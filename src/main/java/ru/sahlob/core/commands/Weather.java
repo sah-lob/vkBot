@@ -1,6 +1,6 @@
 package ru.sahlob.core.commands;
 import ru.sahlob.core.commands.commandsmanage.Command;
-import ru.sahlob.core.modules.WeatherParser;
+import ru.sahlob.core.modules.weather.WeatherParser;
 
 import java.io.IOException;
 

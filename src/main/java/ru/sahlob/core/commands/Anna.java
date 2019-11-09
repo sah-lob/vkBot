@@ -2,9 +2,7 @@ package ru.sahlob.core.commands;
 
 import ru.sahlob.core.commands.commandsmanage.Command;
 import ru.sahlob.core.modules.TrafficJamParser;
-import ru.sahlob.core.modules.WeatherParser;
-
-import java.io.IOException;
+import ru.sahlob.core.modules.weather.WeatherManager;
 
 public class Anna extends Command {
 
@@ -26,12 +24,7 @@ public class Anna extends Command {
     public String getMessage() {
 
         var vet = "";
-        try {
-           vet =  new WeatherParser().annaWeather();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        vet =  new WeatherManager().todayWeatherForm();
 
         var answer = "Врямя до Анькиной работы: \n\n"
                 + "Время на транспорте:" + new TrafficJamParser().getBusTime(bus);
