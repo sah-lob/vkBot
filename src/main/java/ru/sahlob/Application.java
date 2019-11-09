@@ -16,6 +16,5 @@ public class Application implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("hello");
         new VKServer().run();
-        // наша логика
     }
 }
