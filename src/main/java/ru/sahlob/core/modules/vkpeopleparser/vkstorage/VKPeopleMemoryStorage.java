@@ -20,7 +20,14 @@ public class VKPeopleMemoryStorage implements VKPeopleStorage {
 
     @Override
     public Person getPerson(String name) {
-        return null;
+        Person person = null;
+        for (int i = 0; i < persons.size(); i++) {
+            if (persons.get(i).getName().equals(name)) {
+                person = persons.get(i);
+                break;
+            }
+        }
+        return person;
     }
 
     @Override

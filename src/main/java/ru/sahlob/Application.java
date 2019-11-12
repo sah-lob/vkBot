@@ -14,7 +14,6 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("hello");
         new VKServer().run();
     }
 }

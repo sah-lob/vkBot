@@ -17,14 +17,13 @@ public class VKCore {
     private static int maxMsgId = -1;
 
     public VKCore() throws ClientException, ApiException {
+
         var transportClient = HttpTransportClient.getInstance();
         vk = new VkApiClient(transportClient);
         int groupId = 160448028;
         String accessToken = "45e239cc08f664008a981a57052505d7afa58bd0843e102ce69d5ef432c374fe7bcb6a191e101d255c940";
-        //test
         actor = new GroupActor(groupId, accessToken);
         ts = vk.messages().getLongPollServer(actor).execute().getTs();
-
     }
 
 

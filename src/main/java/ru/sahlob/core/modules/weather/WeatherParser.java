@@ -6,9 +6,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-
 public class WeatherParser {
 
     private String city = "saint_petersburg";
@@ -41,10 +38,6 @@ public class WeatherParser {
         var clouds = parsingTodayClouds(document);
 
         var k = ArrayUtils.addAll(s2, clouds);
-
-        for (var ew: k) {
-            System.out.println(ew);
-        }
         return k;
     }
 

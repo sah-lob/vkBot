@@ -1,4 +1,5 @@
 package ru.sahlob.core.modules.vkpeopleparser;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -10,6 +11,7 @@ public class Person {
 
     public Person(String name) {
         this.name = name;
+        activity = new HashMap<>();
     }
 
 
@@ -32,5 +34,9 @@ public class Person {
 
     public void updateActivity(String dateKey, Activity activity) {
         this.activity.put(dateKey, activity);
+    }
+
+    public String getTodayActivityKey() {
+        return new Date().getYear() + " " + new Date().getMonth() + " " + new Date().getDay();
     }
 }
