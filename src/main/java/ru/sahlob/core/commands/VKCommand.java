@@ -25,9 +25,9 @@ public class VKCommand extends Command {
 
         if (messageBody.contains("следить")) {
             if (messageBody.contains("al_lb")
-                    && messageBody.contains("7965708")
-                    && messageBody.contains("mynameisann")
-                    && messageBody.contains("3501014")) {
+                    || messageBody.contains("7965708")
+                    || messageBody.contains("mynameisann")
+                    || messageBody.contains("3501014")) {
                 result = "Не по сеньке шапка";
             } else {
                 result = addVkPerson(messageBody);
