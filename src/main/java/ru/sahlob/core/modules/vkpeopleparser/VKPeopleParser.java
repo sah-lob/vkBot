@@ -118,7 +118,7 @@ public class VKPeopleParser {
             e.printStackTrace();
         }
         var result = false;
-        if (document!= null) {
+        if (document != null) {
             name = name.replace("id", "");
             storage.addPerson(name);
             result = true;
@@ -138,8 +138,8 @@ public class VKPeopleParser {
     }
 
     public static String takeGetRequest(String name) {
-        var url =  "https://api.vk.com/method/users.get?user_ids="+ name
-                +"&fields=online&access_token=45e239cc08f664008a981a57052505d7afa58bd0843e102ce69d5ef432c374fe7bcb6a191e101d255c940&v=5.103";
+        var url =  "https://api.vk.com/method/users.get?user_ids=" + name
+                + "&fields=online&access_token=45e239cc08f664008a981a57052505d7afa58bd0843e102ce69d5ef432c374fe7bcb6a191e101d255c940&v=5.103";
         var answer = "";
         try {
             var obj = new URL(url);
@@ -153,7 +153,7 @@ public class VKPeopleParser {
             }
             in.close();
             answer = response.toString();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Не повезло с распознованием онлайн человек или нет");
         }
         return answer;

@@ -34,7 +34,7 @@ public class VKTime {
     public static OffsetDateTime getDate(int timezone) {
 
         String time = "";
-        if(timezone > 0) {
+        if (timezone > 0) {
             time += "+";
         } else {
             timezone *= -1;
@@ -45,7 +45,7 @@ public class VKTime {
         }
         time += timezone + ":00";
 
-        ZoneOffset zoneOffSet= ZoneOffset.of(time);
+        ZoneOffset zoneOffSet = ZoneOffset.of(time);
         return OffsetDateTime.now(zoneOffSet);
     }
 }
