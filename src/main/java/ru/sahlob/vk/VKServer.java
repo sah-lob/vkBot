@@ -27,7 +27,6 @@ public class VKServer {
         // тест парсера
         MainVKPeopleStorage memoryStorage = MainVKPeopleStorage.getInstance();
         memoryStorage.addPerson("12275982");
-        memoryStorage.addPerson("al_lb");
         // конец теста парсера.
 
         int i = new Date().getMinutes();

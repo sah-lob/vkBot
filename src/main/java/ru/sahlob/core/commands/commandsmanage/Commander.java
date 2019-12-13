@@ -31,6 +31,8 @@ public class Commander {
         }
 
         var msg = cmd.getMessage(message);
+        System.out.println(message);
+        System.out.println(msg);
         new VKManager().sendMessage(msg, message.getUserId());
     }
 

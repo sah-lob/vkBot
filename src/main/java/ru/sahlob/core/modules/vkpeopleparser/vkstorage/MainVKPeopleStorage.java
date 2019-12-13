@@ -17,6 +17,7 @@ public class MainVKPeopleStorage {
     }
 
     public void addPerson(String name) {
+
         vkPeopleStorage.addPerson(name, VKPeopleParser.altName(name));
     }
 
