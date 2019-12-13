@@ -27,10 +27,9 @@ public class VKCommand extends Command {
             addVkPerson(messageBody);
         }
         if (messageBody.contains("шпионим")) {
-            result = spy(message);
+            result = spy(messageBody);
         }
         if (messageBody.contains("ЧП")) {
-            //ЧП 83952543 -13
             result = editTimeZoneVKPerson(messageBody);
         }
         if (messageBody.contains("белка")) {
@@ -66,8 +65,8 @@ public class VKCommand extends Command {
         return result;
     }
 
-    public String spy(Message message) {
-        var name = getNameOrAlternativeNameFromMessageBody(message.getBody());
+    public String spy(String messageBody) {
+        var name = getNameOrAlternativeNameFromMessageBody(messageBody);
         name = name.replaceAll("id", "");
         return vkPeopleParser.getInfoAboutPerson(MainVKPeopleStorage.getInstance().getPerson(name));
     }
