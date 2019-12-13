@@ -6,6 +6,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.stream.Stream;
+
 public class WeatherParser {
 
     private String city = "saint_petersburg";

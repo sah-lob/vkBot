@@ -1,4 +1,5 @@
 package ru.sahlob.core.commands;
+import com.vk.api.sdk.objects.messages.Message;
 import ru.sahlob.core.commands.commandsmanage.Command;
 import ru.sahlob.core.modules.weather.WeatherParser;
 
@@ -11,7 +12,7 @@ public class Weather extends Command {
     }
 
     @Override
-    public String getMessage() {
+    public String getMessage(Message message) {
         return getWeather();
     }
 
@@ -22,7 +23,6 @@ public class Weather extends Command {
         } catch (IOException e) {
             weather = "не удалось получить погоду";
         }
-
         return weather;
     }
 }

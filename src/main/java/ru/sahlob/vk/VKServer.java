@@ -1,11 +1,10 @@
 package ru.sahlob.vk;
-
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
-import ru.sahlob.core.modules.vkpeopleparser.Person;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
+import ru.sahlob.core.modules.vkpeopleparser.VKTime;
+import ru.sahlob.core.modules.vkpeopleparser.vkstorage.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKPeopleMemoryStorage;
-
 import java.util.Date;
 import java.util.concurrent.Executors;
 
@@ -24,13 +23,11 @@ public class VKServer {
     public void run() throws NullPointerException, ApiException, InterruptedException {
 
         System.out.println("Running server...");
-
+        VKTime.getDate(-12);
         // тест парсера
-        Person person = new Person("id12275982");
-        VKPeopleMemoryStorage memoryStorage = VKPeopleMemoryStorage.getInstance();
-        memoryStorage.addPerson(person);
-
-
+        MainVKPeopleStorage memoryStorage = MainVKPeopleStorage.getInstance();
+        memoryStorage.addPerson("12275982");
+        memoryStorage.addPerson("al_lb");
         // конец теста парсера.
 
         int i = new Date().getMinutes();

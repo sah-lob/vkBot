@@ -1,6 +1,7 @@
 package ru.sahlob.core.modules.vkpeopleparser.vkstorage;
 
 import ru.sahlob.core.modules.vkpeopleparser.Person;
+import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,9 @@ public class VKPeopleMemoryStorage implements VKPeopleStorage {
         return vkPeopleMemoryStorage;
     }
     @Override
-    public void addPerson(Person person) {
-        persons.add(person);
+    public void addPerson(String name, String alternativeName) {
+        VKPeopleParser.altName(name);
+        persons.add(new Person(name, alternativeName));
     }
 
     @Override
@@ -38,5 +40,20 @@ public class VKPeopleMemoryStorage implements VKPeopleStorage {
     @Override
     public List<Person> getAllPersons() {
         return persons;
+    }
+
+    @Override
+    public void deletePerson(String name) {
+        for (int i = 0; i < persons.size(); i++) {
+            if (persons.get(i).getName().equals(name)) {
+                persons.remove(i);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void editTimeZoneToPerson(String name, int timezone) {
+        getPerson(name).setTimezone(timezone);
     }
 }

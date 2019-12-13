@@ -1,11 +1,14 @@
 package ru.sahlob.vk;
 
+import com.vk.api.sdk.actions.Users;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
+import com.vk.api.sdk.client.actors.UserActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.objects.messages.Message;
+import com.vk.api.sdk.objects.users.User;
 import com.vk.api.sdk.queries.messages.MessagesGetLongPollHistoryQuery;
 import java.util.List;
 
@@ -15,15 +18,17 @@ public class VKCore {
     private static int ts;
     private GroupActor actor;
     private static int maxMsgId = -1;
+    private String accessToken = "45e239cc08f664008a981a57052505d7afa58bd0843e102ce69d5ef432c374fe7bcb6a191e101d255c940";
 
     public VKCore() throws ClientException, ApiException {
 
         var transportClient = HttpTransportClient.getInstance();
         vk = new VkApiClient(transportClient);
         int groupId = 160448028;
-        String accessToken = "45e239cc08f664008a981a57052505d7afa58bd0843e102ce69d5ef432c374fe7bcb6a191e101d255c940";
         actor = new GroupActor(groupId, accessToken);
         ts = vk.messages().getLongPollServer(actor).execute().getTs();
+
+
     }
 
 
@@ -73,5 +78,9 @@ public class VKCore {
             return messages.get(0);
         }
         return null;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
     }
 }

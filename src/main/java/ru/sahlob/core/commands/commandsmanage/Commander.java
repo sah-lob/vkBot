@@ -11,6 +11,7 @@ public class Commander {
      * @param message сообщение (запрос) пользователя
      */
     public static void execute(Message message) {
+
         String body = "";
         if (message.getFwdMessages() == null) {
             body = message.getBody().toLowerCase();
@@ -20,7 +21,7 @@ public class Commander {
 
         Command cmd = null;
         for (var command : new CommandManager().getCommands()) {
-            if (command.getName().equals(body.split(" ")[0])) {
+            if (body.contains(command.getName())) {
                 cmd = command;
                 break;
             }
@@ -29,7 +30,7 @@ public class Commander {
             cmd = new Unknown("unknown");
         }
 
-        var msg = cmd.getMessage();
+        var msg = cmd.getMessage(message);
         new VKManager().sendMessage(msg, message.getUserId());
     }
 

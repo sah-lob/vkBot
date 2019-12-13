@@ -16,8 +16,13 @@ public class MemoryStorage implements Storage {
         commands.add(new Weather("weather"));
         commands.add(new Weather("погода"));
         commands.add(new Anna("аня"));
-        commands.add(new VKCommand("b"));
+        commands.add(new VKCommand("шпионим"));
+        commands.add(new VKCommand("look"));
+        commands.add(new VKCommand("следить"));
+        commands.add(new VKCommand("ЧП"));
         commands.add(new VKCommand("и"));
+        commands.add(new VKCommand("b"));
+        commands.add(new VKCommand("белка"));
     }
 
     @Override

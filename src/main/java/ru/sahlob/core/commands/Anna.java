@@ -1,5 +1,6 @@
 package ru.sahlob.core.commands;
 
+import com.vk.api.sdk.objects.messages.Message;
 import ru.sahlob.core.commands.commandsmanage.Command;
 import ru.sahlob.core.modules.TrafficJamParser;
 import ru.sahlob.core.modules.weather.WeatherManager;
@@ -21,7 +22,7 @@ public class Anna extends Command {
     }
 
     @Override
-    public String getMessage() {
+    public String getMessage(Message message) {
 
         var vet = "";
         vet =  new WeatherManager().todayWeatherForm();
