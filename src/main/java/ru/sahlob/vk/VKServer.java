@@ -1,47 +1,51 @@
 package ru.sahlob.vk;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
-import ru.sahlob.core.modules.vkpeopleparser.VKTime;
-import ru.sahlob.core.modules.vkpeopleparser.vkstorage.MainVKPeopleStorage;
-import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKPeopleMemoryStorage;
+import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
+import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
+
 import java.util.Date;
 import java.util.concurrent.Executors;
 
+@Component
 public class VKServer {
 
-    public static VKCore vkCore;
+    @Autowired
+    private MainVKPeopleStorage storage;
 
-    static {
-        try {
-            vkCore = new VKCore();
-        } catch (ApiException | ClientException e) {
-            e.printStackTrace();
-        }
-    }
+    @Autowired
+    private VKPeopleParser vkPeopleParser;
+
+    @Autowired
+    private Messenger messenger;
+
+    @Autowired
+    public VKCore vkCore;
 
     public void run() throws NullPointerException, ApiException, InterruptedException {
-
-        System.out.println("Running server...");
         VKTime.getDate(-12);
-        // тест парсера
-        MainVKPeopleStorage memoryStorage = MainVKPeopleStorage.getInstance();
-        memoryStorage.addPerson("12275982");
-        // конец теста парсера.
 
-        int i = new Date().getMinutes();
+        int minutes = new Date().getMinutes();
+        String days = VKTime.getDateKey(3);
         while (true) {
             Thread.sleep(300);
-            if (i != new Date().getMinutes()) {
-                new VKPeopleParser().updateAllPersons();
-                i = new Date().getMinutes();
+            if (minutes != new Date().getMinutes()) {
+                vkPeopleParser.updateAllPersons();
+                minutes = new Date().getMinutes();
+                if (!days.equals(VKTime.getDateKey(3))) {
+                    vkPeopleParser.updateDayTimer();
+                    days = VKTime.getDateKey(3);
+                }
             }
             try {
                 var message = vkCore.getMessage();
                 if (message != null) {
-                    System.out.println(message);
                     var exec = Executors.newCachedThreadPool();
-                    exec.execute(new Messenger(message));
+                    messenger.setMessage(message);
+                    exec.execute(messenger);
                 }
             } catch (ClientException e) {
                 System.out.println("Возникли проблемы");

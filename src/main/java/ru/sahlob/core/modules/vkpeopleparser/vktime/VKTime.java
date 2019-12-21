@@ -1,10 +1,6 @@
-package ru.sahlob.core.modules.vkpeopleparser;
-
+package ru.sahlob.core.modules.vkpeopleparser.vktime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 public class VKTime {
 

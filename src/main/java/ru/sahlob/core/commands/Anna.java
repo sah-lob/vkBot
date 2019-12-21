@@ -1,10 +1,12 @@
 package ru.sahlob.core.commands;
 
 import com.vk.api.sdk.objects.messages.Message;
+import org.springframework.stereotype.Component;
 import ru.sahlob.core.commands.commandsmanage.Command;
 import ru.sahlob.core.modules.TrafficJamParser;
 import ru.sahlob.core.modules.weather.WeatherManager;
 
+@Component
 public class Anna extends Command {
 
 
@@ -17,9 +19,9 @@ public class Anna extends Command {
 
     private String auto = "https://yandex.ru/maps/api/router/buildRoute?ajax=1&avoid=tolls&clientTimezoneOffset=-180&csrfToken=&disableMasstransitColorThread=false&lang=ru&locale=ru_RU&mode=best&pctx=djF8MzcuNzg5MDUyLDU1Ljc0OTE0NzszNy43ODg3NDYsNTUuNzQ5MDkxOzM3Ljc4ODQ1OSw1NS43NDkwNDszNy43ODgxNDQsNTUuNzQ4OTg0OzM3Ljc4NzgzLDU1Ljc0ODkyOTszNy43ODc1MzQsNTUuNzQ4ODc4fDM3Ljc4ODU1NCw1NS43NDkzMjUsNTY3MDk3MjRfMF8sMC44NDszNy43ODc0NzEsNTUuNzQ4NjM3LDU2NzA5NzI0XzEsMC4xMTszNy43ODg1NjUsNTUuNzQ5ODEsNTY3MDk3MjRfMiwwLjA0OzM3Ljc4OTg4OSw1NS43NDg4MjcsNTY3MDk3MjRfMywwLjAy~&regionId=213&results=6&rll=37.78832%2C55.748988~37.936767%2C55.750365&sessionId=1572952274997_967828&type=auto";
 
-    public Anna(String name) {
-        super(name);
-    }
+//    public Anna(String name) {
+//        super(name);
+//    }
 
     @Override
     public String getMessage(Message message) {

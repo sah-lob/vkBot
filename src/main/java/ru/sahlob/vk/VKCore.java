@@ -10,8 +10,12 @@ import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.objects.users.User;
 import com.vk.api.sdk.queries.messages.MessagesGetLongPollHistoryQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class VKCore {
 
     private VkApiClient vk;

@@ -1,16 +1,23 @@
 package ru.sahlob.core.commands;
 import com.vk.api.sdk.objects.messages.Message;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import ru.sahlob.core.commands.commandsmanage.Command;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
-import ru.sahlob.core.modules.vkpeopleparser.vkstorage.MainVKPeopleStorage;
-import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKPeopleMemoryStorage;
+import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 
+@Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class VKCommand extends Command {
 
-    private VKPeopleParser vkPeopleParser = VKPeopleParser.getInstance();
+    private final MainVKPeopleStorage vkPeopleMemoryStorage;
 
-    public VKCommand(String name) {
-        super(name);
+    private final VKPeopleParser vkPeopleParser;
+
+    public VKCommand(MainVKPeopleStorage vkPeopleMemoryStorage, VKPeopleParser vkPeopleParser) {
+        this.vkPeopleMemoryStorage = vkPeopleMemoryStorage;
+        this.vkPeopleParser = vkPeopleParser;
     }
 
     @Override
@@ -45,18 +52,17 @@ public class VKCommand extends Command {
         return result;
     }
 
-    public String editTimeZoneVKPerson(String messageBody) {
+    private String editTimeZoneVKPerson(String messageBody) {
         messageBody = messageBody.substring(3);
         String userName = messageBody.substring(0, messageBody.indexOf(" "));
         messageBody = messageBody.substring(messageBody.indexOf(" ") + 1);
         messageBody = messageBody.replaceAll(" ", "");
         int timezone = Integer.parseInt(messageBody);
-        MainVKPeopleStorage vkPeopleMemoryStorage = MainVKPeopleStorage.getInstance();
         vkPeopleMemoryStorage.editTimeZoneToPerson(userName, timezone);
         return "Часовой пояс изменен.";
     }
 
-    public String addVkPerson(String messageBody) {
+    private String addVkPerson(String messageBody) {
         var result = "";
         var name = getNameOrAlternativeNameFromMessageBody(messageBody);
         boolean checkPerson = checkPerson(messageBody, name);
@@ -72,17 +78,17 @@ public class VKCommand extends Command {
         return result;
     }
 
-    public String spy(String messageBody) {
+    private String spy(String messageBody) {
         var name = getNameOrAlternativeNameFromMessageBody(messageBody);
         name = name.replaceAll("id", "");
-        return vkPeopleParser.getInfoAboutPerson(MainVKPeopleStorage.getInstance().getPerson(name));
+        return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPerson(name));
     }
 
-    public String spyAll() {
+    private String spyAll() {
         return vkPeopleParser.getInfoAboutAllPersons();
     }
 
-    public boolean checkPerson(String messageBody, String name) {
+    private boolean checkPerson(String messageBody, String name) {
         if (messageBody.contains("следить")) {
             return !checkPersonForExistence(name);
         } else if (messageBody.contains("шпионим")) {
@@ -91,13 +97,11 @@ public class VKCommand extends Command {
         return true;
     }
 
-    public boolean checkPersonForExistence(String name) {
+    private boolean checkPersonForExistence(String name) {
         return vkPeopleParser.userExistenceCheck(name);
     }
 
-    public String getNameOrAlternativeNameFromMessageBody(String messageBody) {
-        var name = messageBody.substring(8);
-        System.out.println(name);
-        return name;
+    private String getNameOrAlternativeNameFromMessageBody(String messageBody) {
+        return messageBody.substring(8);
     }
 }

@@ -1,15 +1,13 @@
 package ru.sahlob.core.commands;
 import com.vk.api.sdk.objects.messages.Message;
+import org.springframework.stereotype.Component;
 import ru.sahlob.core.commands.commandsmanage.Command;
 import ru.sahlob.core.modules.weather.WeatherParser;
 
 import java.io.IOException;
 
+@Component
 public class Weather extends Command {
-
-    public Weather(String name) {
-        super(name);
-    }
 
     @Override
     public String getMessage(Message message) {

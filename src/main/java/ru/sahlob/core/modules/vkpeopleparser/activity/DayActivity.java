@@ -1,19 +1,33 @@
 package ru.sahlob.core.modules.vkpeopleparser.activity;
-
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
+@Entity
+@Table(name = "days")
 public class DayActivity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private Long person;
     private int duration;
     private String durationINFO;
-    private ArrayList<MinuteActivity> dayActivities;
+    private String key;
+
+    @Transient
+    private List<MinuteActivity> dayActivities = new ArrayList<>();
+
     private int timezone;
+
+    public DayActivity() {
+    }
 
     public DayActivity(int timezone) {
         this.duration = 0;
         this.durationINFO = "";
         this.timezone = timezone;
-        this.dayActivities = new ArrayList<>();
     }
 
     public int getDuration() {
@@ -34,11 +48,11 @@ public class DayActivity {
     }
 
 
-    public ArrayList<MinuteActivity> getDayActivities() {
+    public List<MinuteActivity> getDayActivities() {
         return dayActivities;
     }
 
-    public void setDayActivities(ArrayList<MinuteActivity> dayActivities) {
+    public void setDayActivities(List<MinuteActivity> dayActivities) {
         this.dayActivities = dayActivities;
     }
 
@@ -47,14 +61,14 @@ public class DayActivity {
     }
 
     public void incrementDurationOfMinuteActivities() {
-        System.out.println(dayActivities.size());
+        if (dayActivities.size() == 0) {
+            addNewMinuteActivity();
+        }
         dayActivities.get(dayActivities.size() - 1).incrementDuration();
     }
 
     public void addNewMinuteActivity() {
-        System.out.println(dayActivities.size());
         dayActivities.add(new MinuteActivity(timezone));
-        System.out.println(dayActivities.size() + "   размер минутной активности.");
     }
 
     public void delete4MinFromMinuteActivity() {
@@ -81,5 +95,54 @@ public class DayActivity {
             dayActivityInfo += activity.getStartTime() + " в течение " + activity.getDuration() + "мин.\n";
         }
         return dayActivityInfo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(int timezone) {
+        this.timezone = timezone;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        DayActivity that = (DayActivity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    public Long getPerson() {
+        return person;
+    }
+
+    public void setPerson(Long person) {
+        this.person = person;
     }
 }

@@ -1,14 +1,14 @@
 package ru.sahlob.core.modules.vkpeopleparser;
-
-import com.sun.xml.bind.v2.runtime.output.SAXOutput;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.activity.DayActivity;
-import ru.sahlob.core.modules.vkpeopleparser.vkstorage.MainVKPeopleStorage;
-import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKPeopleMemoryStorage;
-import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKPeopleStorage;
+import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
+import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
+import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.time.VKTimeKey;
+import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -18,13 +18,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+@Component
 public class VKPeopleParser {
 
-    private static VKPeopleParser vkPeopleParser = new VKPeopleParser();
-    private MainVKPeopleStorage storage = MainVKPeopleStorage.getInstance();
 
-    public static VKPeopleParser getInstance() {
-        return vkPeopleParser;
+    private final MainVKPeopleStorage storage;
+
+    private final VKTimeStorage timeStorage;
+
+    public VKPeopleParser(MainVKPeopleStorage storage, VKTimeStorage timeStorage) {
+        this.storage = storage;
+        this.timeStorage = timeStorage;
     }
 
     public String getInfoAboutPerson(Person person) {
@@ -39,7 +43,7 @@ public class VKPeopleParser {
                 stringAnswer += "Данный пользовтель сейчас офлайн. \n\n";
             }
 
-            var activity = person.getTodayActivity();
+            DayActivity activity = person.getTodayActivity();
             if (activity != null) {
                 String duration = activity.getTodayDuration() + " мин.";
                 String info = activity.getDayActivityInfo();
@@ -54,17 +58,17 @@ public class VKPeopleParser {
     }
 
     public String getInfoAboutAllPersons() {
-        String result = "Всего наблюдаем: " + storage.getAllPersons().size();
+        StringBuilder result = new StringBuilder("Всего наблюдаем: " + storage.getAllPersons().size());
         for (Person p: storage.getAllPersons()) {
-            result += "\n";
-            result += "\n";
-            result += getInfoAboutPerson(p);
-            result += "\n---------------------------";
+            result.append("\n");
+            result.append("\n");
+            result.append(getInfoAboutPerson(p));
+            result.append("\n---------------------------");
         }
-        return result;
+        return result.toString();
     }
 
-    public boolean personOnline(Person person) {
+    private boolean personOnline(Person person) {
         var answer = takeGetRequest(person.getName());
         if (!answer.equals("")) {
             answer = answer.substring(answer.lastIndexOf("\"online\":") + 9, answer.lastIndexOf("\"online\":") + 10);
@@ -74,35 +78,41 @@ public class VKPeopleParser {
 
     public void updateAllPersons() {
         var persons = (ArrayList<Person>) storage.getAllPersons();
+
         for (var p: persons) {
             var dateKey = VKTime.getDateKey(p.getTimezone());
             var dayActivity = p.getActivity().get(dateKey);
-            System.out.println(p.getActivity().size() + "Активности.  ");
-            System.out.println(dayActivity);
             if (personOnline(p)) {
                 if (dayActivity == null) {
                     dayActivity = new DayActivity(p.getTimezone());
                 }
+
                 dayActivity.setDuration(dayActivity.getDuration() + 1);
 
                 if (p.isActive()) {
-                    System.out.println("Пользователь сейчас онлайн и был онлайн до этого!");
                     dayActivity.incrementDurationOfMinuteActivities();
                 } else {
-                    System.out.println("Пользовтель сейчас онлайн, но раньше не был!");
                     p.setActive(true);
                     dayActivity.addNewMinuteActivity();
                 }
                 p.updateTodayActivity(dayActivity);
             } else {
                 if (p.isActive()) {
-                    dayActivity.delete4MinFromMinuteActivity();
-                    p.updateTodayActivity(dayActivity);
+                    if (dayActivity != null) {
+                        dayActivity.delete4MinFromMinuteActivity();
+                        p.updateTodayActivity(dayActivity);
+                    }
                     p.setActive(false);
+                } else {
+                    continue;
                 }
             }
-            System.out.println(p.getActivity().size() + "Активности.  ");
+            storage.editPerson(p);
         }
+
+
+
+
     }
 
     public boolean addNewPerson(String name) {
@@ -137,7 +147,7 @@ public class VKPeopleParser {
         return storage.getPerson(name) != null;
     }
 
-    public static String takeGetRequest(String name) {
+    private static String takeGetRequest(String name) {
         var url =  "https://api.vk.com/method/users.get?user_ids=" + name
                 + "&fields=online&access_token=45e239cc08f664008a981a57052505d7afa58bd0843e102ce69d5ef432c374fe7bcb6a191e101d255c940&v=5.103";
         var answer = "";
@@ -147,15 +157,24 @@ public class VKPeopleParser {
             connection.setRequestMethod("GET");
             var in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine;
-            var response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
             in.close();
             answer = response.toString();
-        } catch (Exception e) {
-            System.out.println("Не повезло с распознованием онлайн человек или нет");
+        } catch (Exception ignored) {
         }
         return answer;
+    }
+
+    public void updateDayTimer() {
+        VKTimeKey vkTimeKey = new VKTimeKey();
+        vkTimeKey.setTimeKey(VKTime.getDateKey(3));
+        timeStorage.addNewTime(vkTimeKey);
+        if (timeStorage.getTimeCount() >= 7) {
+            var key = timeStorage.deleteFirst();
+            storage.deleteAllDayAndMinutesActivitiesByDay(key);
+        }
     }
 }

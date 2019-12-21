@@ -22,7 +22,6 @@ public class TrafficJamParser {
 
         try {
             var v = client.getPage(route);
-            System.out.println(v.getWebResponse().getContentAsString());
             var s = v.getWebResponse().getContentAsString();
             s = s.substring(14, 65);
             var route1 = route.substring(0, 88);

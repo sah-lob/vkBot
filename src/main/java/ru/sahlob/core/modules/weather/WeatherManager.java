@@ -17,16 +17,16 @@ public class WeatherManager {
         var todayWeather = weatherParser.parsingTodayWeatherFromYan("ms");
         String weatherForm = "Погода сегодня!\n";
         double maxWind = 0;
-        var wheatherString = "";
+        StringBuilder wheatherString = new StringBuilder();
         for (int i = 0; i < 4; i++) {
             if (i == 0) {
-                wheatherString += "Утро: ";
+                wheatherString.append("Утро: ");
             } else if (i == 1) {
-                wheatherString += "День: ";
+                wheatherString.append("День: ");
             } else if (i == 2) {
-                wheatherString += "Вечер: ";
+                wheatherString.append("Вечер: ");
             } else {
-                wheatherString += "Ночь: ";
+                wheatherString.append("Ночь: ");
             }
 
             var partOfTodayWeather = todayWeather[i + 1].split(" ");
@@ -49,8 +49,8 @@ public class WeatherManager {
                     maxWind = wind;
                 }
             }
-            int finalTemperature = (int) ((Double.valueOf(num1) + Double.valueOf(num2)) / Double.valueOf(2));
-            wheatherString += finalTemperature + "°  " + todayWeather[i + 5] + "\n";
+            int finalTemperature = (int) (((double) num1 + (double) num2) / 2d);
+            wheatherString.append(finalTemperature).append("°  ").append(todayWeather[i + 5]).append("\n");
         }
         if (maxWind > 6) {
             weatherForm += "\n Сегодня будет сильный ветер! \n";

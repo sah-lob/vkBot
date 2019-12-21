@@ -4,10 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.stream.Stream;
 
 public class WeatherParser {
 
@@ -65,10 +62,7 @@ public class WeatherParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Elements elements = document.select("dd.sunrise-sunset__value");
-        var s = elements.text();
-        System.out.println(s);
-        return s;
+        return document.select("dd.sunrise-sunset__value").text();
     }
 
     public String getWeatherTodayDescription() {

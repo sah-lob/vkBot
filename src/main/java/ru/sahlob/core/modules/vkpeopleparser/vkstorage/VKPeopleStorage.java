@@ -7,9 +7,9 @@ import java.util.List;
 public interface VKPeopleStorage {
 
     void addPerson(String name, String alternativeName);
-    Person getPerson(String name);
+    Person getPersonWithTodayDayActivity(String name);
     void editPerson(Person person);
-    List<Person> getAllPersons();
-    void deletePerson(String name);
+    List<Person> getAllPersonsWithTodayDayActivity();
     void editTimeZoneToPerson(String name, int timezone);
+    void deleteAllDayAndMinutesActivitiesByDay(String key);
 }

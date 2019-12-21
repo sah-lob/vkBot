@@ -4,22 +4,17 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class VKManager {
 
-    public static VKCore vkCore;
-
-    static {
-        try {
-            vkCore = new VKCore();
-        } catch (ApiException | ClientException e) {
-            e.printStackTrace();
-        }
-    }
+    @Autowired
+    public VKCore vkCore;
 
     public void sendMessage(String msg, int peerId) {
         if (msg == null) {
-            System.out.println("null");
             return;
         }
         try {
@@ -39,7 +34,7 @@ public class VKManager {
      * @return {@link UserXtrCounters} информацию о пользователе
      * @see UserXtrCounters
      */
-    public static UserXtrCounters getUserInfo(int id) {
+    public UserXtrCounters getUserInfo(int id) {
         try {
             return vkCore.getVk().users()
                     .get(vkCore.getActor())
