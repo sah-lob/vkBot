@@ -107,7 +107,7 @@ public class MinuteActivity  implements Serializable {
             var intM2 = Integer.parseInt(m2.replaceAll(":", ""));
 
             int result = intH1 - intH2;
-            if(result == 0) {
+            if (result == 0) {
                 result = intM1 - intM2;
             }
             return result;
