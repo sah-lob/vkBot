@@ -1,6 +1,4 @@
 package ru.sahlob.core.commands.commandsmanage.storage;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.commands.Anna;
 import ru.sahlob.core.commands.VKCommand;

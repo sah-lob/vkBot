@@ -19,16 +19,15 @@ public class MinuteActivity implements Serializable {
 
 
     public MinuteActivity() {
-
     }
 
 
-    public MinuteActivity(int timezone) {
+    MinuteActivity(int timezone) {
         this.startTime = VKTime.getMinuteActivity(timezone);
         this.duration = 1;
     }
 
-    public String getStartTime() {
+    String getStartTime() {
         return startTime;
     }
 
@@ -36,7 +35,7 @@ public class MinuteActivity implements Serializable {
         this.startTime = startTime;
     }
 
-    public int getDuration() {
+    int getDuration() {
         return duration;
     }
 
@@ -44,11 +43,11 @@ public class MinuteActivity implements Serializable {
         this.duration = duration;
     }
 
-    public void incrementDuration() {
+    void incrementDuration() {
         duration++;
     }
 
-    public void delete4Min() {
+    void delete4Min() {
         if (duration >= 5) {
             duration = duration - 4;
         } else {
@@ -90,28 +89,24 @@ public class MinuteActivity implements Serializable {
     }
 
 
-    public static final Comparator<MinuteActivity> COMPARE_BY_TIME = new Comparator<MinuteActivity>() {
-        @Override
-        public int compare(MinuteActivity lhs, MinuteActivity rhs) {
+    public static final Comparator<MinuteActivity> COMPARE_BY_TIME = (lhs, rhs) -> {
 
-            var time1  = lhs.getStartTime();
-            var time2 = rhs.getStartTime();
+        var time1  = lhs.getStartTime();
+        var time2 = rhs.getStartTime();
+        var h1 = time1.substring(0, time1.indexOf(":"));
+        var h2 = time2.substring(0, time2.indexOf(":"));
+        var m1 = time1.substring(time1.indexOf(":"));
+        var m2 = time2.substring(time2.indexOf(":"));
+        var intH1 = Integer.parseInt(h1.replaceAll(":", ""));
+        var intH2 = Integer.parseInt(h2.replaceAll(":", ""));
+        var intM1 = Integer.parseInt(m1.replaceAll(":", ""));
+        var intM2 = Integer.parseInt(m2.replaceAll(":", ""));
 
-            var h1 = time1.substring(0, time1.indexOf(":"));
-            var h2 = time2.substring(0, time2.indexOf(":"));
-            var m1 = time1.substring(time1.indexOf(":"));
-            var m2 = time2.substring(time2.indexOf(":"));
-            var intH1 = Integer.parseInt(h1.replaceAll(":", ""));
-            var intH2 = Integer.parseInt(h2.replaceAll(":", ""));
-            var intM1 = Integer.parseInt(m1.replaceAll(":", ""));
-            var intM2 = Integer.parseInt(m2.replaceAll(":", ""));
-
-            int result = intH1 - intH2;
-            if (result == 0) {
-                result = intM1 - intM2;
-            }
-            return result;
+        int result = intH1 - intH2;
+        if (result == 0) {
+            result = intM1 - intM2;
         }
+        return result;
     };
 
 }

@@ -14,7 +14,7 @@ public class WeatherManager {
     }
 
     public String todayWeatherForm() {
-        var todayWeather = weatherParser.parsingTodayWeatherFromYan("ms");
+        var todayWeather = weatherParser.parsingTodayWeatherFromYan();
         String weatherForm = "Погода сегодня!\n";
         double maxWind = 0;
         StringBuilder wheatherString = new StringBuilder();

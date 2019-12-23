@@ -10,11 +10,9 @@ import java.util.List;
 @Component
 public class VKPeopleStats {
 
-    private final VKPeopleParser peopleParser;
     private final MainVKPeopleStorage mainVKPeopleStorage;
 
-    public VKPeopleStats(VKPeopleParser peopleParser, MainVKPeopleStorage mainVKPeopleStorage) {
-        this.peopleParser = peopleParser;
+    public VKPeopleStats(MainVKPeopleStorage mainVKPeopleStorage) {
         this.mainVKPeopleStorage = mainVKPeopleStorage;
     }
 
@@ -31,17 +29,22 @@ public class VKPeopleStats {
             dayAct.setDurationINFO(p.getAlternativeName());
             dayActivities.add(dayAct);
         }
-        Collections.sort(dayActivities, DayActivity.COMPARE_BY_DURATION);
+        dayActivities.sort(DayActivity.COMPARE_BY_DURATION);
         return dayActivities;
     }
 
     private String createDurationRaitingString(List<DayActivity> dayActivities) {
-        var result = "Список задротов за сегодня: \n\n";
+        StringBuilder result = new StringBuilder("Список задротов за сегодня: \n\n");
         for (int i = 0; i < dayActivities.size(); i++) {
-            result += (i + 1) + "  " + dayActivities.get(i).getDayActivityInfo() + dayActivities.get(i).getDuration() + " мин.\n";
+            result.append(i + 1).append("  ")
+                    .append(dayActivities.get(i)
+                            .getDayActivityInfo())
+                    .append(dayActivities.get(i)
+                            .getDuration())
+                    .append(" мин.\n");
         }
-        result += "Рассчет задротов окончен!";
-        return result;
+        result.append("Рассчет задротов окончен!");
+        return result.toString();
     }
 
 }

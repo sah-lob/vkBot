@@ -2,7 +2,6 @@ package ru.sahlob.core.modules.vkpeopleparser;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.activity.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;

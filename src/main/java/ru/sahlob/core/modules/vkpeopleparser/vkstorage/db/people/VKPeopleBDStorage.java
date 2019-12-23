@@ -106,9 +106,7 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
             if (minuteActivities != null) {
                 var minuteActivities1 =
                         StreamSupport.stream(minuteActivities.spliterator(), false)
-                                .collect(Collectors.toList());
-
-                Collections.sort(minuteActivities1, MinuteActivity.COMPARE_BY_TIME);
+                                .sorted(MinuteActivity.COMPARE_BY_TIME).collect(Collectors.toList());
                 dayActivity.setDayActivities(minuteActivities1);
             }
         }

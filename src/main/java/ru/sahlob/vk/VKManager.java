@@ -10,8 +10,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class VKManager {
 
-    @Autowired
-    public VKCore vkCore;
+    public final VKCore vkCore;
+
+    public VKManager(VKCore vkCore) {
+        this.vkCore = vkCore;
+    }
 
     public void sendMessage(String msg, int peerId) {
         if (msg == null) {

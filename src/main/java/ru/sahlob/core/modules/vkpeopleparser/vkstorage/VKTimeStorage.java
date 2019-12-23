@@ -1,6 +1,4 @@
 package ru.sahlob.core.modules.vkpeopleparser.vkstorage;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.time.DBTimesRepository;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.time.VKTimeKey;
@@ -8,7 +6,7 @@ import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.time.VKTimeKey;
 @Component
 public class VKTimeStorage {
 
-    final DBTimesRepository dbTimesRepository;
+    private final DBTimesRepository dbTimesRepository;
 
     public VKTimeStorage(DBTimesRepository dbTimesRepository) {
         this.dbTimesRepository = dbTimesRepository;

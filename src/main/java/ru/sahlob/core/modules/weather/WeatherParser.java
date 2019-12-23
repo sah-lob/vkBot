@@ -6,26 +6,25 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import java.io.IOException;
 
+import static java.lang.System.*;
+
 public class WeatherParser {
 
-    private String city = "saint_petersburg";
     private Document doc;
 
     public WeatherParser() throws IOException {
-        doc = Jsoup.connect(String.format("https://world-weather.ru/pogoda/russia/%s/", city)).get();
-    }
-    public WeatherParser(String city) throws IOException {
-        this.city = city;
+        String city = "saint_petersburg";
         doc = Jsoup.connect(String.format("https://world-weather.ru/pogoda/russia/%s/", city)).get();
     }
 
-    public String[] parsingTodayWeatherFromYan(String city) {
+    String[] parsingTodayWeatherFromYan() {
         Document document = null;
         try {
-            document = Jsoup.connect("https://yandex.ru/pogoda/moscow/details?via=" + city).get();
+            document = Jsoup.connect("https://yandex.ru/pogoda/moscow/details?via=" + "ms").get();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        assert document != null;
         var elements = document.select("div.weather-table__wrapper");
         var s = elements.text().replaceAll("утром", " QAZутром").split("QAZ")[1];
 
@@ -37,32 +36,19 @@ public class WeatherParser {
         var s2 = s.split(replacementChar);
         var clouds = parsingTodayClouds(document);
 
-        var k = ArrayUtils.addAll(s2, clouds);
-        return k;
+        return ArrayUtils.addAll(s2, clouds);
     }
 
-    public String[] parsingTodayClouds(Document doc) {
+    private String[] parsingTodayClouds(Document doc) {
         var allClouds = parsingAllClouds(doc);
         var todayClouds = new String[4];
-        for (int i = 0; i < 4; i++) {
-            todayClouds[i] = allClouds[i];
-        }
+        arraycopy(allClouds, 0, todayClouds, 0, 4);
         return todayClouds;
     }
 
-    public String[] parsingAllClouds(Document doc) {
+    private String[] parsingAllClouds(Document doc) {
         var element2 = doc.select("td.weather-table__body-cell.weather-table__body-cell_type_condition");
         return element2.html().split("\n");
-    }
-
-    public String sunsetValue() {
-        Document document = null;
-        try {
-            document = Jsoup.connect("https://yandex.ru/pogoda/moscow/details?via=ms").get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return document.select("dd.sunrise-sunset__value").text();
     }
 
     public String getWeatherTodayDescription() {
