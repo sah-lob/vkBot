@@ -2,11 +2,13 @@ package ru.sahlob.core.modules.vkpeopleparser.activity;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Objects;
 
 @Entity
 @Table(name = "minutes")
-public class MinuteActivity {
+public class MinuteActivity  implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -86,4 +88,30 @@ public class MinuteActivity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
+    public static final Comparator<MinuteActivity> COMPARE_BY_TIME = new Comparator<MinuteActivity>() {
+        @Override
+        public int compare(MinuteActivity lhs, MinuteActivity rhs) {
+
+            var time1  = lhs.getStartTime();
+            var time2 = rhs.getStartTime();
+
+            var h1 = time1.substring(0, time1.indexOf(":"));
+            var h2 = time2.substring(0, time2.indexOf(":"));
+            var m1 = time1.substring(time1.indexOf(":"));
+            var m2 = time2.substring(time2.indexOf(":"));
+            var intH1 = Integer.parseInt(h1.replaceAll(":", ""));
+            var intH2 = Integer.parseInt(h2.replaceAll(":", ""));
+            var intM1 = Integer.parseInt(m1.replaceAll(":", ""));
+            var intM2 = Integer.parseInt(m2.replaceAll(":", ""));
+
+            int result = intH1 - intH2;
+            if(result == 0) {
+                result = intM1 - intM2;
+            }
+            return result;
+        }
+    };
+
 }

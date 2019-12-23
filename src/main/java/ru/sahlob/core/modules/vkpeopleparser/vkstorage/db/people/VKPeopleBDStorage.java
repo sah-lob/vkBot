@@ -1,6 +1,7 @@
 package ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people;
 
 import ru.sahlob.core.modules.vkpeopleparser.Person;
+import ru.sahlob.core.modules.vkpeopleparser.activity.MinuteActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.modules.vkpeopleparser.activity.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKPeopleStorage;
@@ -106,6 +107,8 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
                 var minuteActivities1 =
                         StreamSupport.stream(minuteActivities.spliterator(), false)
                                 .collect(Collectors.toList());
+
+                Collections.sort(minuteActivities1, MinuteActivity.COMPARE_BY_TIME);
                 dayActivity.setDayActivities(minuteActivities1);
             }
         }
