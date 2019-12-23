@@ -5,15 +5,8 @@ import ru.sahlob.core.commands.commandsmanage.Command;
 
 @Component
 public class Unknown extends Command {
-
-//    public Unknown(String name) {
-//        super(name);
-//    }
-
     @Override
     public String getMessage(Message message) {
         return "Такой команды нет, возможно позжеЙ";
     }
-
-
 }

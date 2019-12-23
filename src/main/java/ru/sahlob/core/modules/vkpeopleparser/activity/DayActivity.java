@@ -1,12 +1,14 @@
 package ru.sahlob.core.modules.vkpeopleparser.activity;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "days")
-public class DayActivity {
+public class DayActivity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -145,4 +147,12 @@ public class DayActivity {
     public void setPerson(Long person) {
         this.person = person;
     }
+
+
+    public static final Comparator<DayActivity> COMPARE_BY_DURATION = new Comparator<DayActivity>() {
+        @Override
+        public int compare(DayActivity lhs, DayActivity rhs) {
+            return lhs.getDuration() - rhs.getDuration();
+        }
+    };
 }

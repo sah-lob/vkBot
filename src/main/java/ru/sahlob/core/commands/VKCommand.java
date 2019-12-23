@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.commands.commandsmanage.Command;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
+import ru.sahlob.core.modules.vkpeopleparser.VKPeopleStats;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 
 @Component
@@ -12,12 +13,14 @@ import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleSto
 public class VKCommand extends Command {
 
     private final MainVKPeopleStorage vkPeopleMemoryStorage;
-
     private final VKPeopleParser vkPeopleParser;
+    private final VKPeopleStats vkPeopleStats;
 
-    public VKCommand(MainVKPeopleStorage vkPeopleMemoryStorage, VKPeopleParser vkPeopleParser) {
+
+    public VKCommand(MainVKPeopleStorage vkPeopleMemoryStorage, VKPeopleParser vkPeopleParser, VKPeopleStats vkPeopleStats) {
         this.vkPeopleMemoryStorage = vkPeopleMemoryStorage;
         this.vkPeopleParser = vkPeopleParser;
+        this.vkPeopleStats = vkPeopleStats;
     }
 
     @Override
@@ -40,15 +43,23 @@ public class VKCommand extends Command {
                 result = addVkPerson(messageBody);
             }
         }
+
         if (messageBody.contains("шпионим")) {
             result = spy(messageBody);
         }
+
         if (messageBody.contains("ЧП")) {
             result = editTimeZoneVKPerson(messageBody);
         }
+
         if (messageBody.contains("белка")) {
             result = spyAll();
         }
+
+        if (messageBody.contains("задроты")) {
+            result = personsDurationRating();
+        }
+
         return result;
     }
 
@@ -86,6 +97,10 @@ public class VKCommand extends Command {
 
     private String spyAll() {
         return vkPeopleParser.getInfoAboutAllPersons();
+    }
+
+    private String personsDurationRating() {
+        return vkPeopleStats.getPersonsDurationRaiting();
     }
 
     private boolean checkPerson(String messageBody, String name) {

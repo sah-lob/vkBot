@@ -12,29 +12,34 @@ import java.util.HashSet;
 @Component
 public class MemoryStorage implements Storage {
 
-    @Autowired
-    private VKCommand vkCommand;
-    @Autowired
-    private VKCommand vkCommand2;
-    @Autowired
-    private VKCommand vkCommand3;
-    @Autowired
-    private VKCommand vkCommand4;
-    @Autowired
-    private VKCommand vkCommand5;
-    @Autowired
-    private VKCommand vkCommand6;
-    @Autowired
-    private VKCommand vkCommand7;
-    @Autowired
-    private Weather weather;
-    @Autowired
-    private Weather weather2;
-    @Autowired
-    private Anna anna;
+    private final VKCommand vkCommand;
+    private final VKCommand vkCommand2;
+    private final VKCommand vkCommand3;
+    private final VKCommand vkCommand4;
+    private final VKCommand vkCommand5;
+    private final VKCommand vkCommand6;
+    private final VKCommand vkCommand7;
+    private final VKCommand vkCommand8;
+    private final Weather weather;
+    private final Weather weather2;
+    private final Anna anna;
 
 
     private static HashSet<Command> commands = new HashSet<>();
+
+    public MemoryStorage(VKCommand vkCommand, VKCommand vkCommand2, VKCommand vkCommand3, VKCommand vkCommand4, VKCommand vkCommand5, VKCommand vkCommand6, VKCommand vkCommand7, Weather weather, Weather weather2, Anna anna, VKCommand vkCommand8) {
+        this.vkCommand = vkCommand;
+        this.vkCommand2 = vkCommand2;
+        this.vkCommand3 = vkCommand3;
+        this.vkCommand4 = vkCommand4;
+        this.vkCommand5 = vkCommand5;
+        this.vkCommand6 = vkCommand6;
+        this.vkCommand7 = vkCommand7;
+        this.vkCommand8 = vkCommand8;
+        this.weather = weather;
+        this.weather2 = weather2;
+        this.anna = anna;
+    }
 
     public void updateCommands() {
         weather.setName("weather");
@@ -47,6 +52,7 @@ public class MemoryStorage implements Storage {
         vkCommand5.setName("и");
         vkCommand6.setName("b");
         vkCommand7.setName("белка");
+        vkCommand8.setName("задроты");
         commands.add(vkCommand);
         commands.add(vkCommand2);
         commands.add(vkCommand3);

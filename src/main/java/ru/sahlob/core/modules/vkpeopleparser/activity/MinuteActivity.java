@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "minutes")
-public class MinuteActivity  implements Serializable {
+public class MinuteActivity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
