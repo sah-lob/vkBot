@@ -50,6 +50,7 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
         var todayActivity = person.getTodayActivity();
 
         if (getTodsyDayAndMinutesActivities(person) == null) {
+
             todayActivity.setPerson(person.getId());
             todayActivity.setKey(VKTime.getDateKey(person.getTimezone()));
             daysRepository.save(todayActivity);
@@ -95,7 +96,6 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     }
 
     private DayActivity getTodsyDayAndMinutesActivities(Person person) {
-
         DayActivity dayActivity = null;
         try {
              dayActivity = daysRepository.getDayActivityByPersonAndKey(person.getId(), VKTime.getDateKey(person.getTimezone()));

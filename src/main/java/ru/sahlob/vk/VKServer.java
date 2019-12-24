@@ -43,7 +43,7 @@ public class VKServer {
                 }
             } catch (ClientException e) {
                 System.out.println("Возникли проблемы");
-                final int RECONNECT_TIME = 10000;
+                final var RECONNECT_TIME = 10000;
                 System.out.println("Повторное соединение через " + RECONNECT_TIME / 1000 + " секунд");
                 Thread.sleep(RECONNECT_TIME);
             }

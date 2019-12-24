@@ -25,9 +25,11 @@ public class VKPeopleStats {
         var persons = mainVKPeopleStorage.getAllPersons();
         var dayActivities = new ArrayList<DayActivity>();
         for (var p: persons) {
-            var dayAct = p.getTodayActivity();
-            dayAct.setDurationINFO(p.getAlternativeName());
-            dayActivities.add(dayAct);
+            if(p.getTodayActivity() != null) {
+                var dayAct = p.getTodayActivity();
+                dayAct.setDurationINFO(p.getAlternativeName());
+                dayActivities.add(dayAct);
+            }
         }
         dayActivities.sort(DayActivity.COMPARE_BY_DURATION);
         return dayActivities;
@@ -38,7 +40,7 @@ public class VKPeopleStats {
         for (int i = 0; i < dayActivities.size(); i++) {
             result.append(i + 1).append("  ")
                     .append(dayActivities.get(i)
-                            .getDayActivityInfo())
+                            .getDurationINFO() + " - ")
                     .append(dayActivities.get(i)
                             .getDuration())
                     .append(" мин.\n");

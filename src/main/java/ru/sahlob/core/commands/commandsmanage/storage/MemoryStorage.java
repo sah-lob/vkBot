@@ -58,6 +58,7 @@ public class MemoryStorage implements Storage {
         commands.add(vkCommand5);
         commands.add(vkCommand6);
         commands.add(vkCommand7);
+        commands.add(vkCommand8);
         commands.add(weather);
         commands.add(weather2);
         commands.add(anna);
