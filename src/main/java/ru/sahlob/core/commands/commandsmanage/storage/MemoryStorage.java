@@ -71,6 +71,5 @@ public class MemoryStorage implements Storage {
 
     @Override
     public void addCommnad(Command command) {
-
     }
 }

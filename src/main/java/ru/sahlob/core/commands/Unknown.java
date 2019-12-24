@@ -7,6 +7,6 @@ import ru.sahlob.core.commands.commandsmanage.Command;
 public class Unknown extends Command {
     @Override
     public String getMessage(Message message) {
-        return "Такой команды нет, возможно позжеЙ";
+        return "Такой команды нет, а надо ли?";
     }
 }
