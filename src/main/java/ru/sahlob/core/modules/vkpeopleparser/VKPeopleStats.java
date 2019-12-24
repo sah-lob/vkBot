@@ -4,7 +4,6 @@ import ru.sahlob.core.modules.vkpeopleparser.activity.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,7 +32,6 @@ public class VKPeopleStats {
             }
         }
         dayActivities.sort(DayActivity.COMPARE_BY_DURATION);
-        dayActivities.sort(Collections.reverseOrder());
         return dayActivities;
     }
 

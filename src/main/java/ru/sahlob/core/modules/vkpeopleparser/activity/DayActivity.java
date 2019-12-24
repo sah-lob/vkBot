@@ -152,7 +152,7 @@ public class DayActivity implements Serializable {
     public static final Comparator<DayActivity> COMPARE_BY_DURATION = new Comparator<DayActivity>() {
         @Override
         public int compare(DayActivity lhs, DayActivity rhs) {
-            return lhs.getDuration() - rhs.getDuration();
+            return rhs.getTodayDuration() - lhs.getTodayDuration();
         }
     };
 }
