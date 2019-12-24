@@ -10,10 +10,10 @@ import java.util.List;
 @Component
 public class VKPeopleStats {
 
-    private final MainVKPeopleStorage mainVKPeopleStorage;
+    private final MainVKPeopleStorage storage;
 
     public VKPeopleStats(MainVKPeopleStorage mainVKPeopleStorage) {
-        this.mainVKPeopleStorage = mainVKPeopleStorage;
+        this.storage = mainVKPeopleStorage;
     }
 
     public String getPersonsDurationRaiting() {
@@ -22,7 +22,7 @@ public class VKPeopleStats {
     }
 
     private List<DayActivity> getSortedDayActivityListOfPersons() {
-        var persons = mainVKPeopleStorage.getAllPersons();
+        var persons = storage.getAllPersons();
         var dayActivities = new ArrayList<DayActivity>();
         for (var p: persons) {
             if (p.getTodayActivity() != null) {
@@ -42,7 +42,7 @@ public class VKPeopleStats {
                     .append(dayActivities.get(i)
                             .getDurationINFO() + " - ")
                     .append(dayActivities.get(i)
-                            .getDuration())
+                            .getTodayDuration())
                     .append(" мин.\n");
         }
         result.append("Рассчет задротов окончен!");
