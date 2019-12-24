@@ -25,7 +25,7 @@ public class VKPeopleStats {
         var persons = mainVKPeopleStorage.getAllPersons();
         var dayActivities = new ArrayList<DayActivity>();
         for (var p: persons) {
-            if(p.getTodayActivity() != null) {
+            if (p.getTodayActivity() != null) {
                 var dayAct = p.getTodayActivity();
                 dayAct.setDurationINFO(p.getAlternativeName());
                 dayActivities.add(dayAct);
