@@ -1,10 +1,13 @@
 package ru.sahlob.core.observers;
 
+import ru.sahlob.core.modules.vkpeopleparser.Person;
 import ru.sahlob.core.observers.roles.Role;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "observers")
@@ -17,6 +20,14 @@ public class Observer {
     private String name;
     @Transient
     private List<Role> roles;
+
+    @ManyToMany()
+    @JoinTable(
+            name = "observers_persons",
+            joinColumns = { @JoinColumn(name = "observers_id") },
+            inverseJoinColumns = { @JoinColumn(name = "person_id")}
+    )
+    private Set<Person> persons = new HashSet<>();
 
     public long getId() {
         return id;
@@ -48,6 +59,14 @@ public class Observer {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Person> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(Set<Person> persons) {
+        this.persons = persons;
     }
 
     @Override

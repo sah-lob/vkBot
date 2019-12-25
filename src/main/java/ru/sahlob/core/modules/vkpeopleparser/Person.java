@@ -1,11 +1,10 @@
 package ru.sahlob.core.modules.vkpeopleparser;
 import ru.sahlob.core.modules.vkpeopleparser.activity.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
+import ru.sahlob.core.observers.Observer;
 
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "persons")
@@ -20,6 +19,13 @@ public class Person {
     @Transient
     private Map<String, DayActivity> activity = new HashMap<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "observers_persons",
+            joinColumns = { @JoinColumn(name = "person_id") },
+            inverseJoinColumns = { @JoinColumn(name = "observers_id")}
+    )
+    private Set<Observer> observers = new HashSet<>();
     private boolean isActive;
     private int timezone = 3;
 
@@ -31,7 +37,6 @@ public class Person {
         this.alternativeName = alternativeName;
         this.isActive = false;
     }
-
 
     String getAlternativeName() {
         return alternativeName;
@@ -70,7 +75,7 @@ public class Person {
         return isActive;
     }
 
-    void setActive(boolean active) {
+    public void setActive(boolean active) {
         isActive = active;
     }
 
@@ -90,7 +95,6 @@ public class Person {
         this.id = id;
     }
 
-
     public String getSex() {
         return sex;
     }
@@ -98,6 +102,16 @@ public class Person {
     public void setSex(String sex) {
         this.sex = sex;
     }
+
+    public Set<Observer> getObservers() {
+        return observers;
+    }
+
+    public void setObservers(Set<Observer> observers) {
+        this.observers = observers;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

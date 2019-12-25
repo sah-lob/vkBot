@@ -1,11 +1,23 @@
 package ru.sahlob.vk;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import org.checkerframework.checker.units.qual.A;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
+import ru.sahlob.core.modules.vkpeopleparser.Person;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
+import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.VKPeopleBDStorage;
+import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.interfaces.DBPersonsRepository;
+import ru.sahlob.core.modules.vkpeopleparser.vkstorage.memory.VKPeopleMemoryStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
+import ru.sahlob.core.observers.Observer;
+import ru.sahlob.core.observers.interfaces.DBObserversRepository;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executors;
 
 @Component
@@ -15,6 +27,15 @@ public class VKServer {
     private final Messenger messenger;
     private final VKCore vkCore;
 
+//    @Autowired
+//    DBPersonsRepository personsRepository;
+
+    @Autowired
+    DBObserversRepository observersRepository;
+
+    @Autowired
+    VKPeopleBDStorage vkPeopleBDStorage;
+
     public VKServer(VKPeopleParser vkPeopleParser, Messenger messenger, VKCore vkCore) {
         this.vkPeopleParser = vkPeopleParser;
         this.messenger = messenger;
@@ -22,6 +43,20 @@ public class VKServer {
     }
 
     public void run() throws NullPointerException, ApiException, InterruptedException {
+
+//        var observer = new Observer();
+//        observer.setVkId(332);
+//        observer.setName("Alexsfander");
+//        List<Person> pp = vkPeopleBDStorage.getAllPersonsWithTodayDayActivity();
+////        vkPeopleBDStorage.addPerson("хомяк", "петров");
+////        var pp = vkPeopleBDStorage.getPersonWithTodayDayActivity("хомяк");
+//        var persons = new HashSet<Person>(pp);
+////        persons.add(pp);
+//        observer.setPersons(persons);
+//
+//        observersRepository.save(observer);
+
+
         int minutes = new Date().getMinutes();
         String days = VKTime.getDateKey(3);
         while (true) {

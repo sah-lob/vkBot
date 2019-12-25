@@ -1,14 +1,15 @@
 package ru.sahlob.core.observers;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.observers.interfaces.DBObserversRepository;
 
 @Component
 public class ObserversStorage {
 
-    @Autowired
-    private DBObserversRepository observersRepository;
+    private final DBObserversRepository observersRepository;
+
+    public ObserversStorage(DBObserversRepository observersRepository) {
+        this.observersRepository = observersRepository;
+    }
 
 
     public void saveObserver(Observer observer) {

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 @Component
 public class VKPeopleParser {
 
-
     private final MainVKPeopleStorage storage;
 
     private final VKTimeStorage timeStorage;

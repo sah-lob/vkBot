@@ -34,6 +34,7 @@ public class VKCommand extends Command {
         }
 
         if (messageBody.contains("следить")) {
+            System.out.println(message.getUserId());
             if (messageBody.contains("al_lb")
                     || messageBody.contains("7965708")
                     || messageBody.contains("mynameisann")
