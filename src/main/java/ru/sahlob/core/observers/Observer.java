@@ -2,14 +2,20 @@ package ru.sahlob.core.observers;
 
 import ru.sahlob.core.observers.roles.Role;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "observers")
 public class Observer {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private long vkId;
     private String name;
+    @Transient
     private List<Role> roles;
 
     public long getId() {

@@ -1,5 +1,6 @@
 package ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people;
 
+import com.sun.xml.bind.v2.TODO;
 import ru.sahlob.core.modules.vkpeopleparser.Person;
 import ru.sahlob.core.modules.vkpeopleparser.activity.MinuteActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
@@ -45,17 +46,15 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
 
     @Override
     public void editPerson(Person person) {
+
         personsRepository.save(person);
-
         var todayActivity = person.getTodayActivity();
-
         if (getTodsyDayAndMinutesActivities(person) == null) {
-
+            todayActivity = new DayActivity();
             todayActivity.setPerson(person.getId());
             todayActivity.setKey(VKTime.getDateKey(person.getTimezone()));
             daysRepository.save(todayActivity);
         }
-
         var minuteActivies = todayActivity.getDayActivities();
 
         for (var m : minuteActivies) {
