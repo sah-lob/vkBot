@@ -48,5 +48,4 @@ public class VKPeopleStats {
         result.append("Рассчет задротов окончен!");
         return result.toString();
     }
-
 }

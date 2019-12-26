@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public abstract class Command {
 
+
+
     private String name;
 
     public abstract String getMessage(Message message);

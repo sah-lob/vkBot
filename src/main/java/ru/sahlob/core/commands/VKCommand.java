@@ -26,7 +26,7 @@ public class VKCommand extends Command {
     @Override
     public String getMessage(Message message) {
         var result = "";
-        var messageBody = message.getBody();
+        var messageBody = message.getBody().toLowerCase();
 
         // это необходимо для слежки за ирой.
         if (messageBody.equals("и") || messageBody.equals("b")) {

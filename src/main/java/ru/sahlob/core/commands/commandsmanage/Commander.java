@@ -8,7 +8,7 @@ import ru.sahlob.vk.VKManager;
 @Component
 public class Commander {
 
-    private final Unknown unknown;
+    private  Unknown unknown;
     private final CommandManager commandManager;
     private final VKManager vkManager;
 
@@ -23,27 +23,32 @@ public class Commander {
      * @param message сообщение (запрос) пользователя
      */
     public void execute(Message message) {
-
-        String body = "";
+        var body = "";
         if (message.getFwdMessages() == null) {
-            body = message.getBody().toLowerCase();
+            var index = message.getBody().indexOf(" ");
+            if (index > -1) {
+                body = message.getBody().substring(0, index);
+            } else {
+                body = message.getBody();
+            }
+            body = body.replaceAll(" ", "").toLowerCase();
         } else if (message.getBody().isEmpty()) {
             body = message.getFwdMessages().get(0).getBody().toLowerCase();
         }
 
         Command cmd = null;
         for (var command : commandManager.getCommands()) {
-            if (body.contains(command.getName())) {
+            if (body.equals(command.getName())) {
                 cmd = command;
                 break;
             }
         }
+        String msg;
         if (cmd == null) {
-            unknown.setName("unknown");
-            cmd = unknown;
+            msg = "Такой команды нет, а надо ли?";
+        } else {
+            msg = cmd.getMessage(message);
         }
-
-        var msg = cmd.getMessage(message);
         vkManager.sendMessage(msg, message.getUserId());
     }
 
