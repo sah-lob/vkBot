@@ -57,6 +57,10 @@ public class VKCommand extends Command {
             result = spyAll();
         }
 
+        if (messageBody.contains("параноики")) {
+            result = personsSessionCount();
+        }
+
         if (messageBody.contains("задротыс")) {
             result = personsAvgDurationRaiting();
         } else if (messageBody.contains("задроты")) {
@@ -108,6 +112,10 @@ public class VKCommand extends Command {
 
     private String personsAvgDurationRaiting() {
         return vkPeopleStats.getPersonsAvgDurationRaiting();
+    }
+
+    private String personsSessionCount() {
+        return vkPeopleStats.getCountOfPersonsSessions();
     }
 
     private boolean checkPerson(String messageBody, String name) {

@@ -16,15 +16,6 @@ public class VKPeopleStats {
         this.storage = mainVKPeopleStorage;
     }
 
-//    public String getPersonsDurationRaiting() {
-//        var dayActivities = getSortedDayActivityListOfPersons();
-//        return createDurationRaitingString(dayActivities);
-//    }
-
-//    public String getAvgPersonsDurationRaiting() {
-//        var dayActivities = getSortedDayActivityListOfPersons();
-//    }
-
 
     private List<DayActivity> getSortedDayActivityListOfPersons() {
         var persons = storage.getAllPersons();
@@ -73,6 +64,24 @@ public class VKPeopleStats {
                     .append(" мин.\n");
         }
         result.append("Рассчет задротов окончен!");
+        return result.toString();
+    }
+
+    public String getCountOfPersonsSessions() {
+
+        var dayActivities = getSortedDayActivityListOfPersons();
+        dayActivities.sort(DayActivity.COMPARE_BY_SESSION_COUNT);
+
+        StringBuilder result = new StringBuilder("Список главных параноиков за сегодня: \n\n");
+
+        for (int i = 0; i < dayActivities.size(); i++) {
+            result.append(i + 1).append("  ").append(dayActivities.get(i)
+                    .getDurationINFO()).append(" - ")
+                    .append(dayActivities.get(i)
+                            .getDayActivities().size())
+                    .append(" раз(а).\n");
+        }
+        result.append("Рассчет параноиков окончен!");
         return result.toString();
     }
 }

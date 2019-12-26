@@ -151,31 +151,24 @@ public class DayActivity implements Serializable {
     }
 
 
-    public static final Comparator<DayActivity> COMPARE_BY_DURATION = new Comparator<DayActivity>() {
-        @Override
-        public int compare(DayActivity lhs, DayActivity rhs) {
-            return rhs.getTodayDuration() - lhs.getTodayDuration();
+    public static final Comparator<DayActivity> COMPARE_BY_DURATION = (lhs, rhs) -> rhs.getTodayDuration() - lhs.getTodayDuration();
+
+    public static final Comparator<DayActivity> COMPARE_BY_AVG_DURATION = (lhs, rhs) -> {
+        var rAllDuration = rhs.getTodayDuration();
+        var rcount = rhs.dayActivities.size();
+        var lAllDuration = lhs.getTodayDuration();
+        var lcount = lhs.dayActivities.size();
+
+        if (rcount ==  0 && lcount == 0) {
+            return 0;
+        } else if (rcount == 0) {
+            return -1;
+        } else if (lcount == 0) {
+            return 1;
+        } else {
+            return (rAllDuration / rcount) - (lAllDuration / lcount);
         }
     };
 
-    public static final Comparator<DayActivity> COMPARE_BY_AVG_DURATION = new Comparator<DayActivity>() {
-        @Override
-        public int compare(DayActivity lhs, DayActivity rhs) {
-
-            var rAllDuration = rhs.getTodayDuration();
-            var rcount = rhs.dayActivities.size();
-            var lAllDuration = lhs.getTodayDuration();
-            var lcount = lhs.dayActivities.size();
-
-            if (rcount ==  0 && lcount == 0) {
-                return 0;
-            } else if (rcount == 0) {
-                return -1;
-            } else if (lcount == 0) {
-                return 1;
-            } else {
-                return (rAllDuration / rcount) - (lAllDuration / lcount);
-            }
-        }
-    };
+    public static final Comparator<DayActivity> COMPARE_BY_SESSION_COUNT = (lhs, rhs) -> rhs.getDayActivities().size() - lhs.getDayActivities().size();
 }
