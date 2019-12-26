@@ -27,7 +27,7 @@ public class VKPeopleStats {
         for (var p: persons) {
             if (p.getTodayActivity() != null) {
                 var dayAct = p.getTodayActivity();
-                dayAct.setDurationINFO(p.getAlternativeName());
+                dayAct.setDurationINFO(p.getAlternativeName() + "  " + p.getName());
                 dayActivities.add(dayAct);
             }
         }
