@@ -43,20 +43,6 @@ public class VKServer {
     }
 
     public void run() throws NullPointerException, ApiException, InterruptedException {
-
-//        var observer = new Observer();
-//        observer.setVkId(332);
-//        observer.setName("Alexsfander");
-//        List<Person> pp = vkPeopleBDStorage.getAllPersonsWithTodayDayActivity();
-////        vkPeopleBDStorage.addPerson("хомяк", "петров");
-////        var pp = vkPeopleBDStorage.getPersonWithTodayDayActivity("хомяк");
-//        var persons = new HashSet<Person>(pp);
-////        persons.add(pp);
-//        observer.setPersons(persons);
-//
-//        observersRepository.save(observer);
-
-
         int minutes = new Date().getMinutes();
         String days = VKTime.getDateKey(3);
         while (true) {
@@ -66,6 +52,7 @@ public class VKServer {
                 minutes = new Date().getMinutes();
                 if (!days.equals(VKTime.getDateKey(3))) {
                     vkPeopleParser.updateDayTimer();
+
                     days = VKTime.getDateKey(3);
                 }
             }

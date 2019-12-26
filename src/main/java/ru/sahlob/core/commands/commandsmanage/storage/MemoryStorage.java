@@ -18,6 +18,7 @@ public class MemoryStorage implements Storage {
     private final VKCommand vkCommand6;
     private final VKCommand vkCommand7;
     private final VKCommand vkCommand8;
+    private final VKCommand vkCommand9;
     private final Weather weather;
     private final Weather weather2;
     private final Anna anna;
@@ -25,7 +26,19 @@ public class MemoryStorage implements Storage {
 
     private static HashSet<Command> commands = new HashSet<>();
 
-    public MemoryStorage(VKCommand vkCommand, VKCommand vkCommand2, VKCommand vkCommand3, VKCommand vkCommand4, VKCommand vkCommand5, VKCommand vkCommand6, VKCommand vkCommand7, Weather weather, Weather weather2, Anna anna, VKCommand vkCommand8) {
+    public MemoryStorage(VKCommand vkCommand,
+                         VKCommand vkCommand2,
+                         VKCommand vkCommand3,
+                         VKCommand vkCommand4,
+                         VKCommand vkCommand5,
+                         VKCommand vkCommand6,
+                         VKCommand vkCommand7,
+                         Weather weather,
+                         Weather weather2,
+                         Anna anna,
+                         VKCommand vkCommand8,
+                         VKCommand vkCommand9) {
+
         this.vkCommand = vkCommand;
         this.vkCommand2 = vkCommand2;
         this.vkCommand3 = vkCommand3;
@@ -34,6 +47,7 @@ public class MemoryStorage implements Storage {
         this.vkCommand6 = vkCommand6;
         this.vkCommand7 = vkCommand7;
         this.vkCommand8 = vkCommand8;
+        this.vkCommand9 = vkCommand9;
         this.weather = weather;
         this.weather2 = weather2;
         this.anna = anna;
@@ -51,6 +65,7 @@ public class MemoryStorage implements Storage {
         vkCommand6.setName("b");
         vkCommand7.setName("белка");
         vkCommand8.setName("задроты");
+        vkCommand9.setName("задротыс");
         commands.add(vkCommand);
         commands.add(vkCommand2);
         commands.add(vkCommand3);
@@ -59,6 +74,7 @@ public class MemoryStorage implements Storage {
         commands.add(vkCommand6);
         commands.add(vkCommand7);
         commands.add(vkCommand8);
+        commands.add(vkCommand9);
         commands.add(weather);
         commands.add(weather2);
         commands.add(anna);

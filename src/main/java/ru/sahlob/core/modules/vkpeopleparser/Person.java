@@ -1,4 +1,5 @@
 package ru.sahlob.core.modules.vkpeopleparser;
+import net.bytebuddy.implementation.bind.annotation.Default;
 import ru.sahlob.core.modules.vkpeopleparser.activity.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.observers.Observer;
@@ -16,6 +17,7 @@ public class Person {
     private String alternativeName;
     private String name;
     private String sex;
+
     @Transient
     private Map<String, DayActivity> activity = new HashMap<>();
 
@@ -57,7 +59,6 @@ public class Person {
     public void setName(String name) {
         this.name = name;
     }
-
 
     Map<String, DayActivity> getActivity() {
         return activity;
@@ -110,8 +111,6 @@ public class Person {
     public void setObservers(Set<Observer> observers) {
         this.observers = observers;
     }
-
-
 
     @Override
     public boolean equals(Object o) {

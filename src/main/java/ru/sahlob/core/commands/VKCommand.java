@@ -57,7 +57,9 @@ public class VKCommand extends Command {
             result = spyAll();
         }
 
-        if (messageBody.contains("задроты")) {
+        if (messageBody.contains("задротыс")) {
+            result = personsAvgDurationRaiting();
+        } else if (messageBody.contains("задроты")) {
             result = personsDurationRating();
         }
 
@@ -102,6 +104,10 @@ public class VKCommand extends Command {
 
     private String personsDurationRating() {
         return vkPeopleStats.getPersonsDurationRaiting();
+    }
+
+    private String personsAvgDurationRaiting() {
+        return vkPeopleStats.getPersonsAvgDurationRaiting();
     }
 
     private boolean checkPerson(String messageBody, String name) {

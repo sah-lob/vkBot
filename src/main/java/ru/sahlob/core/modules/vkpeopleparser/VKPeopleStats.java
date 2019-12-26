@@ -16,10 +16,15 @@ public class VKPeopleStats {
         this.storage = mainVKPeopleStorage;
     }
 
-    public String getPersonsDurationRaiting() {
-        var dayActivities = getSortedDayActivityListOfPersons();
-        return createDurationRaitingString(dayActivities);
-    }
+//    public String getPersonsDurationRaiting() {
+//        var dayActivities = getSortedDayActivityListOfPersons();
+//        return createDurationRaitingString(dayActivities);
+//    }
+
+//    public String getAvgPersonsDurationRaiting() {
+//        var dayActivities = getSortedDayActivityListOfPersons();
+//    }
+
 
     private List<DayActivity> getSortedDayActivityListOfPersons() {
         var persons = storage.getAllPersons();
@@ -31,18 +36,40 @@ public class VKPeopleStats {
                 dayActivities.add(dayAct);
             }
         }
-        dayActivities.sort(DayActivity.COMPARE_BY_DURATION);
         return dayActivities;
     }
 
-    private String createDurationRaitingString(List<DayActivity> dayActivities) {
+    public String getPersonsDurationRaiting() {
+        var dayActivities = getSortedDayActivityListOfPersons();
+        dayActivities.sort(DayActivity.COMPARE_BY_DURATION);
+
         StringBuilder result = new StringBuilder("Список задротов за сегодня: \n\n");
         for (int i = 0; i < dayActivities.size(); i++) {
-            result.append(i + 1).append("  ")
-                    .append(dayActivities.get(i)
-                            .getDurationINFO() + " - ")
+            result.append(i + 1).append("  ").append(dayActivities.get(i)
+                    .getDurationINFO()).append(" - ")
                     .append(dayActivities.get(i)
                             .getTodayDuration())
+                    .append(" мин.\n");
+        }
+        result.append("Рассчет задротов окончен!");
+        return result.toString();
+    }
+
+    public String getPersonsAvgDurationRaiting() {
+        var dayActivities = getSortedDayActivityListOfPersons();
+        var newDayActivities = new ArrayList<DayActivity>();
+        for (var d: dayActivities) {
+            if (d.getDayActivities().size() != 0) {
+                newDayActivities.add(d);
+            }
+        }
+        newDayActivities.sort(DayActivity.COMPARE_BY_AVG_DURATION);
+        var result = new StringBuilder("Список лидеров по средней длине сессии за сегодня: \n\n");
+        for (int i = 0; i < newDayActivities.size(); i++) {
+            double data = newDayActivities.get(i).getTodayDuration() /  newDayActivities.get(i).getDayActivities().size();
+
+            result.append(i + 1).append("  ").append(newDayActivities.get(i).getDurationINFO()).append(" - ")
+                    .append(data)
                     .append(" мин.\n");
         }
         result.append("Рассчет задротов окончен!");

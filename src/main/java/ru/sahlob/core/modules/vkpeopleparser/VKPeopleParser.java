@@ -76,7 +76,6 @@ public class VKPeopleParser {
 
     public void updateAllPersons() {
         var persons = (ArrayList<Person>) storage.getAllPersons();
-
         for (var p: persons) {
             var dateKey = VKTime.getDateKey(p.getTimezone());
             var dayActivity = p.getActivity().get(dateKey);

@@ -157,4 +157,25 @@ public class DayActivity implements Serializable {
             return rhs.getTodayDuration() - lhs.getTodayDuration();
         }
     };
+
+    public static final Comparator<DayActivity> COMPARE_BY_AVG_DURATION = new Comparator<DayActivity>() {
+        @Override
+        public int compare(DayActivity lhs, DayActivity rhs) {
+
+            var rAllDuration = rhs.getTodayDuration();
+            var rcount = rhs.dayActivities.size();
+            var lAllDuration = lhs.getTodayDuration();
+            var lcount = lhs.dayActivities.size();
+
+            if (rcount ==  0 && lcount == 0) {
+                return 0;
+            } else if (rcount == 0) {
+                return -1;
+            } else if (lcount == 0) {
+                return 1;
+            } else {
+                return (rAllDuration / rcount) - (lAllDuration / lcount);
+            }
+        }
+    };
 }
