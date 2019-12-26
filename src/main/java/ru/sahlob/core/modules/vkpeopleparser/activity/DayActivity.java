@@ -74,7 +74,9 @@ public class DayActivity implements Serializable {
     }
 
     public void delete4MinFromMinuteActivity() {
-        dayActivities.get(dayActivities.size() - 1).delete4Min();
+        if (dayActivities.size() > 0) {
+            dayActivities.get(dayActivities.size() - 1).delete4Min();
+        }
     }
 
     public int getTodayDuration() {
