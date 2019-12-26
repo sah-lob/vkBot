@@ -45,7 +45,10 @@ public class Commander {
         }
         String msg;
         if (cmd == null) {
-            if (message.getBody().contains("хуй")) {
+            if (message.getBody().contains("хуй")
+                    || message.getBody().contains("хуи")
+                    || message.getBody().contains("hui")
+            ) {
                 msg = "Cам " + message.getBody();
             } else {
                 msg = "Такой команды нет, а надо ли?";
