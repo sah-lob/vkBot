@@ -45,9 +45,9 @@ public class Commander {
         }
         String msg;
         if (cmd == null) {
-            if (message.getBody().contains("хуй")
-                    || message.getBody().contains("хуи")
-                    || message.getBody().contains("hui")
+            if (message.getBody().toLowerCase().contains("хуй")
+                    || message.getBody().toLowerCase().contains("хуи")
+                    || message.getBody().toLowerCase().contains("hui")
             ) {
                 msg = "Cам " + message.getBody();
             } else {
