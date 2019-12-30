@@ -20,6 +20,7 @@ public class MemoryStorage implements Storage {
     private final VKCommand vkCommand8;
     private final VKCommand vkCommand9;
     private final VKCommand vkCommand10;
+    private final VKCommand vkCommand11;
     private final Weather weather;
     private final Weather weather2;
     private final Anna anna;
@@ -39,7 +40,8 @@ public class MemoryStorage implements Storage {
                          Anna anna,
                          VKCommand vkCommand8,
                          VKCommand vkCommand9,
-                         VKCommand vkCommand10) {
+                         VKCommand vkCommand10,
+                         VKCommand vkCommand11) {
 
         this.vkCommand = vkCommand;
         this.vkCommand2 = vkCommand2;
@@ -51,6 +53,7 @@ public class MemoryStorage implements Storage {
         this.vkCommand8 = vkCommand8;
         this.vkCommand9 = vkCommand9;
         this.vkCommand10 = vkCommand10;
+        this.vkCommand11 = vkCommand11;
         this.weather = weather;
         this.weather2 = weather2;
         this.anna = anna;
@@ -70,6 +73,7 @@ public class MemoryStorage implements Storage {
         vkCommand8.setName("задроты");
         vkCommand9.setName("задротыс");
         vkCommand10.setName("параноики");
+        vkCommand10.setName("едины");
         commands.add(vkCommand);
         commands.add(vkCommand2);
         commands.add(vkCommand3);

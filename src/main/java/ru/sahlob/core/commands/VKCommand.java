@@ -4,8 +4,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.commands.commandsmanage.Command;
+import ru.sahlob.core.modules.vkpeopleparser.VKPeopleAnalize;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
-import ru.sahlob.core.modules.vkpeopleparser.VKPeopleStats;
+import ru.sahlob.core.modules.vkpeopleparser.VKPeopleRatings;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 
 @Component
@@ -14,13 +15,15 @@ public class VKCommand extends Command {
 
     private final MainVKPeopleStorage vkPeopleMemoryStorage;
     private final VKPeopleParser vkPeopleParser;
-    private final VKPeopleStats vkPeopleStats;
+    private final VKPeopleRatings vkPeopleRatings;
+    private final VKPeopleAnalize vkPeopleAnalize;
 
 
-    public VKCommand(MainVKPeopleStorage vkPeopleMemoryStorage, VKPeopleParser vkPeopleParser, VKPeopleStats vkPeopleStats) {
+    public VKCommand(MainVKPeopleStorage vkPeopleMemoryStorage, VKPeopleParser vkPeopleParser, VKPeopleRatings vkPeopleRatings, VKPeopleAnalize vkPeopleAnalize) {
         this.vkPeopleMemoryStorage = vkPeopleMemoryStorage;
         this.vkPeopleParser = vkPeopleParser;
-        this.vkPeopleStats = vkPeopleStats;
+        this.vkPeopleRatings = vkPeopleRatings;
+        this.vkPeopleAnalize = vkPeopleAnalize;
     }
 
     @Override
@@ -67,6 +70,10 @@ public class VKCommand extends Command {
             result = personsDurationRating();
         }
 
+        if (messageBody.contains("едины")) {
+            result = jointOnlineOfTwoUsers(messageBody);
+        }
+
         return result;
     }
 
@@ -107,15 +114,15 @@ public class VKCommand extends Command {
     }
 
     private String personsDurationRating() {
-        return vkPeopleStats.getPersonsDurationRaiting();
+        return vkPeopleRatings.getPersonsDurationRaiting();
     }
 
     private String personsAvgDurationRaiting() {
-        return vkPeopleStats.getPersonsAvgDurationRaiting();
+        return vkPeopleRatings.getPersonsAvgDurationRaiting();
     }
 
     private String personsSessionCount() {
-        return vkPeopleStats.getCountOfPersonsSessions();
+        return vkPeopleRatings.getCountOfPersonsSessions();
     }
 
     private boolean checkPerson(String messageBody, String name) {
@@ -133,5 +140,29 @@ public class VKCommand extends Command {
 
     private String getNameOrAlternativeNameFromMessageBody(String messageBody) {
         return messageBody.substring(8);
+    }
+
+    private String jointOnlineOfTwoUsers(String messageBody) {
+        var ew = messageBody.split(" ");
+        var name1 = ew[1].replace(" ", "");
+        var name2 = ew[2].replace(" ", "");
+        if (!checkPersonForExistence(name1)) {
+            return "1 пользователь " + name1 + " не добавлен";
+        } else if (!checkPersonForExistence(name2)) {
+            return "2 пользователь " + name2 + " не добавлен";
+        } else {
+            return vkPeopleAnalize.jointOnlineOfTwoUsers(name1, name2);
+        }
+    }
+
+    @Override
+    public String info() {
+        return "Команды, которые относятся к слежке в вк."
+                + "следить {id} - добавить пользователя, за которым нужно следить"
+                + "шпионим {id} - наблюдать, сколько пользователь был онлайн"
+                + "задроты - топ лист по длительности из всех людей, за которыми наблюдают."
+                + "задротыс - топ лист по средней длительности сессии по пользователям"
+                + "параноики - топ лист из людей, кто чаще заходил"
+                + "ЧП {id} +3 - изменить часовой пояс у пользователя.(возможно не работает)";
     }
 }

@@ -8,12 +8,10 @@ import ru.sahlob.vk.VKManager;
 @Component
 public class Commander {
 
-    private  Unknown unknown;
     private final CommandManager commandManager;
     private final VKManager vkManager;
 
-    public Commander(Unknown unknown, CommandManager commandManager, VKManager vkManager) {
-        this.unknown = unknown;
+    public Commander(CommandManager commandManager, VKManager vkManager) {
         this.commandManager = commandManager;
         this.vkManager = vkManager;
     }

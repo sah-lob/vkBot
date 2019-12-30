@@ -8,26 +8,12 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class VKPeopleStats {
+public class VKPeopleRatings {
 
     private final MainVKPeopleStorage storage;
 
-    public VKPeopleStats(MainVKPeopleStorage mainVKPeopleStorage) {
+    public VKPeopleRatings(MainVKPeopleStorage mainVKPeopleStorage) {
         this.storage = mainVKPeopleStorage;
-    }
-
-
-    private List<DayActivity> getSortedDayActivityListOfPersons() {
-        var persons = storage.getAllPersons();
-        var dayActivities = new ArrayList<DayActivity>();
-        for (var p: persons) {
-            if (p.getTodayActivity() != null) {
-                var dayAct = p.getTodayActivity();
-                dayAct.setDurationINFO(p.getAlternativeName() + "  " + p.getName());
-                dayActivities.add(dayAct);
-            }
-        }
-        return dayActivities;
     }
 
     public String getPersonsDurationRaiting() {
@@ -83,5 +69,18 @@ public class VKPeopleStats {
         }
         result.append("Рассчет параноиков окончен!");
         return result.toString();
+    }
+
+    private List<DayActivity> getSortedDayActivityListOfPersons() {
+        var persons = storage.getAllPersons();
+        var dayActivities = new ArrayList<DayActivity>();
+        for (var p: persons) {
+            if (p.getTodayActivity() != null) {
+                var dayAct = p.getTodayActivity();
+                dayAct.setDurationINFO(p.getAlternativeName() + "  " + p.getName());
+                dayActivities.add(dayAct);
+            }
+        }
+        return dayActivities;
     }
 }

@@ -92,11 +92,10 @@ public class DayActivity implements Serializable {
 
     public String getDayActivityInfo() {
         var dayActivityInfo = "";
-        if (dayActivities.isEmpty()) {
-            return "Данный пользователь сегодня не сидел вк";
-        }
-        for (var activity: dayActivities) {
-            dayActivityInfo += activity.getStartTime() + " в течение " + activity.getDuration() + "мин.\n";
+        if (!dayActivities.isEmpty()) {
+            for (var activity: dayActivities) {
+                dayActivityInfo += activity.getStartTime() + " в течение " + activity.getDuration() + "мин.\n";
+            }
         }
         return dayActivityInfo;
     }

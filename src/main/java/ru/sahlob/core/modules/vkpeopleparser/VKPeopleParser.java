@@ -45,6 +45,9 @@ public class VKPeopleParser {
             if (activity != null) {
                 String duration = activity.getTodayDuration() + " мин.";
                 String info = activity.getDayActivityInfo();
+                if (info.equals("")) {
+                    info = "Данный пользователь сегодня не сидел вк";
+                }
 
                 stringAnswer += "Онлайн в течение дня:  " + duration + "\n";
                 stringAnswer += "Информация о посещении: \n" + info;
@@ -106,10 +109,6 @@ public class VKPeopleParser {
             }
             storage.editPerson(p);
         }
-
-
-
-
     }
 
     public boolean addNewPerson(String name) {

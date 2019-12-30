@@ -27,7 +27,7 @@ public class MinuteActivity implements Serializable {
         this.duration = 1;
     }
 
-    String getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
@@ -35,7 +35,7 @@ public class MinuteActivity implements Serializable {
         this.startTime = startTime;
     }
 
-    int getDuration() {
+    public int getDuration() {
         return duration;
     }
 
@@ -43,7 +43,7 @@ public class MinuteActivity implements Serializable {
         this.duration = duration;
     }
 
-    void incrementDuration() {
+    public void incrementDuration() {
         duration++;
     }
 

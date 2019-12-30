@@ -9,4 +9,9 @@ public class Unknown extends Command {
     public String getMessage(Message message) {
         return "Такой команды нет, а надо ли?";
     }
+
+    @Override
+    public String info() {
+        return "";
+    }
 }

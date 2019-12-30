@@ -30,11 +30,11 @@ public class VKServer {
 //    @Autowired
 //    DBPersonsRepository personsRepository;
 
-    @Autowired
-    DBObserversRepository observersRepository;
-
-    @Autowired
-    VKPeopleBDStorage vkPeopleBDStorage;
+//    @Autowired
+//    DBObserversRepository observersRepository;
+//
+//    @Autowired
+//    VKPeopleBDStorage vkPeopleBDStorage;
 
     public VKServer(VKPeopleParser vkPeopleParser, Messenger messenger, VKCore vkCore) {
         this.vkPeopleParser = vkPeopleParser;

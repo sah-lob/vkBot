@@ -34,4 +34,9 @@ public class Anna extends Command {
         answer = answer + "\n" + vet;
         return answer;
     }
+
+    @Override
+    public String info() {
+        return null;
+    }
 }
