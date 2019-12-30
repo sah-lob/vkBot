@@ -43,16 +43,30 @@ public class Commander {
         }
         String msg;
         if (cmd == null) {
-            if (message.getBody().toLowerCase().contains("хуй")
-                    || message.getBody().toLowerCase().contains("хуи")
-                    || message.getBody().toLowerCase().contains("hui")
+            var messageBody = message.getBody().toLowerCase();
+            if (messageBody.contains("хуй")
+                    || messageBody.contains("хуи")
+                    || messageBody.contains("hui")
+                    || messageBody.contains("пидр")
             ) {
-                msg = "Cам " + message.getBody();
+                if (messageBody.contains("застрахуй")) {
+                    msg = "наушники свои " + message.getBody();
+                } else if (messageBody.contains("перестраху")) {
+                    msg = "Самый умный? нах иди";
+                } else {
+                    msg = "Cам " + message.getBody();
+                }
             } else {
                 msg = "Такой команды нет, а надо ли?";
             }
         } else {
             msg = cmd.getMessage(message);
+        }
+        if (message.getBody().toLowerCase().contains("застрахуй")) {
+            for (int i = 0; i < 5; i++) {
+                vkManager.sendMessage("иди", message.getUserId());
+                vkManager.sendMessage("нахуй", message.getUserId());
+            }
         }
         vkManager.sendMessage(msg, message.getUserId());
     }
