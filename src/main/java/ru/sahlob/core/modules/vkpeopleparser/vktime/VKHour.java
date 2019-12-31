@@ -47,6 +47,17 @@ public class VKHour {
         return result;
     }
 
+    public int getFirstOnlineMinuteOfHour() {
+        var result = -1;
+        for (int i = 0; i < 60; i++) {
+            if (onlineMinutes[i]) {
+                result = i;
+                break;
+            }
+        }
+        return result;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

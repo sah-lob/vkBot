@@ -108,12 +108,14 @@ public class VKTwoPeopleAnalize {
         return finalDay;
     }
 
-    private VKDay getVKDayOfPerson(Person person) {
+    public VKDay getVKDayOfPerson(Person person) {
         var dayActivity = person.getTodayActivity();
-        var minuteActivities = dayActivity.getDayActivities();
         var vkDay = new VKDay();
-        for (MinuteActivity m: minuteActivities) {
-            vkDay.addVkHoursList(parsingTime(m));
+        if (dayActivity != null) {
+            var minuteActivities = dayActivity.getDayActivities();
+            for (MinuteActivity m: minuteActivities) {
+                vkDay.addVkHoursList(parsingTime(m));
+            }
         }
         return vkDay;
     }
