@@ -21,7 +21,7 @@ public class VKMorning {
 
 
     public String usersMorning() {
-        var result = "Кто во сколько первый раз зашел в вк:\n \n";
+        StringBuilder result = new StringBuilder("Кто во сколько первый раз зашел в вк:\n \n");
         var persons = storage.getAllPersons();
         for (var p: persons) {
             var vkDay = analize.getVKDayOfPerson(p);
@@ -31,13 +31,18 @@ public class VKMorning {
                 if (vkHours[i] != null && vkHours[i].hasMinutes() && i > 2) {
                     String min = String.valueOf(vkHours[i].getFirstOnlineMinuteOfHour());
                     if (min.length() < 2) {
-                        min += "0" + min;
+                        min = "0" + min;
                     }
-                    result += p.getAlternativeName() + " в " + i + ":" + min + " мин. \n";
+                    result.append(p.getAlternativeName())
+                            .append(" в ")
+                            .append(i)
+                            .append(":")
+                            .append(min)
+                            .append(" мин. \n");
                 }
             }
         }
-        return result;
+        return result.toString();
     }
 
 
