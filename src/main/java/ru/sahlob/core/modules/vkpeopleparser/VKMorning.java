@@ -39,6 +39,7 @@ public class VKMorning {
                             .append(":")
                             .append(min)
                             .append(" мин. \n");
+                    break;
                 }
             }
         }
