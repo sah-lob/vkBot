@@ -1,11 +1,9 @@
 package ru.sahlob.core.modules.vkpeopleparser;
 
 import org.springframework.stereotype.Component;
-import ru.sahlob.core.modules.vkpeopleparser.activity.MinuteActivity;
+import ru.sahlob.core.modules.vkpeopleparser.domain.Morning;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
-import ru.sahlob.core.modules.vkpeopleparser.vktime.VKDay;
-
-import java.util.Collections;
+import java.util.ArrayList;
 
 @Component
 public class VKMorning {
@@ -21,32 +19,23 @@ public class VKMorning {
 
 
     public String usersMorning() {
-        StringBuilder result = new StringBuilder("Кто во сколько первый раз зашел в вк:\n \n");
+        var result = "Кто во сколько первый раз зашел в вк:\n \n";
         var persons = storage.getAllPersons();
+        var morningTimes = new ArrayList<Morning>();
         for (var p: persons) {
             var vkDay = analize.getVKDayOfPerson(p);
             var vkHours = vkDay.getVkHours();
-
             for (int i = 0; i < 24; i++) {
-                if (vkHours[i] != null && vkHours[i].hasMinutes() && i > 2) {
-                    String min = String.valueOf(vkHours[i].getFirstOnlineMinuteOfHour());
-                    if (min.length() < 2) {
-                        min = "0" + min;
-                    }
-                    result.append(p.getAlternativeName())
-                            .append(" в ")
-                            .append(i)
-                            .append(":")
-                            .append(min)
-                            .append(" мин. \n");
+                if (vkHours[i] != null && vkHours[i].hasMinutes() && i > 3) {
+                    morningTimes.add(new Morning(i, vkHours[i].getFirstOnlineMinuteOfHour(), p.getAlternativeName()));
                     break;
                 }
             }
         }
-        return result.toString();
+        morningTimes.sort(Morning.COMPARE_BY_TIME);
+        for (var morningTime : morningTimes) {
+            result += morningTime.getName() + " в " + morningTime.getTime() + "\n";
+        }
+        return result;
     }
-
-
-
-
 }

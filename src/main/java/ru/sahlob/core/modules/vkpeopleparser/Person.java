@@ -1,6 +1,5 @@
 package ru.sahlob.core.modules.vkpeopleparser;
-import net.bytebuddy.implementation.bind.annotation.Default;
-import ru.sahlob.core.modules.vkpeopleparser.activity.DayActivity;
+import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.observers.Observer;
 

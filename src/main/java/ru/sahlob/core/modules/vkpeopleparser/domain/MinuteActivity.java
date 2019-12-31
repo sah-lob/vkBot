@@ -1,4 +1,4 @@
-package ru.sahlob.core.modules.vkpeopleparser.activity;
+package ru.sahlob.core.modules.vkpeopleparser.domain;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 
 import javax.persistence.*;

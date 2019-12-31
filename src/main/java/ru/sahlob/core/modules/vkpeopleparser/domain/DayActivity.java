@@ -1,4 +1,4 @@
-package ru.sahlob.core.modules.vkpeopleparser.activity;
+package ru.sahlob.core.modules.vkpeopleparser.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;

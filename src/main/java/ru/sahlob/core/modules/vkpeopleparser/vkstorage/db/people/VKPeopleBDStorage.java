@@ -1,8 +1,8 @@
 package ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people;
 import ru.sahlob.core.modules.vkpeopleparser.Person;
-import ru.sahlob.core.modules.vkpeopleparser.activity.MinuteActivity;
+import ru.sahlob.core.modules.vkpeopleparser.domain.MinuteActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
-import ru.sahlob.core.modules.vkpeopleparser.activity.DayActivity;
+import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.interfaces.DBDaysRepository;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.interfaces.DBMinutesRepository;
