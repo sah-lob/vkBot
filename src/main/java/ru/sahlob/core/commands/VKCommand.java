@@ -4,7 +4,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.commands.commandsmanage.Command;
-import ru.sahlob.core.modules.vkpeopleparser.VKPeopleAnalize;
+import ru.sahlob.core.modules.vkpeopleparser.VKMorning;
+import ru.sahlob.core.modules.vkpeopleparser.VKTwoPeopleAnalize;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleRatings;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
@@ -16,14 +17,20 @@ public class VKCommand extends Command {
     private final MainVKPeopleStorage vkPeopleMemoryStorage;
     private final VKPeopleParser vkPeopleParser;
     private final VKPeopleRatings vkPeopleRatings;
-    private final VKPeopleAnalize vkPeopleAnalize;
+    private final VKTwoPeopleAnalize vkTwoPeopleAnalize;
+    private final VKMorning vkMorning;
 
 
-    public VKCommand(MainVKPeopleStorage vkPeopleMemoryStorage, VKPeopleParser vkPeopleParser, VKPeopleRatings vkPeopleRatings, VKPeopleAnalize vkPeopleAnalize) {
+    public VKCommand(MainVKPeopleStorage vkPeopleMemoryStorage,
+                     VKPeopleParser vkPeopleParser,
+                     VKPeopleRatings vkPeopleRatings,
+                     VKTwoPeopleAnalize vkTwoPeopleAnalize,
+                     VKMorning vkMorning) {
         this.vkPeopleMemoryStorage = vkPeopleMemoryStorage;
         this.vkPeopleParser = vkPeopleParser;
         this.vkPeopleRatings = vkPeopleRatings;
-        this.vkPeopleAnalize = vkPeopleAnalize;
+        this.vkTwoPeopleAnalize = vkTwoPeopleAnalize;
+        this.vkMorning = vkMorning;
     }
 
     @Override
@@ -72,6 +79,10 @@ public class VKCommand extends Command {
 
         if (messageBody.contains("едины")) {
             result = jointOnlineOfTwoUsers(messageBody);
+        }
+
+        if (messageBody.contains("утро")) {
+            result = usersMorning();
         }
 
         return result;
@@ -151,8 +162,12 @@ public class VKCommand extends Command {
         } else if (!checkPersonForExistence(name2)) {
             return "2 пользователь " + name2 + " не добавлен";
         } else {
-            return vkPeopleAnalize.jointOnlineOfTwoUsers(name1, name2);
+            return vkTwoPeopleAnalize.jointOnlineOfTwoUsers(name1, name2);
         }
+    }
+
+    private String usersMorning() {
+        return vkMorning.usersMorning();
     }
 
     @Override

@@ -10,11 +10,11 @@ import ru.sahlob.core.modules.vkpeopleparser.vktime.VKHour;
 import java.util.*;
 
 @Component
-public class VKPeopleAnalize {
+public class VKTwoPeopleAnalize {
 
     private MainVKPeopleStorage storage;
 
-    public VKPeopleAnalize(MainVKPeopleStorage storage) {
+    public VKTwoPeopleAnalize(MainVKPeopleStorage storage) {
         this.storage = storage;
     }
 
