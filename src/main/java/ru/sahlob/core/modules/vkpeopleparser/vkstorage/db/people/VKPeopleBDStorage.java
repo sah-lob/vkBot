@@ -1,4 +1,5 @@
 package ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sahlob.core.modules.vkpeopleparser.Person;
 import ru.sahlob.core.modules.vkpeopleparser.domain.MinuteActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
+@Transactional
 public class VKPeopleBDStorage implements VKPeopleStorage {
 
     private final DBPersonsRepository personsRepository;
@@ -79,7 +81,7 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
 
     @Override
     public void deleteAllDayAndMinutesActivitiesByDay(String key) {
-
+        key = key.toUpperCase();
         ArrayList<Long> dayActivitiesId = new ArrayList<>();
         for (var d: daysRepository.findAllByKey(key)) {
             dayActivitiesId.add(d.getId());

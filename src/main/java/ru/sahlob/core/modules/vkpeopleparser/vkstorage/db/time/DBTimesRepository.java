@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DBTimesRepository extends CrudRepository<VKTimeKey, Integer> {
     int countAllByIdAfter(int id);
+    VKTimeKey findFirstByOrderByIdAsc();
 }

@@ -13,4 +13,5 @@ public interface DBDaysRepository  extends CrudRepository<DayActivity, Integer> 
 
     void deleteAllByKey(String key);
 
+    DayActivity findFirstByOrderByIdAsc();
 }

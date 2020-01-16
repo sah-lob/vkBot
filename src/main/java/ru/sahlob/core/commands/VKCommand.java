@@ -55,6 +55,10 @@ public class VKCommand extends Command {
             }
         }
 
+        if (messageBody.contains("удалить")) {
+            result = deleteDay(messageBody);
+        }
+
         if (messageBody.contains("шпионим")) {
             result = spy(messageBody);
         }
@@ -168,6 +172,12 @@ public class VKCommand extends Command {
 
     private String usersMorning() {
         return vkMorning.usersMorning();
+    }
+
+    private String deleteDay(String messageBody) {
+        var key = messageBody.replaceAll("удалить ", "");
+        vkPeopleMemoryStorage.deleteAllDayAndMinutesActivitiesByDay(key);
+        return "Возможно удалины=)";
     }
 
     @Override
