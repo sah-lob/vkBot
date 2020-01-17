@@ -59,7 +59,7 @@ public class VKPeopleRatings {
 
 
         for (int i = 0; i < persons.size(); i++) {
-            result += i + ". " + persons.get(i).getAlternativeName() + " рекордные для себя " + persons.get(i).getRecordDurationAllTime() + " мин.\n";
+            result += (i + 1) + ". " + persons.get(i).getAlternativeName() + " рекордные для себя " + persons.get(i).getRecordDurationAllTime() + " мин.\n";
         }
         return result;
     }
@@ -70,7 +70,7 @@ public class VKPeopleRatings {
         var result = "Рейтинг по средним сессиям: \n\n";
 
         for (int i = 0; i < persons.size(); i++) {
-            result += i + ". " + persons.get(i).getAlternativeName() + " в среднем " + persons.get(i).getAvgDurationAllTime() + " мин.\n";
+            result += (i + 1) + ". " + persons.get(i).getAlternativeName() + " в среднем " + persons.get(i).getAvgDurationAllTime() + " мин.\n";
         }
         return result;
     }
