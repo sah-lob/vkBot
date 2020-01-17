@@ -63,6 +63,10 @@ public class VKCommand extends Command {
             result = spy(messageBody);
         }
 
+        if (messageBody.contains("досье")) {
+            result = dossier(messageBody);
+        }
+
         if (messageBody.contains("ЧП")) {
             result = editTimeZoneVKPerson(messageBody);
         }
@@ -89,6 +93,9 @@ public class VKCommand extends Command {
             result = usersMorning();
         }
 
+        if (result == null) {
+            result = "Странно, непонятно как вы умудрились увидеть это сообщение.";
+        }
         return result;
     }
 
@@ -122,6 +129,11 @@ public class VKCommand extends Command {
         var name = getNameOrAlternativeNameFromMessageBody(messageBody);
         name = name.replaceAll("id", "");
         return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPersonWithTodayDayActivity(name));
+    }
+
+    private String dossier(String messageBody) {
+        var name = messageBody.replaceAll("досье ", "");
+        return vkPeopleParser.getInfoAboutPersonsRecords(vkPeopleMemoryStorage.getPersonWithTodayDayActivity(name));
     }
 
     private String spyAll() {

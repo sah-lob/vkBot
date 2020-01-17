@@ -57,6 +57,19 @@ public class VKPeopleParser {
         return stringAnswer;
     }
 
+    public String getInfoAboutPersonsRecords(Person person) {
+        var stringAnswer = "";
+        if (person == null) {
+            stringAnswer += "Данный пользовтель почему-то не найден";
+        } else {
+            stringAnswer += "Досье " + person.getAlternativeName() + ":\n\n";
+            stringAnswer += "Максимальное время онлайн за день: " + person.getRecordDurationAllTime() + " мин.\n";
+            stringAnswer += "Среднее время онлайн за день: " + person.getAvgDurationAllTime() + " мин.\n";
+            stringAnswer += "Данные по пользователю собираются в течение " + person.getAllTimeDaysCount()  + " суток.";
+        }
+        return stringAnswer;
+    }
+
     public String getInfoAboutAllPersons() {
         StringBuilder result = new StringBuilder("Всего наблюдаем: " + storage.getAllPersonsWithTodayDayActivity().size());
         for (Person p: storage.getAllPersonsWithTodayDayActivity()) {

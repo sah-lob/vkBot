@@ -70,6 +70,11 @@ public class VKPeopleRatings {
         return result.toString();
     }
 
+    public String getPersonsRecords() {
+
+        return null;
+    }
+
     private List<DayActivity> getSortedDayActivityListOfPersons() {
         var persons = storage.getAllPersonsWithTodayDayActivity();
         var dayActivities = new ArrayList<DayActivity>();
