@@ -57,8 +57,9 @@ public class VKPeopleRatings {
         persons.sort(Person.COMPARE_BY_DURATION);
         var result = "Главные задроты за все время: \n\n";
 
-        for (var p : persons) {
-            result += p.getAlternativeName() + " рекордные для себя " + p.getRecordDurationAllTime() + " мин.\n";
+
+        for (int i = 0; i < persons.size(); i++) {
+            result += i + ". " + persons.get(i).getAlternativeName() + " рекордные для себя " + persons.get(i).getRecordDurationAllTime() + " мин.\n";
         }
         return result;
     }
@@ -68,8 +69,8 @@ public class VKPeopleRatings {
         persons.sort(Person.COMPARE_BY_AVG_DURATION);
         var result = "Рейтинг по средним сессиям: \n\n";
 
-        for (var p : persons) {
-            result += p.getAlternativeName() + " в среднем " + p.getAvgDurationAllTime() + " мин.\n";
+        for (int i = 0; i < persons.size(); i++) {
+            result += i + ". " + persons.get(i).getAlternativeName() + " в среднем " + persons.get(i).getAvgDurationAllTime() + " мин.\n";
         }
         return result;
     }

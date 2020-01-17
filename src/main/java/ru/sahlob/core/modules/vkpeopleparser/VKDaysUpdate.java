@@ -22,55 +22,55 @@ public class VKDaysUpdate {
         updateDayTimer();
     }
 
-    public void updatePeoplesRecordes(String day) {
-        var persons = storage.getAllPersonsWithDayActivityByDate(day);
-        for (var p: persons) {
-            var recordDurationAlltime = storage.getPersonWithDayActivityByDate(p.getName(), day).getRecordDurationAllTime();
-            var addDaysCount = storage.getPersonWithDayActivityByDate(p.getName(), day).getAllTimeDaysCount();
-            var avgDuration = storage.getPersonWithDayActivityByDate(p.getName(), day).getAvgDurationAllTime();
-            var dayActivity = p.getActivityByDate(day);
-            if (dayActivity != null) {
-                var dayDuration = dayActivity.getTodayDuration();
-                if (recordDurationAlltime != null && addDaysCount != null && avgDuration != null) {
-                    if (recordDurationAlltime < dayDuration) {
-                        p.setRecordDurationAllTime(dayDuration);
-                    }
-                    if (avgDuration < 0) {
-                        avgDuration = 0;
-                    }
-                    if (addDaysCount < 0) {
-                        addDaysCount = 0;
-                    }
-                    p.setAvgDurationAllTime(((avgDuration * addDaysCount) + dayDuration) / (addDaysCount + 1));
-                    p.setAllTimeDaysCount(addDaysCount + 1);
-                } else {
-                    p.setRecordDurationAllTime(0);
-                    p.setAvgDurationAllTime(0);
-                    p.setAllTimeDaysCount(0);
-                }
-            } else {
-                if (recordDurationAlltime != null && addDaysCount != null && avgDuration != null) {
-                    p.setAllTimeDaysCount(addDaysCount + 1);
-                    p.setAvgDurationAllTime((avgDuration * addDaysCount) / (addDaysCount + 1));
-                } else {
-                    p.setAllTimeDaysCount(0);
-                    p.setRecordDurationAllTime(0);
-                    p.setAvgDurationAllTime(0);
-                }
-            }
-            storage.editPerson(p);
-        }
-    }
-//
 //    public void updatePeoplesRecordes(String day) {
 //        var persons = storage.getAllPersonsWithDayActivityByDate(day);
 //        for (var p: persons) {
+//            var recordDurationAlltime = storage.getPersonWithDayActivityByDate(p.getName(), day).getRecordDurationAllTime();
+//            var addDaysCount = storage.getPersonWithDayActivityByDate(p.getName(), day).getAllTimeDaysCount();
+//            var avgDuration = storage.getPersonWithDayActivityByDate(p.getName(), day).getAvgDurationAllTime();
+//            var dayActivity = p.getActivityByDate(day);
+//            if (dayActivity != null) {
+//                var dayDuration = dayActivity.getTodayDuration();
+//                if (recordDurationAlltime != null && addDaysCount != null && avgDuration != null) {
+//                    if (recordDurationAlltime < dayDuration) {
+//                        p.setRecordDurationAllTime(dayDuration);
+//                    }
+//                    if (avgDuration < 0) {
+//                        avgDuration = 0;
+//                    }
+//                    if (addDaysCount < 0) {
+//                        addDaysCount = 0;
+//                    }
+//                    p.setAvgDurationAllTime(((avgDuration * addDaysCount) + dayDuration) / (addDaysCount + 1));
+//                    p.setAllTimeDaysCount(addDaysCount + 1);
+//                } else {
+//                    p.setRecordDurationAllTime(0);
+//                    p.setAvgDurationAllTime(0);
+//                    p.setAllTimeDaysCount(0);
+//                }
+//            } else {
+//                if (recordDurationAlltime != null && addDaysCount != null && avgDuration != null) {
+//                    p.setAllTimeDaysCount(addDaysCount + 1);
+//                    p.setAvgDurationAllTime((avgDuration * addDaysCount) / (addDaysCount + 1));
+//                } else {
 //                    p.setAllTimeDaysCount(0);
 //                    p.setRecordDurationAllTime(0);
 //                    p.setAvgDurationAllTime(0);
+//                }
+//            }
 //            storage.editPerson(p);
 //        }
 //    }
+//
+    public void updatePeoplesRecordes(String day) {
+        var persons = storage.getAllPersonsWithDayActivityByDate(day);
+        for (var p: persons) {
+                    p.setAllTimeDaysCount(0);
+                    p.setRecordDurationAllTime(0);
+                    p.setAvgDurationAllTime(0);
+            storage.editPerson(p);
+        }
+    }
 
     private void updateDayTimer() {
         var vkTimeKey = new VKTimeKey();
