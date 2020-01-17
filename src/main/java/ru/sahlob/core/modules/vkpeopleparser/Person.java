@@ -16,6 +16,9 @@ public class Person {
     private String alternativeName;
     private String name;
     private String sex;
+    private Integer recordDurationAllTime;
+    private Integer avgDurationAllTime;
+    private Integer allTimeDaysCount;
 
     @Transient
     private Map<String, DayActivity> activity = new HashMap<>();
@@ -37,6 +40,9 @@ public class Person {
         this.name = name;
         this.alternativeName = alternativeName;
         this.isActive = false;
+        this.recordDurationAllTime = 0;
+        this.avgDurationAllTime = 0;
+        this.allTimeDaysCount = 0;
     }
 
     String getAlternativeName() {
@@ -67,8 +73,20 @@ public class Person {
         return activity.get(VKTime.getDateKey(timezone));
     }
 
+    public DayActivity getActivityByDate(String date) {
+        return activity.get(date);
+    }
+
+    public void deleteActivity() {
+        activity = new HashMap<>();
+    }
+
     public void updateTodayActivity(DayActivity dayActivity) {
         this.activity.put(VKTime.getDateKey(timezone), dayActivity);
+    }
+
+    public void updateActivityByDate(String date, DayActivity dayActivity) {
+        this.activity.put(date, dayActivity);
     }
 
     boolean isActive() {
@@ -109,6 +127,30 @@ public class Person {
 
     public void setObservers(Set<Observer> observers) {
         this.observers = observers;
+    }
+
+    public Integer getRecordDurationAllTime() {
+        return recordDurationAllTime;
+    }
+
+    public void setRecordDurationAllTime(Integer recordDurationAllTime) {
+        this.recordDurationAllTime = recordDurationAllTime;
+    }
+
+    public Integer getAvgDurationAllTime() {
+        return avgDurationAllTime;
+    }
+
+    public void setAvgDurationAllTime(Integer avgDurationAllTime) {
+        this.avgDurationAllTime = avgDurationAllTime;
+    }
+
+    public Integer getAllTimeDaysCount() {
+        return allTimeDaysCount;
+    }
+
+    public void setAllTimeDaysCount(Integer allTimeDaysCount) {
+        this.allTimeDaysCount = allTimeDaysCount;
     }
 
     @Override

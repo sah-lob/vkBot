@@ -71,7 +71,7 @@ public class VKPeopleRatings {
     }
 
     private List<DayActivity> getSortedDayActivityListOfPersons() {
-        var persons = storage.getAllPersons();
+        var persons = storage.getAllPersonsWithTodayDayActivity();
         var dayActivities = new ArrayList<DayActivity>();
         for (var p: persons) {
             if (p.getTodayActivity() != null) {

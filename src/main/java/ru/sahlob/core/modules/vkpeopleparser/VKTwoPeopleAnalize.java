@@ -20,8 +20,8 @@ public class VKTwoPeopleAnalize {
 
     public String jointOnlineOfTwoUsers(String name1, String name2) {
 
-        var person1 = storage.getPerson(name1);
-        var person2 = storage.getPerson(name2);
+        var person1 = storage.getPersonWithTodayDayActivity(name1);
+        var person2 = storage.getPersonWithTodayDayActivity(name2);
         var stringAnswer = "";
         var dayActivity1 = person1.getTodayActivity();
         var dayActivity2 = person2.getTodayActivity();

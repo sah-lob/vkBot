@@ -50,4 +50,14 @@ public class VKPeopleMemoryStorage implements VKPeopleStorage {
     public void deleteAllDayAndMinutesActivitiesByDay(String key) {
 
     }
+
+    @Override
+    public Person getPersonWithActivityByDate(String name, String date) {
+        return null;
+    }
+
+    @Override
+    public List<Person> getAllPersonsWithActivityByDate(String date) {
+        return null;
+    }
 }

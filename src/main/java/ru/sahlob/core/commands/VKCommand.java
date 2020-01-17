@@ -121,7 +121,7 @@ public class VKCommand extends Command {
     private String spy(String messageBody) {
         var name = getNameOrAlternativeNameFromMessageBody(messageBody);
         name = name.replaceAll("id", "");
-        return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPerson(name));
+        return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPersonWithTodayDayActivity(name));
     }
 
     private String spyAll() {

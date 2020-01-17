@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
-import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.time.VKTimeKey;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -59,8 +58,8 @@ public class VKPeopleParser {
     }
 
     public String getInfoAboutAllPersons() {
-        StringBuilder result = new StringBuilder("Всего наблюдаем: " + storage.getAllPersons().size());
-        for (Person p: storage.getAllPersons()) {
+        StringBuilder result = new StringBuilder("Всего наблюдаем: " + storage.getAllPersonsWithTodayDayActivity().size());
+        for (Person p: storage.getAllPersonsWithTodayDayActivity()) {
             result.append("\n");
             result.append("\n");
             result.append(getInfoAboutPerson(p));
@@ -78,7 +77,7 @@ public class VKPeopleParser {
     }
 
     public void updateAllPersons() {
-        var persons = (ArrayList<Person>) storage.getAllPersons();
+        var persons = (ArrayList<Person>) storage.getAllPersonsWithTodayDayActivity();
         for (var p: persons) {
             var dateKey = VKTime.getDateKey(p.getTimezone());
             var dayActivity = p.getActivity().get(dateKey);
@@ -140,7 +139,7 @@ public class VKPeopleParser {
     }
 
     public boolean userExistenceCheck(String name) {
-        return storage.getPerson(name) != null;
+        return storage.getPersonWithTodayDayActivity(name) != null;
     }
 
     private static String takeGetRequest(String name) {
@@ -164,13 +163,4 @@ public class VKPeopleParser {
         return answer;
     }
 
-    public void updateDayTimer() {
-        VKTimeKey vkTimeKey = new VKTimeKey();
-        vkTimeKey.setTimeKey(VKTime.getDateKey(3));
-        timeStorage.addNewTime(vkTimeKey);
-        if (timeStorage.getTimeCount() >= 7) {
-            var key = timeStorage.deleteFirst();
-            storage.deleteAllDayAndMinutesActivitiesByDay(key);
-        }
-    }
 }

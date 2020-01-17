@@ -37,42 +37,32 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
 
     @Override
     public Person getPersonWithTodayDayActivity(String name) {
-        var person = personsRepository.getFirstPersonByName(name);
-        if (person != null) {
-            person.updateTodayActivity(getTodsyDayAndMinutesActivities(person));
-        }
-        return person;
+        return getPersonWithActivityByDate(name, "");
     }
 
     @Override
     public void editPerson(Person person) {
         personsRepository.save(person);
         var todayActivity = person.getTodayActivity();
-        if (getTodsyDayAndMinutesActivities(person) == null) {
-            todayActivity = new DayActivity(person.getTimezone());
-            todayActivity.setPerson(person.getId());
-            todayActivity.setKey(VKTime.getDateKey(person.getTimezone()));
-            daysRepository.save(todayActivity);
-        }
-        var minuteActivies = todayActivity.getDayActivities();
+        if (todayActivity != null) {
+            if (getDayAndMinutesActivitiesByDate(person, VKTime.getDateKey(person.getTimezone())) == null) {
+                todayActivity = new DayActivity(person.getTimezone());
+                todayActivity.setPerson(person.getId());
+                todayActivity.setKey(VKTime.getDateKey(person.getTimezone()));
+                daysRepository.save(todayActivity);
+            }
+            var minuteActivies = todayActivity.getDayActivities();
 
-        for (var m : minuteActivies) {
-            m.setDayActivity(todayActivity.getId());
-            minutesRepository.save(m);
+            for (var m : minuteActivies) {
+                m.setDayActivity(todayActivity.getId());
+                minutesRepository.save(m);
+            }
         }
     }
 
     @Override
     public List<Person> getAllPersonsWithTodayDayActivity() {
-        var persons = personsRepository.findAll();
-        var result =
-                StreamSupport.stream(persons.spliterator(), false)
-                        .collect(Collectors.toList());
-        for (var p: result) {
-            p.updateTodayActivity(getTodsyDayAndMinutesActivities(p));
-        }
-
-        return result;
+        return getAllPersonsWithActivityByDate("");
     }
 
     @Override
@@ -92,10 +82,40 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
         }
     }
 
-    private DayActivity getTodsyDayAndMinutesActivities(Person person) {
+    @Override
+    public Person getPersonWithActivityByDate(String name, String date) {
+        var person = personsRepository.getFirstPersonByName(name);
+
+        if (date.equals("")) {
+            date = VKTime.getDateKey(person.getTimezone());
+        }
+
+        if (person != null) {
+            person.updateActivityByDate(date, getDayAndMinutesActivitiesByDate(person, date));
+        }
+        return person;
+    }
+
+    @Override
+    public List<Person> getAllPersonsWithActivityByDate(String date) {
+        var persons = personsRepository.findAll();
+        var result =
+                StreamSupport.stream(persons.spliterator(), false)
+                        .collect(Collectors.toList());
+        for (var p: result) {
+            if (date.equals("")) {
+                p.updateTodayActivity(getDayAndMinutesActivitiesByDate(p, VKTime.getDateKey(p.getTimezone())));
+            } else {
+                p.updateTodayActivity(getDayAndMinutesActivitiesByDate(p, date));
+            }
+        }
+        return result;
+    }
+
+    private DayActivity getDayAndMinutesActivitiesByDate(Person person, String date) {
         DayActivity dayActivity = null;
         try {
-             dayActivity = daysRepository.getDayActivityByPersonAndKey(person.getId(), VKTime.getDateKey(person.getTimezone()));
+            dayActivity = daysRepository.getDayActivityByPersonAndKey(person.getId(), date);
         } catch (Exception ignored) {
         }
         if (dayActivity != null) {

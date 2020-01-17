@@ -19,7 +19,7 @@ public class MainVKPeopleStorage {
         vkPeopleStorage.addPerson(name, VKPeopleParser.altName(name));
     }
 
-    public Person getPerson(String name) {
+    public Person getPersonWithTodayDayActivity(String name) {
         return vkPeopleStorage.getPersonWithTodayDayActivity(name);
     }
 
@@ -27,7 +27,7 @@ public class MainVKPeopleStorage {
         vkPeopleStorage.editPerson(person);
     }
 
-    public List<Person> getAllPersons() {
+    public List<Person> getAllPersonsWithTodayDayActivity() {
         return vkPeopleStorage.getAllPersonsWithTodayDayActivity();
     }
 
@@ -37,5 +37,13 @@ public class MainVKPeopleStorage {
 
     public void deleteAllDayAndMinutesActivitiesByDay(String key) {
         vkPeopleStorage.deleteAllDayAndMinutesActivitiesByDay(key);
+    }
+
+    public Person getPersonWithDayActivityByDate(String name, String date) {
+        return vkPeopleStorage.getPersonWithActivityByDate(name, date);
+    }
+
+    public List<Person> getAllPersonsWithDayActivityByDate(String date) {
+        return vkPeopleStorage.getAllPersonsWithActivityByDate(date);
     }
 }

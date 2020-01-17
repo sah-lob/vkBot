@@ -20,7 +20,7 @@ public class VKMorning {
 
     public String usersMorning() {
         var result = "Кто во сколько первый раз зашел в вк:\n \n";
-        var persons = storage.getAllPersons();
+        var persons = storage.getAllPersonsWithTodayDayActivity();
         var morningTimes = new ArrayList<Morning>();
         for (var p: persons) {
             var vkDay = analize.getVKDayOfPerson(p);
