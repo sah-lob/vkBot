@@ -42,6 +42,11 @@ public class VKPeopleMemoryStorage implements VKPeopleStorage {
     }
 
     @Override
+    public List<Person> getAllPersonsWithoutDayActivities() {
+        return null;
+    }
+
+    @Override
     public void editTimeZoneToPerson(String name, int timezone) {
         getPersonWithTodayDayActivity(name).setTimezone(timezone);
     }
