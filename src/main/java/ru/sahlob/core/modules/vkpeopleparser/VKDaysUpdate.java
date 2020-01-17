@@ -61,6 +61,16 @@ public class VKDaysUpdate {
             storage.editPerson(p);
         }
     }
+//
+//    public void updatePeoplesRecordes(String day) {
+//        var persons = storage.getAllPersonsWithDayActivityByDate(day);
+//        for (var p: persons) {
+//                    p.setAllTimeDaysCount(0);
+//                    p.setRecordDurationAllTime(0);
+//                    p.setAvgDurationAllTime(0);
+//            storage.editPerson(p);
+//        }
+//    }
 
     private void updateDayTimer() {
         var vkTimeKey = new VKTimeKey();
