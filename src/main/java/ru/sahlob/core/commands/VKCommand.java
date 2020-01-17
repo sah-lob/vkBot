@@ -67,7 +67,7 @@ public class VKCommand extends Command {
             result = dossier(messageBody);
         }
 
-        if (messageBody.contains("лидерыc")) {
+        if (messageBody.contains("лидерыс")) {
             result = avgAllTimeDurationsLiders();
         } else if (messageBody.contains("лидеры")) {
             result = allTimeDurationsLiders();
