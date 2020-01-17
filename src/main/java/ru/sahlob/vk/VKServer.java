@@ -27,7 +27,6 @@ public class VKServer {
     public void run() throws NullPointerException, ApiException, InterruptedException {
         int minutes = new Date().getMinutes();
         String days = VKTime.getDateKey(3);
-        vkDaysUpdate.updatePeoplesRecordes(days);
         while (true) {
             Thread.sleep(300);
             if (minutes != new Date().getMinutes()) {
