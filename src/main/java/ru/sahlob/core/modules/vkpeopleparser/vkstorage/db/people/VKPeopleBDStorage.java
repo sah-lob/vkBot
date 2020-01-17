@@ -66,6 +66,15 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     }
 
     @Override
+    public List<Person> getAllPersonsWithoutDayActivities() {
+        var persons = personsRepository.findAll();
+        var result =
+                StreamSupport.stream(persons.spliterator(), false)
+                        .collect(Collectors.toList());
+        return result;
+    }
+
+    @Override
     public void editTimeZoneToPerson(String name, int timezone) {
     }
 

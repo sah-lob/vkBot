@@ -67,6 +67,12 @@ public class VKCommand extends Command {
             result = dossier(messageBody);
         }
 
+        if (messageBody.contains("лидерыc")) {
+            result = avgAllTimeDurationsLiders();
+        } else if (messageBody.contains("лидеры")) {
+            result = allTimeDurationsLiders();
+        }
+
         if (messageBody.contains("ЧП")) {
             result = editTimeZoneVKPerson(messageBody);
         }
@@ -146,6 +152,14 @@ public class VKCommand extends Command {
 
     private String personsAvgDurationRaiting() {
         return vkPeopleRatings.getPersonsAvgDurationRaiting();
+    }
+
+    private String allTimeDurationsLiders() {
+        return vkPeopleRatings.getPseronsAllTimeDurationRaiting();
+    }
+
+    private String avgAllTimeDurationsLiders() {
+        return vkPeopleRatings.getPseronsAvgAllTimeDurationRaiting();
     }
 
     private String personsSessionCount() {

@@ -4,11 +4,12 @@ import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.observers.Observer;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Table(name = "persons")
-public class Person {
+public class Person implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -169,4 +170,13 @@ public class Person {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public static final Comparator<Person> COMPARE_BY_DURATION = (lhs, rhs) -> {
+        return rhs.getRecordDurationAllTime() - lhs.getRecordDurationAllTime();
+    };
+
+    public static final Comparator<Person> COMPARE_BY_AVG_DURATION = (lhs, rhs) -> {
+        return rhs.getAvgDurationAllTime() - lhs.getAvgDurationAllTime();
+    };
+
 }

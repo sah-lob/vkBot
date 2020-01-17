@@ -31,6 +31,10 @@ public class MainVKPeopleStorage {
         return vkPeopleStorage.getAllPersonsWithTodayDayActivity();
     }
 
+    public List<Person> getAllPersonsWithoutDayActivity() {
+        return vkPeopleStorage.getAllPersonsWithoutDayActivities();
+    }
+
     public void editTimeZoneToPerson(String name, int timezone) {
         vkPeopleStorage.editTimeZoneToPerson(name, timezone);
     }

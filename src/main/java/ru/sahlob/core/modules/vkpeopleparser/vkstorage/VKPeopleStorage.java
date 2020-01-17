@@ -10,6 +10,7 @@ public interface VKPeopleStorage {
     Person getPersonWithTodayDayActivity(String name);
     void editPerson(Person person);
     List<Person> getAllPersonsWithTodayDayActivity();
+    List<Person> getAllPersonsWithoutDayActivities();
     void editTimeZoneToPerson(String name, int timezone);
     void deleteAllDayAndMinutesActivitiesByDay(String key);
     Person getPersonWithActivityByDate(String name, String date);

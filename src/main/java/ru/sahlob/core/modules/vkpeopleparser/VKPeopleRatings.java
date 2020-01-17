@@ -52,6 +52,28 @@ public class VKPeopleRatings {
         return result.toString();
     }
 
+    public String getPseronsAllTimeDurationRaiting() {
+        var persons = storage.getAllPersonsWithoutDayActivity();
+        persons.sort(Person.COMPARE_BY_DURATION);
+        var result = "Главные задроты за все время: \n\n";
+
+        for (var p : persons) {
+            result += p.getAlternativeName() + " рекордные для себя " + p.getRecordDurationAllTime() + " мин.";
+        }
+        return result;
+    }
+
+    public String getPseronsAvgAllTimeDurationRaiting() {
+        var persons = storage.getAllPersonsWithoutDayActivity();
+        persons.sort(Person.COMPARE_BY_AVG_DURATION);
+        var result = "Рейтинг по средним сессиям: \n\n";
+
+        for (var p : persons) {
+            result += p.getAlternativeName() + " в среднем " + p.getAvgDurationAllTime() + " мин.";
+        }
+        return result;
+    }
+
     public String getCountOfPersonsSessions() {
 
         var dayActivities = getSortedDayActivityListOfPersons();
