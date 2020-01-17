@@ -22,7 +22,7 @@ public class VKDaysUpdate {
         updateDayTimer();
     }
 
-    public void updatePeoplesRecordes(String day) {
+    private void updatePeoplesRecordes(String day) {
         var persons = storage.getAllPersonsWithDayActivityByDate(day);
         for (var p: persons) {
             var recordDurationAlltime = storage.getPersonWithDayActivityByDate(p.getName(), day).getRecordDurationAllTime();
