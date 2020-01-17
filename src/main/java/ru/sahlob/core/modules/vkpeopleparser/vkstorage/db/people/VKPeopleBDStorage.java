@@ -111,11 +111,19 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
         var result =
                 StreamSupport.stream(persons.spliterator(), false)
                         .collect(Collectors.toList());
-        for (var p: result) {
+//        for (var p: result) {
+//            if (date.equals("")) {
+//                p.updateTodayActivity(getDayAndMinutesActivitiesByDate(p, VKTime.getDateKey(p.getTimezone())));
+//            } else {
+//                p.updateTodayActivity(getDayAndMinutesActivitiesByDate(p, date));
+//            }
+//        }
+        for (int i = 0; i < result.size(); i++) {
+            var p = result.get(i);
             if (date.equals("")) {
-                p.updateTodayActivity(getDayAndMinutesActivitiesByDate(p, VKTime.getDateKey(p.getTimezone())));
+                result.get(i).updateActivityByDate(date, getDayAndMinutesActivitiesByDate(p, VKTime.getDateKey(p.getTimezone())));
             } else {
-                p.updateTodayActivity(getDayAndMinutesActivitiesByDate(p, date));
+                result.get(i).updateActivityByDate(date, getDayAndMinutesActivitiesByDate(p, date));
             }
         }
         return result;
