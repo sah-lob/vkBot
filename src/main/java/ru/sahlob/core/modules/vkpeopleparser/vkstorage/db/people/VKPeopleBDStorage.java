@@ -121,9 +121,9 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
         for (int i = 0; i < result.size(); i++) {
             var p = result.get(i);
             if (date.equals("")) {
-                result.get(i).updateActivityByDate(date, getDayAndMinutesActivitiesByDate(p, VKTime.getDateKey(p.getTimezone())));
+                result.get(i).updateActivityByDate(VKTime.getDateKey(p.getTimezone()), getDayAndMinutesActivitiesByDate(p, VKTime.getDateKey(p.getTimezone())));
             } else {
-                result.get(i).updateActivityByDate(date, getDayAndMinutesActivitiesByDate(p, date));
+                result.get(i).updateActivityByDate(VKTime.getDateKey(p.getTimezone()), getDayAndMinutesActivitiesByDate(p, date));
             }
         }
         return result;
