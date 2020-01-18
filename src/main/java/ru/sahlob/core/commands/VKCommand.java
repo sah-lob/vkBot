@@ -8,6 +8,7 @@ import ru.sahlob.core.modules.vkpeopleparser.VKMorning;
 import ru.sahlob.core.modules.vkpeopleparser.VKTwoPeopleAnalize;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleRatings;
+import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 
 @Component
@@ -18,6 +19,7 @@ public class VKCommand extends Command {
     private final VKPeopleParser vkPeopleParser;
     private final VKPeopleRatings vkPeopleRatings;
     private final VKTwoPeopleAnalize vkTwoPeopleAnalize;
+    private final VKTimeStorage vkTimeStorage;
     private final VKMorning vkMorning;
 
 
@@ -25,12 +27,14 @@ public class VKCommand extends Command {
                      VKPeopleParser vkPeopleParser,
                      VKPeopleRatings vkPeopleRatings,
                      VKTwoPeopleAnalize vkTwoPeopleAnalize,
-                     VKMorning vkMorning) {
+                     VKMorning vkMorning,
+                     VKTimeStorage vkTimeStorage) {
         this.vkPeopleMemoryStorage = vkPeopleMemoryStorage;
         this.vkPeopleParser = vkPeopleParser;
         this.vkPeopleRatings = vkPeopleRatings;
         this.vkTwoPeopleAnalize = vkTwoPeopleAnalize;
         this.vkMorning = vkMorning;
+        this.vkTimeStorage = vkTimeStorage;
     }
 
     @Override
@@ -99,6 +103,9 @@ public class VKCommand extends Command {
             result = usersMorning();
         }
 
+        if (messageBody.contains("даты")) {
+            result = availableDates();
+        }
         if (result == null) {
             result = "Странно, непонятно как вы умудрились увидеть это сообщение.";
         }
@@ -204,6 +211,15 @@ public class VKCommand extends Command {
         var key = messageBody.replaceAll("удалить ", "");
         vkPeopleMemoryStorage.deleteAllDayAndMinutesActivitiesByDay(key);
         return "Возможно удалины=)";
+    }
+
+    private String availableDates() {
+        var list = vkTimeStorage.getAllAvlDays();
+        String result = "Доступные даты: \n";
+        for (var l : list) {
+            result += l + "\n";
+        }
+        return result;
     }
 
     @Override

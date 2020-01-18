@@ -3,6 +3,9 @@ import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.time.DBTimesRepository;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.time.VKTimeKey;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class VKTimeStorage {
 
@@ -36,6 +39,15 @@ public class VKTimeStorage {
         String key = minID.getTimeKey();
         dbTimesRepository.delete(minID);
         return key;
+    }
+
+    public List<String> getAllAvlDays() {
+        var result = new ArrayList<String>();
+        var intew = dbTimesRepository.findAll();
+        for (var i : intew) {
+            result.add(i.getTimeKey());
+        }
+        return result;
     }
 
 }

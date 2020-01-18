@@ -1,9 +1,10 @@
 package ru.sahlob.core.modules.vkpeopleparser.vktime;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 public class VKTime {
-
 
     public static String getDateKey(int timezone) {
         var date = getDate(timezone);
@@ -44,6 +45,4 @@ public class VKTime {
         ZoneOffset zoneOffSet = ZoneOffset.of(time);
         return OffsetDateTime.now(zoneOffSet);
     }
-
-
 }
