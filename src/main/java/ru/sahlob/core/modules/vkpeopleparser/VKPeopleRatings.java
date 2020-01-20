@@ -55,24 +55,24 @@ public class VKPeopleRatings {
     public String getPseronsAllTimeDurationRaiting() {
         var persons = storage.getAllPersonsWithoutDayActivity();
         persons.sort(Person.COMPARE_BY_DURATION);
-        var result = "Главные задроты за все время: \n\n";
+        StringBuilder result = new StringBuilder("Главные задроты за все время: \n\n");
 
 
         for (int i = 0; i < persons.size(); i++) {
-            result += (i + 1) + ". " + persons.get(i).getAlternativeName() + " рекордные для себя " + persons.get(i).getRecordDurationAllTime() + " мин.\n";
+            result.append(i + 1).append(". ").append(persons.get(i).getAlternativeName()).append(" рекордные для себя ").append(persons.get(i).getRecordDurationAllTime()).append(" мин.\n");
         }
-        return result;
+        return result.toString();
     }
 
     public String getPseronsAvgAllTimeDurationRaiting() {
         var persons = storage.getAllPersonsWithoutDayActivity();
         persons.sort(Person.COMPARE_BY_AVG_DURATION);
-        var result = "Рейтинг по средним сессиям: \n\n";
+        StringBuilder result = new StringBuilder("Рейтинг по средним сессиям: \n\n");
 
         for (int i = 0; i < persons.size(); i++) {
-            result += (i + 1) + ". " + persons.get(i).getAlternativeName() + " в среднем " + persons.get(i).getAvgDurationAllTime() + " мин.\n";
+            result.append(i + 1).append(". ").append(persons.get(i).getAlternativeName()).append(" в среднем ").append(persons.get(i).getAvgDurationAllTime()).append(" мин.\n");
         }
-        return result;
+        return result.toString();
     }
 
     public String getCountOfPersonsSessions() {
@@ -103,7 +103,6 @@ public class VKPeopleRatings {
         var femaleAvgDuration = 0;
         var maxFemaleDuration = 0;
         var femaleCount = 0;
-
         for (var p: persons) {
             if (p.getSex() != null) {
                 if (p.getSex().equals("m")) {
@@ -123,18 +122,18 @@ public class VKPeopleRatings {
                 }
             }
         }
-
+        int maxSession = maxFemaleDuration > maxMaleDuration ? maxFemaleDuration : maxMaleDuration;
         var result = "";
-
-        result += "Средняя максимальная длинна сессии у мужчин: " + (maleDuration / maleCount) + " мин.\n";
-        result += "Средняя максимальная длинна сессии у женщин: " + (femaleDuration / maleCount) + " мин.\n";
         result += "Самая продолжительная сессия у мужцин: " + maxMaleDuration + " мин.\n";
         result += "Самая продолжительная сессия у женщин: " + maxFemaleDuration + " мин.\n";
-        if (maleCount > 0) {
+        result += "Самая продолжительная сессия: " + maxSession + " мин.\n";
+        if (maleCount > 0 && femaleCount > 0) {
+            result += "Средняя максимальная длинна сессии у мужчин: " + (maleDuration / maleCount) + " мин.\n";
+            result += "Средняя максимальная длинна сессии у женщин: " + (femaleDuration / femaleCount) + " мин.\n";
+            result += "Средняя максимальная длинна сессии у всех: " + (maleDuration + femaleDuration / maleCount + femaleCount) + " мин.\n";
             result += "Средняя сессия у мажчин: " + (maleAvgDuration / maleCount) + " мин.\n";
-        }
-        if (femaleCount > 0) {
             result += "Средняя сессия у женщин: " + (femaleAvgDuration / femaleCount) + " мин.\n";
+            result += "Средняя сессия у всех: " + (femaleAvgDuration + maleAvgDuration / femaleCount + maleCount) + " мин.\n";
         }
         result += "Количество наблюдаемых мужчин: " + maleCount + " мин.\n";
         result += "Количество наблюдаемых женщин: " + femaleCount + " мин.\n";
