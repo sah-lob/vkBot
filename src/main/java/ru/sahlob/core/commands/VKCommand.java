@@ -80,12 +80,12 @@ public class VKCommand extends Command {
             result = allTimeDurationsLiders();
         }
 
-        if (messageBody.contains("ЧП")) {
-            result = editTimeZoneVKPerson(messageBody);
-        }
-
-        if (messageBody.contains("белка")) {
-            result = spyAll();
+        if (messageBody.contains("чп")) {
+            if (message.getUserId() == 7965708) {
+                result = editTimeZoneVKPerson(messageBody);
+            } else {
+                result = "не надо лучше=)";
+            }
         }
 
         if (messageBody.contains("параноики")) {
@@ -114,10 +114,14 @@ public class VKCommand extends Command {
             result = info(message.getUserId());
         }
 
+        if (messageBody.contains("пол")) {
+            result = setSex(messageBody);
+        }
 
         if (result == null) {
             result = "Странно, непонятно как вы умудрились увидеть это сообщение.";
         }
+
         return result;
     }
 
@@ -163,10 +167,6 @@ public class VKCommand extends Command {
     private String dossier(String messageBody) {
         var name = messageBody.replaceAll("досье ", "");
         return vkPeopleParser.getInfoAboutPersonsRecords(vkPeopleMemoryStorage.getPersonWithTodayDayActivity(name));
-    }
-
-    private String spyAll() {
-        return vkPeopleParser.getInfoAboutAllPersons();
     }
 
     private String personsDurationRating() {
@@ -231,9 +231,23 @@ public class VKCommand extends Command {
 
     private String availableDates() {
         var list = vkTimeStorage.getAllAvlDays();
-        String result = "Доступные даты: \n";
+        StringBuilder result = new StringBuilder("Доступные даты: \n");
         for (var l : list) {
-            result += l + "\n";
+            result.append(l).append("\n");
+        }
+        return result.toString();
+    }
+
+    private String setSex(String messageBody) {
+        var mas = messageBody.split(" ");
+        var name = mas[1];
+        var sex = mas[2];
+        var result = "";
+        if (sex.equals("m") || sex.equals("f")) {
+            vkPeopleMemoryStorage.editSexToPerson(name, sex);
+            result = "Пол поменялся=)";
+        } else {
+            result = "Пол был введен неправильно нужно 'f' - женский или 'm'- мужской";
         }
         return result;
     }
@@ -253,10 +267,10 @@ public class VKCommand extends Command {
         list.add("'едины " + id + " " + id + "' - смотреть сколько времени люди были онлайн одновременно.");
         list.add("'досье " + id + "' - смотреть максимальное время и среднюю длину сессий пользователя.");
         list.add("'команды' - команды");
-        var result = "Команды вк:\n";
+        StringBuilder result = new StringBuilder("Команды вк:\n");
         for (int i = 0; i < list.size(); i++) {
-            result +=  (i + 1) + ". " + list.get(i) + "\n";
+            result.append(i + 1).append(". ").append(list.get(i)).append("\n");
         }
-        return result;
+        return result.toString();
     }
 }

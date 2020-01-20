@@ -76,6 +76,16 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
 
     @Override
     public void editTimeZoneToPerson(String name, int timezone) {
+        var person = personsRepository.getFirstPersonByName(name);
+        person.setTimezone(timezone);
+        personsRepository.save(person);
+    }
+
+
+    public void editSexToPerson(String name, String sex) {
+        var person = personsRepository.getFirstPersonByName(name);
+        person.setSex(sex);
+        personsRepository.save(person);
     }
 
     @Override

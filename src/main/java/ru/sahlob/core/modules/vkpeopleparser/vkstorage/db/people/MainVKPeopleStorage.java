@@ -39,6 +39,10 @@ public class MainVKPeopleStorage {
         vkPeopleStorage.editTimeZoneToPerson(name, timezone);
     }
 
+    public void editSexToPerson(String name, String sex) {
+        vkPeopleStorage.editSexToPerson(name, sex);
+    }
+
     public void deleteAllDayAndMinutesActivitiesByDay(String key) {
         vkPeopleStorage.deleteAllDayAndMinutesActivitiesByDay(key);
     }

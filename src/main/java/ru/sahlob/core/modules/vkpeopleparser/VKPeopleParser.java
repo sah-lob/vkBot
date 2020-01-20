@@ -72,17 +72,6 @@ public class VKPeopleParser {
         return stringAnswer;
     }
 
-    public String getInfoAboutAllPersons() {
-        StringBuilder result = new StringBuilder("Всего наблюдаем: " + storage.getAllPersonsWithTodayDayActivity().size());
-        for (Person p: storage.getAllPersonsWithTodayDayActivity()) {
-            result.append("\n");
-            result.append("\n");
-            result.append(getInfoAboutPerson(p, VKTime.getDateKey(p.getTimezone())));
-            result.append("\n---------------------------");
-        }
-        return result.toString();
-    }
-
     private boolean personOnline(Person person) {
         var answer = takeGetRequest(person.getName());
         if (!answer.equals("")) {

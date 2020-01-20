@@ -16,7 +16,6 @@ public class MemoryStorage implements Storage {
     private final VKCommand vkCommand4;
     private final VKCommand vkCommand5;
     private final VKCommand vkCommand6;
-    private final VKCommand vkCommand7;
     private final VKCommand vkCommand8;
     private final VKCommand vkCommand9;
     private final VKCommand vkCommand10;
@@ -28,6 +27,8 @@ public class MemoryStorage implements Storage {
     private final VKCommand vkCommand16;
     private final VKCommand vkCommand17;
     private final VKCommand vkCommand18;
+    private final VKCommand vkCommand19;
+    private final VKCommand vkCommand20;
     private final Weather weather;
     private final Weather weather2;
     private final Anna anna;
@@ -35,16 +36,15 @@ public class MemoryStorage implements Storage {
 
     private static HashSet<Command> commands = new HashSet<>();
 
-    public MemoryStorage(VKCommand vkCommand,
+    public MemoryStorage(Weather weather,
+                         Weather weather2,
+                         Anna anna,
+                         VKCommand vkCommand,
                          VKCommand vkCommand2,
                          VKCommand vkCommand3,
                          VKCommand vkCommand4,
                          VKCommand vkCommand5,
                          VKCommand vkCommand6,
-                         VKCommand vkCommand7,
-                         Weather weather,
-                         Weather weather2,
-                         Anna anna,
                          VKCommand vkCommand8,
                          VKCommand vkCommand9,
                          VKCommand vkCommand10,
@@ -55,15 +55,19 @@ public class MemoryStorage implements Storage {
                          VKCommand vkCommand15,
                          VKCommand vkCommand16,
                          VKCommand vkCommand17,
-                         VKCommand vkCommand18) {
+                         VKCommand vkCommand18,
+                         VKCommand vkCommand19,
+                         VKCommand vkCommand20) {
 
+        this.weather = weather;
+        this.weather2 = weather2;
+        this.anna = anna;
         this.vkCommand = vkCommand;
         this.vkCommand2 = vkCommand2;
         this.vkCommand3 = vkCommand3;
         this.vkCommand4 = vkCommand4;
         this.vkCommand5 = vkCommand5;
         this.vkCommand6 = vkCommand6;
-        this.vkCommand7 = vkCommand7;
         this.vkCommand8 = vkCommand8;
         this.vkCommand9 = vkCommand9;
         this.vkCommand10 = vkCommand10;
@@ -75,9 +79,8 @@ public class MemoryStorage implements Storage {
         this.vkCommand16 = vkCommand16;
         this.vkCommand17 = vkCommand17;
         this.vkCommand18 = vkCommand18;
-        this.weather = weather;
-        this.weather2 = weather2;
-        this.anna = anna;
+        this.vkCommand19 = vkCommand19;
+        this.vkCommand20 = vkCommand20;
     }
 
     public void updateCommands() {
@@ -90,7 +93,6 @@ public class MemoryStorage implements Storage {
         vkCommand4.setName("м");
         vkCommand5.setName("и");
         vkCommand6.setName("b");
-        vkCommand7.setName("белка");
         vkCommand8.setName("задроты");
         vkCommand9.setName("задротыс");
         vkCommand10.setName("параноики");
@@ -102,13 +104,14 @@ public class MemoryStorage implements Storage {
         vkCommand16.setName("лидерыс");
         vkCommand17.setName("даты");
         vkCommand18.setName("команды");
+        vkCommand19.setName("чп");
+        vkCommand20.setName("пол");
         commands.add(vkCommand);
         commands.add(vkCommand2);
         commands.add(vkCommand3);
         commands.add(vkCommand4);
         commands.add(vkCommand5);
         commands.add(vkCommand6);
-        commands.add(vkCommand7);
         commands.add(vkCommand8);
         commands.add(vkCommand9);
         commands.add(vkCommand10);
@@ -120,6 +123,8 @@ public class MemoryStorage implements Storage {
         commands.add(vkCommand16);
         commands.add(vkCommand17);
         commands.add(vkCommand18);
+        commands.add(vkCommand19);
+        commands.add(vkCommand20);
         commands.add(weather);
         commands.add(weather2);
         commands.add(anna);

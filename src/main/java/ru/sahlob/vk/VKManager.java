@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class VKManager {
 
-    public final VKCore vkCore;
+    private final VKCore vkCore;
 
     public VKManager(VKCore vkCore) {
         this.vkCore = vkCore;
