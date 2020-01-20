@@ -2,10 +2,9 @@ package ru.sahlob.core.commands.commandsmanage;
 
 import com.vk.api.sdk.objects.messages.Message;
 import org.springframework.stereotype.Component;
-import ru.sahlob.core.commands.commandsmanage.storage.INFO;
 
 @Component
-public abstract class Command implements INFO {
+public abstract class Command {
 
     private String name;
 

@@ -10,6 +10,9 @@ import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleRatings;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
+import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
+
+import java.util.ArrayList;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -106,6 +109,12 @@ public class VKCommand extends Command {
         if (messageBody.contains("даты")) {
             result = availableDates();
         }
+
+        if (messageBody.contains("команды")) {
+            result = info(message.getUserId());
+        }
+
+
         if (result == null) {
             result = "Странно, непонятно как вы умудрились увидеть это сообщение.";
         }
@@ -229,14 +238,25 @@ public class VKCommand extends Command {
         return result;
     }
 
-    @Override
-    public String info() {
-        return "Команды, которые относятся к слежке в вк."
-                + "следить {id} - добавить пользователя, за которым нужно следить"
-                + "шпионим {id} - наблюдать, сколько пользователь был онлайн"
-                + "задроты - топ лист по длительности из всех людей, за которыми наблюдают."
-                + "задротыс - топ лист по средней длительности сессии по пользователям"
-                + "параноики - топ лист из людей, кто чаще заходил"
-                + "ЧП {id} +3 - изменить часовой пояс у пользователя.(возможно не работает)";
+    private String info(Integer id) {
+        var list = new ArrayList<>();
+        list.add("'следить " + id + "' - добавить пользователя, за которым нужно следить.");
+        list.add("'шпионим " + id + "' - наблюдать, сколько пользователь был онлайн.");
+        list.add("'шпионим " + id + " " + VKTime.getDateKey(3) + "' - наблюдать, сколько пользователь был онлайн.");
+        list.add("'даты' - данные пользователей хроняться только за эти дни.");
+        list.add("'задроты' - топ лист по длительности сессии сегодня из всех людей, за которыми наблюдают.");
+        list.add("'задротыс' - топ лист по средней длительности сессии по пользователям.");
+        list.add("'параноики' - топ лист из людей, кто чаще заходил.");
+        list.add("'лидеры' - топ лист по длительности сессии людей за все время.");
+        list.add("'лидерыс' - топ лист по средней длительности сессии людей за все время.");
+        list.add("'ЧП " + id + "' +3 - изменить часовой пояс у пользователя.(возможно не работает).");
+        list.add("'едины " + id + " " + id + "' - смотреть сколько времени люди были онлайн одновременно.");
+        list.add("'досье " + id + "' - смотреть максимальное время и среднюю длину сессий пользователя.");
+        list.add("'команды' - команды");
+        var result = "Команды вк:\n";
+        for (int i = 0; i < list.size(); i++) {
+            result +=  (i + 1) + ". " + list.get(i) + "\n";
+        }
+        return result;
     }
 }

@@ -23,9 +23,4 @@ public class Weather extends Command {
         }
         return weather;
     }
-
-    @Override
-    public String info() {
-        return "";
-    }
 }

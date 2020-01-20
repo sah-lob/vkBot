@@ -57,7 +57,7 @@ public class Commander {
                     msg = "Cам " + message.getBody();
                 }
             } else {
-                msg = "Такой команды нет, а надо ли?";
+                msg = "Такой команды нет, введите слово 'команды', чтобы посмотреть команды, которые есть.";
             }
         } else {
             msg = cmd.getMessage(message);
