@@ -139,9 +139,16 @@ public class VKCommand extends Command {
     }
 
     private String spy(String messageBody) {
-        var name = getNameOrAlternativeNameFromMessageBody(messageBody);
-        name = name.replaceAll("id", "");
-        return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPersonWithTodayDayActivity(name));
+        if (messageBody.split(" ").length > 2) {
+            var m = messageBody.split(" ");
+            var name = m[1];
+            var date = m[2] + " " + m[3].toUpperCase() + " " + m[4];
+            return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPersonWithDayActivityByDate(name, date));
+        } else {
+            var name = getNameOrAlternativeNameFromMessageBody(messageBody);
+            name = name.replaceAll("id", "");
+            return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPersonWithTodayDayActivity(name));
+        }
     }
 
     private String dossier(String messageBody) {
