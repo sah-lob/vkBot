@@ -123,17 +123,17 @@ public class VKPeopleRatings {
             }
         }
         int maxSession = maxFemaleDuration > maxMaleDuration ? maxFemaleDuration : maxMaleDuration;
-        var result = "";
+        var result = "Статистика по полате.\n\n";
         result += "Самая продолжительная сессия у мужцин: " + maxMaleDuration + " мин.\n";
         result += "Самая продолжительная сессия у женщин: " + maxFemaleDuration + " мин.\n";
         result += "Самая продолжительная сессия: " + maxSession + " мин.\n";
         if (maleCount > 0 && femaleCount > 0) {
             result += "Средняя максимальная длинна сессии у мужчин: " + (maleDuration / maleCount) + " мин.\n";
             result += "Средняя максимальная длинна сессии у женщин: " + (femaleDuration / femaleCount) + " мин.\n";
-            result += "Средняя максимальная длинна сессии у всех: " + (maleDuration + femaleDuration / maleCount + femaleCount) + " мин.\n";
+            result += "Средняя максимальная длинна сессии у всех: " + ((maleDuration + femaleDuration) / (maleCount + femaleCount)) + " мин.\n";
             result += "Средняя сессия у мажчин: " + (maleAvgDuration / maleCount) + " мин.\n";
             result += "Средняя сессия у женщин: " + (femaleAvgDuration / femaleCount) + " мин.\n";
-            result += "Средняя сессия у всех: " + (femaleAvgDuration + maleAvgDuration / femaleCount + maleCount) + " мин.\n";
+            result += "Средняя сессия у всех: " + ((femaleAvgDuration + maleAvgDuration) / (femaleCount + maleCount)) + " мин.\n";
         }
         result += "Количество наблюдаемых мужчин: " + maleCount + " мин.\n";
         result += "Количество наблюдаемых женщин: " + femaleCount + " мин.\n";
