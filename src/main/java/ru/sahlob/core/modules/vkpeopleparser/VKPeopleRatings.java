@@ -93,9 +93,53 @@ public class VKPeopleRatings {
         return result.toString();
     }
 
-    public String getPersonsRecords() {
+    public String getMainStats() {
+        var persons = storage.getAllPersonsWithoutDayActivity();
+        var maleDuration = 0;
+        var maxMaleDuration = 0;
+        var maleAvgDuration = 0;
+        var maleCount = 0;
+        var femaleDuration = 0;
+        var femaleAvgDuration = 0;
+        var maxFemaleDuration = 0;
+        var femaleCount = 0;
 
-        return null;
+        for (var p: persons) {
+            if (p.getSex() != null) {
+                if (p.getSex().equals("m")) {
+                    maleCount++;
+                    maleDuration += p.getRecordDurationAllTime();
+                    maleAvgDuration += p.getAvgDurationAllTime();
+                    if (maxMaleDuration < p.getRecordDurationAllTime()) {
+                        maxMaleDuration = p.getRecordDurationAllTime();
+                    }
+                } else {
+                    femaleCount++;
+                    femaleDuration += p.getRecordDurationAllTime();
+                    femaleAvgDuration += p.getAvgDurationAllTime();
+                    if (maxFemaleDuration < p.getRecordDurationAllTime()) {
+                        maxFemaleDuration = p.getRecordDurationAllTime();
+                    }
+                }
+            }
+        }
+
+        var result = "";
+
+        result += "Средняя максимальная длинна сессии у мужчин: " + (maleDuration / maleCount) + " мин.\n";
+        result += "Средняя максимальная длинна сессии у женщин: " + (femaleDuration / maleCount) + " мин.\n";
+        result += "Самая продолжительная сессия у мужцин: " + maxMaleDuration + " мин.\n";
+        result += "Самая продолжительная сессия у женщин: " + maxFemaleDuration + " мин.\n";
+        if (maleCount > 0) {
+            result += "Средняя сессия у мажчин: " + (maleAvgDuration / maleCount) + " мин.\n";
+        }
+        if (femaleCount > 0) {
+            result += "Средняя сессия у женщин: " + (femaleAvgDuration / femaleCount) + " мин.\n";
+        }
+        result += "Количество наблюдаемых мужчин: " + maleCount + " мин.\n";
+        result += "Количество наблюдаемых женщин: " + femaleCount + " мин.\n";
+
+        return result;
     }
 
     private List<DayActivity> getSortedDayActivityListOfPersons() {

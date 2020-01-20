@@ -118,6 +118,9 @@ public class VKCommand extends Command {
             result = setSex(messageBody);
         }
 
+        if (messageBody.contains("статистика")) {
+            result = stats();
+        }
         if (result == null) {
             result = "Странно, непонятно как вы умудрились увидеть это сообщение.";
         }
@@ -250,6 +253,10 @@ public class VKCommand extends Command {
             result = "Пол был введен неправильно нужно 'f' - женский или 'm'- мужской";
         }
         return result;
+    }
+
+    private String stats() {
+        return vkPeopleRatings.getMainStats();
     }
 
     private String info(Integer id) {
