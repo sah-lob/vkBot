@@ -28,7 +28,7 @@ public class VKPeopleParser {
         this.timeStorage = timeStorage;
     }
 
-    public String getInfoAboutPerson(Person person) {
+    public String getInfoAboutPerson(Person person, String date) {
         var stringAnswer = "";
         if (person == null) {
             stringAnswer += "Данный пользовтель почему-то не найден";
@@ -39,8 +39,10 @@ public class VKPeopleParser {
             } else {
                 stringAnswer += "Данный пользовтель сейчас офлайн. \n\n";
             }
-
-            DayActivity activity = person.getTodayActivity();
+            if (date.equals("")) {
+                date = VKTime.getDateKey(person.getTimezone());
+            }
+            DayActivity activity = person.getActivityByDate(date);
             if (activity != null) {
                 String duration = activity.getTodayDuration() + " мин.";
                 String info = activity.getDayActivityInfo();
@@ -75,7 +77,7 @@ public class VKPeopleParser {
         for (Person p: storage.getAllPersonsWithTodayDayActivity()) {
             result.append("\n");
             result.append("\n");
-            result.append(getInfoAboutPerson(p));
+            result.append(getInfoAboutPerson(p, VKTime.getDateKey(p.getTimezone())));
             result.append("\n---------------------------");
         }
         return result.toString();

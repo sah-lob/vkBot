@@ -143,11 +143,11 @@ public class VKCommand extends Command {
             var m = messageBody.split(" ");
             var name = m[1];
             var date = m[2] + " " + m[3].toUpperCase() + " " + m[4];
-            return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPersonWithDayActivityByDate(name, date));
+            return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPersonWithDayActivityByDate(name, date), date);
         } else {
             var name = getNameOrAlternativeNameFromMessageBody(messageBody);
             name = name.replaceAll("id", "");
-            return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPersonWithTodayDayActivity(name));
+            return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPersonWithTodayDayActivity(name), "");
         }
     }
 
