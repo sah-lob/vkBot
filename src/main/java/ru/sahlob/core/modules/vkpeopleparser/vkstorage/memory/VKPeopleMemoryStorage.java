@@ -1,5 +1,6 @@
 package ru.sahlob.core.modules.vkpeopleparser.vkstorage.memory;
 
+import lombok.Data;
 import org.springframework.stereotype.Service;
 import ru.sahlob.core.modules.vkpeopleparser.Person;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;

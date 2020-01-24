@@ -1,4 +1,5 @@
 package ru.sahlob.core.modules.vkpeopleparser;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
@@ -6,16 +7,11 @@ import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.time.VKTimeKey;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 
 @Component
+@Data
 public class VKDaysUpdate {
 
     private final MainVKPeopleStorage storage;
     private final VKTimeStorage timeStorage;
-
-    public VKDaysUpdate(MainVKPeopleStorage storage, VKTimeStorage timeStorage) {
-        this.storage = storage;
-        this.timeStorage = timeStorage;
-    }
-
 
     public void dayUpdate(String day) {
         updatePeoplesRecordes(day);

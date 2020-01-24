@@ -1,14 +1,13 @@
 package ru.sahlob.core.modules.vkpeopleparser.vktime;
 
+import lombok.Getter;
+
 import java.util.*;
 
 public class VKDay {
 
+    @Getter
     private VKHour[] vkHours = new VKHour[24];
-
-    public VKHour[] getVkHours() {
-        return vkHours;
-    }
 
     public void addVkHoursList(ArrayList<VKHour> parsingTime) {
         for (var h: parsingTime) {

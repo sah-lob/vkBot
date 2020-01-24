@@ -1,4 +1,5 @@
 package ru.sahlob.core.modules.vkpeopleparser;
+import lombok.Data;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,16 +18,11 @@ import java.net.URL;
 import java.util.ArrayList;
 
 @Component
+@Data
 public class VKPeopleParser {
 
     private final MainVKPeopleStorage storage;
-
     private final VKTimeStorage timeStorage;
-
-    public VKPeopleParser(MainVKPeopleStorage storage, VKTimeStorage timeStorage) {
-        this.storage = storage;
-        this.timeStorage = timeStorage;
-    }
 
     public String getInfoAboutPerson(Person person, String date) {
         var stringAnswer = "";

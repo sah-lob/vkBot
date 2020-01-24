@@ -1,7 +1,10 @@
 package ru.sahlob.core.modules.vkpeopleparser.vktime;
 
-import java.util.Objects;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(of = {"hour"})
 public class VKHour {
 
     private int hour;
@@ -12,23 +15,6 @@ public class VKHour {
         for (int i = 0; i < 60; i++) {
             onlineMinutes[i] = false;
         }
-    }
-
-    public int getHour() {
-        return hour;
-    }
-
-    public void setHour(int hour) {
-        this.hour = hour;
-    }
-
-
-    public boolean[] getOnlineMinutes() {
-        return onlineMinutes;
-    }
-
-    public void setOnlineMinutes(boolean[] onlineMinutes) {
-        this.onlineMinutes = onlineMinutes;
     }
 
     public void addMinute(int i) {
@@ -57,23 +43,5 @@ public class VKHour {
         }
         return result;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        var vkHour = (VKHour) o;
-        return hour == vkHour.hour;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(hour);
-    }
-
 
 }

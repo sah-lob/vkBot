@@ -1,4 +1,5 @@
 package ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people;
+import lombok.Data;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sahlob.core.modules.vkpeopleparser.Person;
 import ru.sahlob.core.modules.vkpeopleparser.domain.MinuteActivity;
@@ -16,6 +17,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
+@Data
 public class VKPeopleBDStorage implements VKPeopleStorage {
 
     private final DBPersonsRepository personsRepository;
@@ -23,12 +25,6 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     private final DBDaysRepository daysRepository;
 
     private final DBMinutesRepository minutesRepository;
-
-    public VKPeopleBDStorage(DBPersonsRepository personsRepository, DBDaysRepository daysRepository, DBMinutesRepository minutesRepository) {
-        this.personsRepository = personsRepository;
-        this.daysRepository = daysRepository;
-        this.minutesRepository = minutesRepository;
-    }
 
     @Override
     public void addPerson(String name, String alternativeName) {
@@ -68,10 +64,8 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     @Override
     public List<Person> getAllPersonsWithoutDayActivities() {
         var persons = personsRepository.findAll();
-        var result =
-                StreamSupport.stream(persons.spliterator(), false)
-                        .collect(Collectors.toList());
-        return result;
+        return StreamSupport.stream(persons.spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -121,13 +115,6 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
         var result =
                 StreamSupport.stream(persons.spliterator(), false)
                         .collect(Collectors.toList());
-//        for (var p: result) {
-//            if (date.equals("")) {
-//                p.updateTodayActivity(getDayAndMinutesActivitiesByDate(p, VKTime.getDateKey(p.getTimezone())));
-//            } else {
-//                p.updateTodayActivity(getDayAndMinutesActivitiesByDate(p, date));
-//            }
-//        }
         for (int i = 0; i < result.size(); i++) {
             var p = result.get(i);
             if (date.equals("")) {

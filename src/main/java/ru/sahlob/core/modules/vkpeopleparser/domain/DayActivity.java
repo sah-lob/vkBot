@@ -1,4 +1,6 @@
 package ru.sahlob.core.modules.vkpeopleparser.domain;
+import lombok.*;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,55 +10,19 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "days")
+@Data
+@EqualsAndHashCode(of = {"id"})
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class DayActivity implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
     private Long person;
-    private int duration;
-    private String durationINFO;
+    private int duration = 0;
+    private String durationINFO = "";
     private String key;
-
-    @Transient
-    private List<MinuteActivity> dayActivities = new ArrayList<>();
-
-    private int timezone;
-
-    public DayActivity() {
-    }
-
-    public DayActivity(int timezone) {
-        this.duration = 0;
-        this.durationINFO = "";
-        this.timezone = timezone;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-
-    public String getDurationINFO() {
-        return durationINFO;
-    }
-
-    public void setDurationINFO(String durationINFO) {
-        this.durationINFO = durationINFO;
-    }
-
-
-    public List<MinuteActivity> getDayActivities() {
-        return dayActivities;
-    }
-
-    public void setDayActivities(List<MinuteActivity> dayActivities) {
-        this.dayActivities = dayActivities;
-    }
+    @Transient private List<MinuteActivity> dayActivities = new ArrayList<>();
+    @NonNull  private int timezone;
 
     public void addNewDayActivities(MinuteActivity minuteActivity) {
         dayActivities.add(minuteActivity);
@@ -100,54 +66,6 @@ public class DayActivity implements Serializable {
         return dayActivityInfo;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getTimezone() {
-        return timezone;
-    }
-
-    public void setTimezone(int timezone) {
-        this.timezone = timezone;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        DayActivity that = (DayActivity) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    public Long getPerson() {
-        return person;
-    }
-
-    public void setPerson(Long person) {
-        this.person = person;
-    }
 
 
     public static final Comparator<DayActivity> COMPARE_BY_DURATION = (lhs, rhs) -> rhs.getTodayDuration() - lhs.getTodayDuration();

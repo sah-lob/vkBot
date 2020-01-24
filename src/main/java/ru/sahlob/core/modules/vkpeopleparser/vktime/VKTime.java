@@ -1,5 +1,4 @@
 package ru.sahlob.core.modules.vkpeopleparser.vktime;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -8,9 +7,7 @@ public class VKTime {
 
     public static String getDateKey(int timezone) {
         var date = getDate(timezone);
-        String str = date.getYear() + " " + date.getMonth() + " " + date.getDayOfMonth();
-        System.out.println("get Date Key " + str);
-        return str;
+        return date.getYear() + " " + date.getMonth() + " " + date.getDayOfMonth();
     }
 
     public static String getMinuteActivity(int timezone) {

@@ -1,4 +1,5 @@
 package ru.sahlob.core.modules.vkpeopleparser;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
@@ -7,13 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Data
 public class VKPeopleRatings {
 
     private final MainVKPeopleStorage storage;
-
-    public VKPeopleRatings(MainVKPeopleStorage mainVKPeopleStorage) {
-        this.storage = mainVKPeopleStorage;
-    }
 
     public String getPersonsDurationRaiting() {
         var dayActivities = getSortedDayActivityListOfPersons();
@@ -123,7 +121,7 @@ public class VKPeopleRatings {
             }
         }
         int maxSession = maxFemaleDuration > maxMaleDuration ? maxFemaleDuration : maxMaleDuration;
-        var result = "Статистика по полате.\n\n";
+        var result = "Статистика по палате.\n\n";
         result += "Самая продолжительная сессия у мужцин: " + maxMaleDuration + " мин.\n";
         result += "Самая продолжительная сессия у женщин: " + maxFemaleDuration + " мин.\n";
         result += "Самая продолжительная сессия: " + maxSession + " мин.\n";
@@ -135,8 +133,8 @@ public class VKPeopleRatings {
             result += "Средняя сессия у женщин: " + (femaleAvgDuration / femaleCount) + " мин.\n";
             result += "Средняя сессия у всех: " + ((femaleAvgDuration + maleAvgDuration) / (femaleCount + maleCount)) + " мин.\n";
         }
-        result += "Количество наблюдаемых мужчин: " + maleCount + " мин.\n";
-        result += "Количество наблюдаемых женщин: " + femaleCount + " мин.\n";
+        result += "Количество наблюдаемых мужчин: " + maleCount + "\n";
+        result += "Количество наблюдаемых женщин: " + femaleCount + "\n";
 
         return result;
     }

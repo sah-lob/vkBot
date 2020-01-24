@@ -1,4 +1,5 @@
 package ru.sahlob.core.modules.vkpeopleparser.vkstorage;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.time.DBTimesRepository;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.time.VKTimeKey;
@@ -7,13 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Data
 public class VKTimeStorage {
 
     private final DBTimesRepository dbTimesRepository;
-
-    public VKTimeStorage(DBTimesRepository dbTimesRepository) {
-        this.dbTimesRepository = dbTimesRepository;
-    }
 
     public void addNewTime(VKTimeKey key) {
         dbTimesRepository.save(key);

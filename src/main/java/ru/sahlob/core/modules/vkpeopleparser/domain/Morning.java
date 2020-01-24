@@ -1,8 +1,12 @@
 package ru.sahlob.core.modules.vkpeopleparser.domain;
 
+import lombok.Data;
+import lombok.NonNull;
+
 import java.io.Serializable;
 import java.util.Comparator;
 
+@Data
 public class Morning implements Serializable {
 
     private int hour;
@@ -19,34 +23,6 @@ public class Morning implements Serializable {
             time = "0" + time;
         }
         time = hour + ":" + time;
-    }
-
-    public int getHour() {
-        return hour;
-    }
-
-    public void setHour(int hour) {
-        this.hour = hour;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getMinute() {
-        return minute;
-    }
-
-    public void setMinute(int minute) {
-        this.minute = minute;
-    }
-
-    public String getTime() {
-        return time;
     }
 
     public static final Comparator<Morning> COMPARE_BY_TIME = (lhs, rhs) -> {

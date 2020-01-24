@@ -1,5 +1,6 @@
 package ru.sahlob.core.modules.vkpeopleparser;
 
+import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.domain.MinuteActivity;
@@ -10,13 +11,10 @@ import ru.sahlob.core.modules.vkpeopleparser.vktime.VKHour;
 import java.util.*;
 
 @Component
+@Data
 public class VKTwoPeopleAnalize {
 
     private MainVKPeopleStorage storage;
-
-    public VKTwoPeopleAnalize(MainVKPeopleStorage storage) {
-        this.storage = storage;
-    }
 
     public String jointOnlineOfTwoUsers(String name1, String name2) {
 

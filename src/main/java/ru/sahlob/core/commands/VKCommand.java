@@ -1,5 +1,7 @@
 package ru.sahlob.core.commands;
 import com.vk.api.sdk.objects.messages.Message;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,8 +16,10 @@ import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 
 import java.util.ArrayList;
 
+@EqualsAndHashCode(callSuper = true)
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Data
 public class VKCommand extends Command {
 
     private final MainVKPeopleStorage vkPeopleMemoryStorage;
@@ -24,21 +28,6 @@ public class VKCommand extends Command {
     private final VKTwoPeopleAnalize vkTwoPeopleAnalize;
     private final VKTimeStorage vkTimeStorage;
     private final VKMorning vkMorning;
-
-
-    public VKCommand(MainVKPeopleStorage vkPeopleMemoryStorage,
-                     VKPeopleParser vkPeopleParser,
-                     VKPeopleRatings vkPeopleRatings,
-                     VKTwoPeopleAnalize vkTwoPeopleAnalize,
-                     VKMorning vkMorning,
-                     VKTimeStorage vkTimeStorage) {
-        this.vkPeopleMemoryStorage = vkPeopleMemoryStorage;
-        this.vkPeopleParser = vkPeopleParser;
-        this.vkPeopleRatings = vkPeopleRatings;
-        this.vkTwoPeopleAnalize = vkTwoPeopleAnalize;
-        this.vkMorning = vkMorning;
-        this.vkTimeStorage = vkTimeStorage;
-    }
 
     @Override
     public String getMessage(Message message) {

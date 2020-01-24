@@ -1,4 +1,5 @@
 package ru.sahlob.core.commands.commandsmanage.storage;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.commands.Anna;
 import ru.sahlob.core.commands.VKCommand;
@@ -8,6 +9,7 @@ import ru.sahlob.core.commands.commandsmanage.Command;
 import java.util.HashSet;
 
 @Component
+@Data
 public class MemoryStorage implements Storage {
 
     private final VKCommand vkCommand;
@@ -33,58 +35,8 @@ public class MemoryStorage implements Storage {
     private final Weather weather;
     private final Weather weather2;
     private final Anna anna;
-
-
     private static HashSet<Command> commands = new HashSet<>();
 
-    public MemoryStorage(Weather weather,
-                         Weather weather2,
-                         Anna anna,
-                         VKCommand vkCommand,
-                         VKCommand vkCommand2,
-                         VKCommand vkCommand3,
-                         VKCommand vkCommand4,
-                         VKCommand vkCommand5,
-                         VKCommand vkCommand6,
-                         VKCommand vkCommand8,
-                         VKCommand vkCommand9,
-                         VKCommand vkCommand10,
-                         VKCommand vkCommand11,
-                         VKCommand vkCommand12,
-                         VKCommand vkCommand13,
-                         VKCommand vkCommand14,
-                         VKCommand vkCommand15,
-                         VKCommand vkCommand16,
-                         VKCommand vkCommand17,
-                         VKCommand vkCommand18,
-                         VKCommand vkCommand19,
-                         VKCommand vkCommand20,
-                         VKCommand vkCommand21) {
-
-        this.weather = weather;
-        this.weather2 = weather2;
-        this.anna = anna;
-        this.vkCommand = vkCommand;
-        this.vkCommand2 = vkCommand2;
-        this.vkCommand3 = vkCommand3;
-        this.vkCommand4 = vkCommand4;
-        this.vkCommand5 = vkCommand5;
-        this.vkCommand6 = vkCommand6;
-        this.vkCommand8 = vkCommand8;
-        this.vkCommand9 = vkCommand9;
-        this.vkCommand10 = vkCommand10;
-        this.vkCommand11 = vkCommand11;
-        this.vkCommand12 = vkCommand12;
-        this.vkCommand13 = vkCommand13;
-        this.vkCommand14 = vkCommand14;
-        this.vkCommand15 = vkCommand15;
-        this.vkCommand16 = vkCommand16;
-        this.vkCommand17 = vkCommand17;
-        this.vkCommand18 = vkCommand18;
-        this.vkCommand19 = vkCommand19;
-        this.vkCommand20 = vkCommand20;
-        this.vkCommand21 = vkCommand21;
-    }
 
     public void updateCommands() {
         weather.setName("weather");
