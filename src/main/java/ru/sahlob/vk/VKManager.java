@@ -4,16 +4,14 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@AllArgsConstructor
 public class VKManager {
 
     private final VKCore vkCore;
-
-    public VKManager(VKCore vkCore) {
-        this.vkCore = vkCore;
-    }
 
     public void sendMessage(String msg, int peerId) {
         if (msg == null) {

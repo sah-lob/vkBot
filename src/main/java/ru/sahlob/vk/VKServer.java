@@ -1,6 +1,7 @@
 package ru.sahlob.vk;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.VKDaysUpdate;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
@@ -10,19 +11,13 @@ import java.util.Date;
 import java.util.concurrent.Executors;
 
 @Component
+@Data
 public class VKServer {
 
     private final VKPeopleParser vkPeopleParser;
     private final Messenger messenger;
     private final VKCore vkCore;
     private final VKDaysUpdate vkDaysUpdate;
-
-    public VKServer(VKPeopleParser vkPeopleParser, Messenger messenger, VKCore vkCore, VKDaysUpdate vkDaysUpdate) {
-        this.vkPeopleParser = vkPeopleParser;
-        this.messenger = messenger;
-        this.vkCore = vkCore;
-        this.vkDaysUpdate = vkDaysUpdate;
-    }
 
     public void run() throws NullPointerException, ApiException, InterruptedException {
         int minutes = new Date().getMinutes();

@@ -1,16 +1,13 @@
 package ru.sahlob.core.observers;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.observers.interfaces.DBObserversRepository;
 
 @Component
+@Data
 public class ObserversStorage {
 
     private final DBObserversRepository observersRepository;
-
-    public ObserversStorage(DBObserversRepository observersRepository) {
-        this.observersRepository = observersRepository;
-    }
-
 
     public void saveObserver(Observer observer) {
         observersRepository.save(observer);

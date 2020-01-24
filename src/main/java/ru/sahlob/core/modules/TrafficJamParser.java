@@ -17,9 +17,7 @@ public class TrafficJamParser {
     }
 
     public String getBusTime(String route) {
-
         var time = "Время пробок почему-то не получилось узнать=(";
-
         try {
             var v = client.getPage(route);
             var s = v.getWebResponse().getContentAsString();
@@ -46,9 +44,7 @@ public class TrafficJamParser {
     }
 
     public String getAutoTime(String route) {
-
         var time = "Время пробок почему-то не получилось узнать=(";
-
         try {
             var v = client.getPage(route);
             var s = v.getWebResponse().getContentAsString();

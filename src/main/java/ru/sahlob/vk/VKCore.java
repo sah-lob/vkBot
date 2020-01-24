@@ -6,11 +6,13 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.queries.messages.MessagesGetLongPollHistoryQuery;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@Data
 public class VKCore {
 
     private VkApiClient vk;
@@ -26,15 +28,6 @@ public class VKCore {
         vk = new VkApiClient(transportClient);
         actor = new GroupActor(groupId, accessToken);
         ts = vk.messages().getLongPollServer(actor).execute().getTs();
-    }
-
-
-    GroupActor getActor() {
-        return actor;
-    }
-
-    public VkApiClient getVk() {
-        return vk;
     }
 
     public Message getMessage() throws ClientException, ApiException {
