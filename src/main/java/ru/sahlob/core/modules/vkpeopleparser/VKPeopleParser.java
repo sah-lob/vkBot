@@ -38,14 +38,13 @@ public class VKPeopleParser {
             if (date.equals("")) {
                 date = VKTime.getDateKey(person.getTimezone());
             }
-            DayActivity activity = person.getActivityByDate(date);
+            var activity = person.getActivityByDate(date);
             if (activity != null) {
-                String duration = activity.getTodayDuration() + " мин.";
-                String info = activity.getDayActivityInfo();
+                var duration = activity.getTodayDuration() + " мин.";
+                var info = activity.getDayActivityInfo();
                 if (info.equals("")) {
                     info = "Данный пользователь сегодня не сидел вк";
                 }
-
                 stringAnswer += "Онлайн в течение дня:  " + duration + "\n";
                 stringAnswer += "Информация о посещении: \n" + info;
             } else {
@@ -72,6 +71,8 @@ public class VKPeopleParser {
         var answer = takeGetRequest(person.getName());
         if (!answer.equals("")) {
             answer = answer.substring(answer.lastIndexOf("\"online\":") + 9, answer.lastIndexOf("\"online\":") + 10);
+        } else {
+            answer = "0";
         }
         return Integer.parseInt(answer) == 1;
     }

@@ -66,8 +66,6 @@ public class DayActivity implements Serializable {
         return dayActivityInfo;
     }
 
-
-
     public static final Comparator<DayActivity> COMPARE_BY_DURATION = (lhs, rhs) -> rhs.getTodayDuration() - lhs.getTodayDuration();
 
     public static final Comparator<DayActivity> COMPARE_BY_AVG_DURATION = (lhs, rhs) -> {

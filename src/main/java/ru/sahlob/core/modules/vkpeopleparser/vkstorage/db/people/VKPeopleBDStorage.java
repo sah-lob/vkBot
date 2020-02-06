@@ -99,11 +99,11 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     public Person getPersonWithActivityByDate(String name, String date) {
         var person = personsRepository.getFirstPersonByName(name);
 
-        if (date.equals("")) {
-            date = VKTime.getDateKey(person.getTimezone());
-        }
 
         if (person != null) {
+            if (date.equals("")) {
+                date = VKTime.getDateKey(person.getTimezone());
+            }
             person.updateActivityByDate(date, getDayAndMinutesActivitiesByDate(person, date));
         }
         return person;

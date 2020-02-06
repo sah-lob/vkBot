@@ -14,7 +14,7 @@ public class VKMorning {
     private VKTwoPeopleAnalize analize;
 
     public String usersMorning() {
-        StringBuilder result = new StringBuilder("Кто во сколько первый раз зашел в вк:\n \n");
+        var result = new StringBuilder("Кто во сколько первый раз зашел в вк:\n \n");
         var persons = storage.getAllPersonsWithTodayDayActivity();
         var morningTimes = new ArrayList<Morning>();
         for (var p: persons) {

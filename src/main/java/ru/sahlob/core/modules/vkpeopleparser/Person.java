@@ -17,8 +17,8 @@ import java.util.*;
 public class Person implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
-    @NonNull private String alternativeName;
     @NonNull private String name;
+    @NonNull private String alternativeName;
     private String sex;
     private Integer recordDurationAllTime = 0;
     private Integer avgDurationAllTime = 0;
