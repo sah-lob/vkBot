@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.VKDaysUpdate;
 import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
+import ru.sahlob.core.observers.ObserversManagement;
 
 import java.util.Date;
 import java.util.concurrent.Executors;
@@ -18,6 +19,7 @@ public class VKServer {
     private final Messenger messenger;
     private final VKCore vkCore;
     private final VKDaysUpdate vkDaysUpdate;
+    private final ObserversManagement observersManagement;
 
     public void run() throws NullPointerException, ApiException, InterruptedException {
         int minutes = new Date().getMinutes();
@@ -35,6 +37,8 @@ public class VKServer {
             try {
                 var message = vkCore.getMessage();
                 if (message != null) {
+                    observersManagement.checkObserver(String.valueOf(message.getUserId()), message.getBody());
+//                    observersManagement.addPersonsName(String.valueOf(message.getUserId()), "popka");
                     var exec = Executors.newCachedThreadPool();
                     messenger.setMessage(message);
                     exec.execute(messenger);

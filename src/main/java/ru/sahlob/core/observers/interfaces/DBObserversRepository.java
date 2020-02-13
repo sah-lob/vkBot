@@ -6,5 +6,5 @@ import ru.sahlob.core.observers.Observer;
 
 @Repository
 public interface DBObserversRepository extends CrudRepository<Observer, Integer> {
-    Observer findFirstByVkId(Long id);
+    Observer findFirstByName(String id);
 }

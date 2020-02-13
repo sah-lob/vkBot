@@ -1,6 +1,7 @@
 package ru.sahlob.core.observers;
 import lombok.Data;
 import org.springframework.stereotype.Component;
+import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
 import ru.sahlob.core.observers.interfaces.DBObserversRepository;
 
 @Component
@@ -9,7 +10,18 @@ public class ObserversStorage {
 
     private final DBObserversRepository observersRepository;
 
-    public void saveObserver(Observer observer) {
+    public void addObserver(String name) {
+        var dataObserver = getObserver(name);
+        if (dataObserver != null) {
+            dataObserver.incrementCountOfRequests();
+            editObserver(dataObserver);
+        } else {
+            observersRepository.save(new Observer(name, VKPeopleParser.altName(name)));
+        }
+    }
+
+
+    public void editObserver(Observer observer) {
         observersRepository.save(observer);
     }
 
@@ -17,7 +29,23 @@ public class ObserversStorage {
         observersRepository.delete(observer);
     }
 
-    public Observer getObserver(Long vkid) {
-        return observersRepository.findFirstByVkId(vkid);
+    public Observer getObserver(String vkid) {
+        return observersRepository.findFirstByName(vkid);
+    }
+
+    public boolean observerExists(String vkid) {
+        return getObserver(vkid) != null;
+    }
+
+    public void addPeronName(String observersName, String personsName) {
+        var observer = getObserver(observersName);
+        observer.addPersonsName(personsName);
+        editObserver(observer);
+    }
+
+    public void addRequest(String name, String request) {
+        Observer observer = getObserver(name);
+        observer.addRequest(request);
+        editObserver(observer);
     }
 }

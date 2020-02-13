@@ -34,6 +34,8 @@ public class VKCommand extends Command {
         var result = "";
         var messageBody = message.getBody().toLowerCase();
 
+        observersLogic(message);
+
         // это необходимо для слежки за ирой.
         if (messageBody.equals("и") || messageBody.equals("b")) {
             messageBody = "шпионим 12275982";
@@ -268,5 +270,9 @@ public class VKCommand extends Command {
             result.append(i + 1).append(". ").append(list.get(i)).append("\n");
         }
         return result.toString();
+    }
+
+    private void observersLogic(Message message) {
+
     }
 }

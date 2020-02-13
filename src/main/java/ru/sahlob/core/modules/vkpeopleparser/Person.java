@@ -24,13 +24,6 @@ public class Person implements Serializable {
     private Integer avgDurationAllTime = 0;
     private Integer allTimeDaysCount = 0;
     @Transient private Map<String, DayActivity> activity = new HashMap<>();
-
-    @ManyToMany
-    @JoinTable(name = "observers_persons",
-            joinColumns = { @JoinColumn(name = "person_id") },
-            inverseJoinColumns = { @JoinColumn(name = "observers_id")}
-    )
-    private Set<Observer> observers = new HashSet<>();
     private boolean isActive = false;
     private int timezone = 3;
 
