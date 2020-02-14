@@ -32,6 +32,7 @@ public class MemoryStorage implements Storage {
     private final VKCommand vkCommand19;
     private final VKCommand vkCommand20;
     private final VKCommand vkCommand21;
+    private final VKCommand vkCommand22;
     private final Weather weather;
     private final Weather weather2;
     private final Anna anna;
@@ -62,6 +63,7 @@ public class MemoryStorage implements Storage {
         vkCommand19.setName("чп");
         vkCommand20.setName("пол");
         vkCommand21.setName("статистика");
+        vkCommand21.setName("онлайн");
         commands.add(vkCommand);
         commands.add(vkCommand2);
         commands.add(vkCommand3);
@@ -82,6 +84,7 @@ public class MemoryStorage implements Storage {
         commands.add(vkCommand19);
         commands.add(vkCommand20);
         commands.add(vkCommand21);
+        commands.add(vkCommand22);
         commands.add(weather);
         commands.add(weather2);
         commands.add(anna);

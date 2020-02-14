@@ -2,6 +2,7 @@ package ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people;
 import lombok.Data;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sahlob.core.modules.vkpeopleparser.Person;
+import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.domain.MinuteActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
@@ -32,11 +33,6 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     }
 
     @Override
-    public Person getPersonWithTodayDayActivity(String name) {
-        return getPersonWithActivityByDate(name, "");
-    }
-
-    @Override
     public void editPerson(Person person) {
         personsRepository.save(person);
         var todayActivity = person.getTodayActivity();
@@ -57,29 +53,26 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     }
 
     @Override
-    public List<Person> getAllPersonsWithTodayDayActivity() {
-        return getAllPersonsWithActivityByDate("");
-    }
-
-    @Override
-    public List<Person> getAllPersonsWithoutDayActivities() {
-        var persons = personsRepository.findAll();
-        return StreamSupport.stream(persons.spliterator(), false)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public void editTimeZoneToPerson(String name, int timezone) {
         var person = personsRepository.getFirstPersonByName(name);
         person.setTimezone(timezone);
         personsRepository.save(person);
     }
 
-
     public void editSexToPerson(String name, String sex) {
         var person = personsRepository.getFirstPersonByName(name);
         person.setSex(sex);
         personsRepository.save(person);
+    }
+
+    public void addNewWaiter(String name, String waiter) {
+        Person person = getPersonWithoutActivity(name);
+        if (person == null) {
+            addPerson(name, VKPeopleParser.altName(name));
+            person = getPersonWithoutActivity(name);
+        }
+        person.addExpectingPeople(waiter);
+        editPerson(person);
     }
 
     @Override
@@ -96,6 +89,11 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     }
 
     @Override
+    public Person getPersonWithTodayDayActivity(String name) {
+        return getPersonWithActivityByDate(name, "");
+    }
+
+    @Override
     public Person getPersonWithActivityByDate(String name, String date) {
         var person = personsRepository.getFirstPersonByName(name);
 
@@ -107,6 +105,22 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
             person.updateActivityByDate(date, getDayAndMinutesActivitiesByDate(person, date));
         }
         return person;
+    }
+
+    public Person getPersonWithoutActivity(String name) {
+        var person = personsRepository.getFirstPersonByName(name);
+        return  person;
+    }
+    @Override
+    public List<Person> getAllPersonsWithTodayDayActivity() {
+        return getAllPersonsWithActivityByDate("");
+    }
+
+    @Override
+    public List<Person> getAllPersonsWithoutDayActivities() {
+        var persons = personsRepository.findAll();
+        return StreamSupport.stream(persons.spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     @Override

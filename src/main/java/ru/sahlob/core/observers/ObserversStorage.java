@@ -20,7 +20,6 @@ public class ObserversStorage {
         }
     }
 
-
     public void editObserver(Observer observer) {
         observersRepository.save(observer);
     }

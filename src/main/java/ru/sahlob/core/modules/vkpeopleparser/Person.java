@@ -1,5 +1,6 @@
 package ru.sahlob.core.modules.vkpeopleparser;
 import lombok.*;
+import org.springframework.lang.Nullable;
 import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.observers.Observer;
@@ -26,6 +27,7 @@ public class Person implements Serializable {
     @Transient private Map<String, DayActivity> activity = new HashMap<>();
     private boolean isActive = false;
     private int timezone = 3;
+    @ElementCollection(fetch = FetchType.EAGER) private Set<String> expectingPeople = new HashSet<>();
 
     public DayActivity getTodayActivity() {
         return activity.get(VKTime.getDateKey(timezone));
@@ -45,6 +47,13 @@ public class Person implements Serializable {
 
     public void updateActivityByDate(String date, DayActivity dayActivity) {
         this.activity.put(date, dayActivity);
+    }
+
+    public void addExpectingPeople(String name) {
+        if (expectingPeople == null) {
+            expectingPeople = new HashSet<>();
+        }
+        expectingPeople.add(name);
     }
 
     public static final Comparator<Person> COMPARE_BY_DURATION = (lhs, rhs) -> rhs.getRecordDurationAllTime() - lhs.getRecordDurationAllTime();

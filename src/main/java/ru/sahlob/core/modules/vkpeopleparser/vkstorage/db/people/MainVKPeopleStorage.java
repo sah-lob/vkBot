@@ -16,6 +16,10 @@ public class MainVKPeopleStorage {
         vkPeopleStorage.addPerson(name, VKPeopleParser.altName(name));
     }
 
+    public void addNewWaiter(String name, String waitersName) {
+        vkPeopleStorage.addNewWaiter(name, waitersName);
+    }
+
     public Person getPersonWithTodayDayActivity(String name) {
         return vkPeopleStorage.getPersonWithTodayDayActivity(name);
     }

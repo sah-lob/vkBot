@@ -8,6 +8,7 @@ import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
+import ru.sahlob.core.observers.ObserversManagement;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -16,6 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 @Component
 @Data
@@ -23,6 +25,7 @@ public class VKPeopleParser {
 
     private final MainVKPeopleStorage storage;
     private final VKTimeStorage timeStorage;
+    private final ObserversManagement observersManagement;
 
     public String getInfoAboutPerson(Person person, String date) {
         var stringAnswer = "";
@@ -83,10 +86,10 @@ public class VKPeopleParser {
             var dateKey = VKTime.getDateKey(p.getTimezone());
             var dayActivity = p.getActivity().get(dateKey);
             if (personOnline(p)) {
+                sendMessageToWaiters(p);
                 if (dayActivity == null) {
                     dayActivity = new DayActivity(p.getTimezone());
                 }
-
                 dayActivity.setDuration(dayActivity.getDuration() + 1);
 
                 if (p.isActive()) {
@@ -162,6 +165,13 @@ public class VKPeopleParser {
         } catch (Exception ignored) {
         }
         return answer;
+    }
+
+    private void sendMessageToWaiters(Person p) {
+        if (!p.getExpectingPeople().isEmpty()) {
+            observersManagement.sendMessageAllWaiters(p.getExpectingPeople(), p.getAlternativeName());
+            p.setExpectingPeople(new HashSet<>());
+        }
     }
 
 }

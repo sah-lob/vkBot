@@ -112,6 +112,11 @@ public class VKCommand extends Command {
         if (messageBody.contains("статистика")) {
             result = stats();
         }
+
+        if (messageBody.contains("онлайн")) {
+            result = online(message);
+        }
+
         if (result == null) {
             result = "Странно, непонятно как вы умудрились увидеть это сообщение.";
         }
@@ -272,7 +277,15 @@ public class VKCommand extends Command {
         return result.toString();
     }
 
-    private void observersLogic(Message message) {
-
+    private String online(Message message) {
+        String messageBody = message.getBody();
+        messageBody = messageBody.substring(7);
+        messageBody = messageBody.replaceAll("id", "");
+        vkPeopleMemoryStorage.addNewWaiter(messageBody, String.valueOf(message.getUserId()));
+        return "Когда человек будет онлайн, прийдет сообщение.";
     }
+
+    private void observersLogic(Message message) {}
+
+
 }
