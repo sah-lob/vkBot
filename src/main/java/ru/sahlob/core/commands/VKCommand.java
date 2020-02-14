@@ -285,7 +285,9 @@ public class VKCommand extends Command {
         return "Когда человек будет онлайн, прийдет сообщение.";
     }
 
-    private void observersLogic(Message message) {}
+    private void observersLogic(Message message) {
+
+    }
 
 
 }
