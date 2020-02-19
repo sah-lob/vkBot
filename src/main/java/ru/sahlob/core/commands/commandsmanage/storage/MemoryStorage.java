@@ -63,7 +63,7 @@ public class MemoryStorage implements Storage {
         vkCommand19.setName("чп");
         vkCommand20.setName("пол");
         vkCommand21.setName("статистика");
-        vkCommand21.setName("онлайн");
+        vkCommand22.setName("онлайн");
         commands.add(vkCommand);
         commands.add(vkCommand2);
         commands.add(vkCommand3);
