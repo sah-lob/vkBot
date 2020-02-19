@@ -1,8 +1,8 @@
 package ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people;
 import lombok.Data;
 import org.springframework.stereotype.Component;
-import ru.sahlob.core.modules.vkpeopleparser.Person;
-import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
+import ru.sahlob.core.modules.vkpeopleparser.models.Person;
+import ru.sahlob.core.modules.vkpeopleparser.services.single.VKPeopleParser;
 
 import java.util.List;
 
@@ -12,12 +12,12 @@ public class MainVKPeopleStorage {
 
     private final VKPeopleBDStorage vkPeopleStorage;
 
-    public void addPerson(String name) {
-        vkPeopleStorage.addPerson(name, VKPeopleParser.altName(name));
+    public void addPerson(Person person) {
+        vkPeopleStorage.addPerson(person);
     }
 
-    public void addNewWaiter(String name, String waitersName) {
-        vkPeopleStorage.addNewWaiter(name, waitersName);
+    public String addNewWaiter(String name, String waitersName) {
+        return vkPeopleStorage.addNewWaiter(name, waitersName);
     }
 
     public Person getPersonWithTodayDayActivity(String name) {
@@ -40,12 +40,12 @@ public class MainVKPeopleStorage {
         vkPeopleStorage.editTimeZoneToPerson(name, timezone);
     }
 
-    public void editSexToPerson(String name, String sex) {
-        vkPeopleStorage.editSexToPerson(name, sex);
+    public String editSexToPerson(String name, String sex) {
+        return vkPeopleStorage.editSexToPerson(name, sex);
     }
 
-    public void deleteAllDayAndMinutesActivitiesByDay(String key) {
-        vkPeopleStorage.deleteAllDayAndMinutesActivitiesByDay(key);
+    public String deleteAllDayAndMinutesActivitiesByDay(String key) {
+        return vkPeopleStorage.deleteAllDayAndMinutesActivitiesByDay(key);
     }
 
     public Person getPersonWithDayActivityByDate(String name, String date) {

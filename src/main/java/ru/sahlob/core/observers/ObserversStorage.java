@@ -1,7 +1,7 @@
 package ru.sahlob.core.observers;
 import lombok.Data;
 import org.springframework.stereotype.Component;
-import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
+import ru.sahlob.core.modules.vkpeopleparser.services.single.VKPeopleParser;
 import ru.sahlob.core.observers.interfaces.DBObserversRepository;
 
 @Component

@@ -1,7 +1,8 @@
-package ru.sahlob.core.modules.vkpeopleparser;
+package ru.sahlob.core.modules.vkpeopleparser.services.multi;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
+import ru.sahlob.core.modules.vkpeopleparser.models.Person;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 
 import java.util.ArrayList;
@@ -122,14 +123,14 @@ public class VKPeopleRatings {
         }
         int maxSession = maxFemaleDuration > maxMaleDuration ? maxFemaleDuration : maxMaleDuration;
         var result = "Статистика по палате.\n\n";
-        result += "Самая продолжительная сессия у мужцин: " + maxMaleDuration + " мин.\n";
+        result += "Самая продолжительная сессия у мужчин: " + maxMaleDuration + " мин.\n";
         result += "Самая продолжительная сессия у женщин: " + maxFemaleDuration + " мин.\n";
         result += "Самая продолжительная сессия: " + maxSession + " мин.\n";
         if (maleCount > 0 && femaleCount > 0) {
             result += "Средняя максимальная длинна сессии у мужчин: " + (maleDuration / maleCount) + " мин.\n";
             result += "Средняя максимальная длинна сессии у женщин: " + (femaleDuration / femaleCount) + " мин.\n";
             result += "Средняя максимальная длинна сессии у всех: " + ((maleDuration + femaleDuration) / (maleCount + femaleCount)) + " мин.\n";
-            result += "Средняя сессия у мажчин: " + (maleAvgDuration / maleCount) + " мин.\n";
+            result += "Средняя сессия у мужчин: " + (maleAvgDuration / maleCount) + " мин.\n";
             result += "Средняя сессия у женщин: " + (femaleAvgDuration / femaleCount) + " мин.\n";
             result += "Средняя сессия у всех: " + ((femaleAvgDuration + maleAvgDuration) / (femaleCount + maleCount)) + " мин.\n";
         }

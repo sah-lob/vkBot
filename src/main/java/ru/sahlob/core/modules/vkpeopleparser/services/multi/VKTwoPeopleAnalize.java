@@ -1,9 +1,10 @@
-package ru.sahlob.core.modules.vkpeopleparser;
+package ru.sahlob.core.modules.vkpeopleparser.services.multi;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.domain.MinuteActivity;
+import ru.sahlob.core.modules.vkpeopleparser.models.Person;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKDay;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKHour;

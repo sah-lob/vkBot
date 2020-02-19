@@ -1,18 +1,15 @@
-package ru.sahlob.core.modules.vkpeopleparser;
+package ru.sahlob.core.modules.vkpeopleparser.services.single;
+
 import lombok.Data;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
-import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
+import ru.sahlob.core.modules.vkpeopleparser.models.Person;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
+import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.observers.ObserversManagement;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -83,6 +80,9 @@ public class VKPeopleParser {
     public void updateAllPersons() {
         var persons = (ArrayList<Person>) storage.getAllPersonsWithTodayDayActivity();
         for (var p: persons) {
+            if (p.getRealId() == null) {
+                updateRealID(p);
+            }
             var dateKey = VKTime.getDateKey(p.getTimezone());
             var dayActivity = p.getActivity().get(dateKey);
             if (personOnline(p)) {
@@ -107,6 +107,7 @@ public class VKPeopleParser {
                     }
                     p.setActive(false);
                 } else {
+                    storage.editPerson(p);
                     continue;
                 }
             }
@@ -115,29 +116,41 @@ public class VKPeopleParser {
     }
 
     public boolean addNewPerson(String name) {
-        Document document = null;
-        try {
-            if (!name.contains("id") && name.matches("[0-9]+")) {
-                name = "id" + name;
-            }
-            HttpsURLConnection.setDefaultHostnameVerifier(
-                    SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-            document = Jsoup.connect("https://vk.com/" + name).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         var result = false;
-        if (document != null) {
-            name = name.replace("id", "");
-            storage.addPerson(name);
+        var request = takeGetRequest(name);
+
+        if (request.contains("{\"response\":[{")) {
+
+            var altName = request.substring(request.indexOf("\"first_name\":\"") + 14)
+                    .replaceAll("\",\"last_name\":\"", " ");
+            altName = altName.substring(0, altName.indexOf("\",\"is_closed\""));
+
+
+            var realId = request.substring(request.indexOf("{\"response\":[{\"id\":") + 19);
+            realId = realId.substring(0, realId.indexOf(",\"first_name\":\""));
             result = true;
+
+            var person = new Person(name, altName);
+            person.setRealId(Integer.valueOf(realId));
+            storage.addPerson(person);
         }
+
         return result;
     }
 
+
+    private void updateRealID(Person person) {
+        var request = takeGetRequest(person.getName());
+        var realId = request.substring(request.indexOf("{\"response\":[{\"id\":") + 19);
+        realId = realId.substring(0, realId.indexOf(",\"first_name\":\""));
+        if (person.getRealId() == null) {
+            person.setRealId(Integer.valueOf(realId));
+        }
+    }
+
     public static String altName(String name) {
-        String answ = takeGetRequest(name);
-        String result = answ.substring(answ.indexOf("\"first_name\":\"") + 14).replaceAll("\",\"last_name\":\"", " ");
+        var answ = takeGetRequest(name);
+        var result = answ.substring(answ.indexOf("\"first_name\":\"") + 14).replaceAll("\",\"last_name\":\"", " ");
         result = result.substring(0, result.indexOf("\",\"is_closed\""));
         return result;
     }

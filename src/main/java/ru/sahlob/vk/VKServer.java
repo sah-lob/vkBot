@@ -3,8 +3,8 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import lombok.Data;
 import org.springframework.stereotype.Component;
-import ru.sahlob.core.modules.vkpeopleparser.VKDaysUpdate;
-import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
+import ru.sahlob.core.modules.vkpeopleparser.services.multi.VKDaysUpdate;
+import ru.sahlob.core.modules.vkpeopleparser.services.single.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.observers.ObserversManagement;
 

@@ -6,10 +6,10 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.commands.commandsmanage.Command;
-import ru.sahlob.core.modules.vkpeopleparser.VKMorning;
-import ru.sahlob.core.modules.vkpeopleparser.VKTwoPeopleAnalize;
-import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
-import ru.sahlob.core.modules.vkpeopleparser.VKPeopleRatings;
+import ru.sahlob.core.modules.vkpeopleparser.services.multi.VKMorning;
+import ru.sahlob.core.modules.vkpeopleparser.services.multi.VKTwoPeopleAnalize;
+import ru.sahlob.core.modules.vkpeopleparser.services.single.VKPeopleParser;
+import ru.sahlob.core.modules.vkpeopleparser.services.multi.VKPeopleRatings;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
@@ -224,8 +224,7 @@ public class VKCommand extends Command {
 
     private String deleteDay(String messageBody) {
         var key = messageBody.replaceAll("удалить ", "");
-        vkPeopleMemoryStorage.deleteAllDayAndMinutesActivitiesByDay(key);
-        return "Возможно удалины=)";
+        return vkPeopleMemoryStorage.deleteAllDayAndMinutesActivitiesByDay(key);
     }
 
     private String availableDates() {
@@ -241,14 +240,7 @@ public class VKCommand extends Command {
         var mas = messageBody.split(" ");
         var name = mas[1];
         var sex = mas[2];
-        var result = "";
-        if (sex.equals("m") || sex.equals("f")) {
-            vkPeopleMemoryStorage.editSexToPerson(name, sex);
-            result = "Пол поменялся=)";
-        } else {
-            result = "Пол был введен неправильно нужно 'f' - женский или 'm'- мужской";
-        }
-        return result;
+        return vkPeopleMemoryStorage.editSexToPerson(name, sex);
     }
 
     private String stats() {
@@ -281,8 +273,7 @@ public class VKCommand extends Command {
         String messageBody = message.getBody();
         messageBody = messageBody.substring(7);
         messageBody = messageBody.replaceAll("id", "");
-        vkPeopleMemoryStorage.addNewWaiter(messageBody, String.valueOf(message.getUserId()));
-        return "Когда человек будет онлайн, прийдет сообщение.";
+        return vkPeopleMemoryStorage.addNewWaiter(messageBody, String.valueOf(message.getUserId()));
     }
 
     private void observersLogic(Message message) {

@@ -1,18 +1,19 @@
 package ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people;
+
 import lombok.Data;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.sahlob.core.modules.vkpeopleparser.Person;
-import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
-import ru.sahlob.core.modules.vkpeopleparser.domain.MinuteActivity;
-import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
+import ru.sahlob.core.modules.vkpeopleparser.models.Person;
 import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
+import ru.sahlob.core.modules.vkpeopleparser.domain.MinuteActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.interfaces.DBDaysRepository;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.interfaces.DBMinutesRepository;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.interfaces.DBPersonsRepository;
-import org.springframework.stereotype.Service;
+import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -27,9 +28,8 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
 
     private final DBMinutesRepository minutesRepository;
 
-    @Override
-    public void addPerson(String name, String alternativeName) {
-        personsRepository.save(new Person(name, alternativeName));
+    public void addPerson(Person person) {
+        personsRepository.save(person);
     }
 
     @Override
@@ -55,28 +55,45 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     @Override
     public void editTimeZoneToPerson(String name, int timezone) {
         var person = personsRepository.getFirstPersonByName(name);
-        person.setTimezone(timezone);
-        personsRepository.save(person);
-    }
-
-    public void editSexToPerson(String name, String sex) {
-        var person = personsRepository.getFirstPersonByName(name);
-        person.setSex(sex);
-        personsRepository.save(person);
-    }
-
-    public void addNewWaiter(String name, String waiter) {
-        Person person = getPersonWithoutActivity(name);
-        if (person == null) {
-            addPerson(name, VKPeopleParser.altName(name));
-            person = getPersonWithoutActivity(name);
+        if (person != null) {
+            person.setTimezone(timezone);
+            personsRepository.save(person);
         }
-        person.addExpectingPeople(waiter);
-        editPerson(person);
+    }
+
+    public String editSexToPerson(String name, String sex) {
+        String result;
+        var person = personsRepository.getFirstPersonByName(name);
+        if (person != null) {
+            if (sex.equals("f") || sex.equals("m")) {
+                person.setSex(sex);
+                personsRepository.save(person);
+                result = "Пол поменялся=)";
+            } else {
+                result = "Пол передается двумя буквами: \"m\" или \"f\"";
+            }
+        } else {
+            result = "Такого человека нет";
+        }
+        return result;
+    }
+
+    public String addNewWaiter(String name, String waiter) {
+        String result;
+        var person = getPersonWithoutActivity(name);
+        if (person == null) {
+            result = "Для того, чтобы получить уведомление о том, что человек вошел в вк его нужно добавить."
+                    + " Для этого введите команду: следить " + name;
+        } else {
+            person.addExpectingPeople(waiter);
+            editPerson(person);
+            result = "Когда человек будет онлайн, придет сообщение.";
+        }
+        return result;
     }
 
     @Override
-    public void deleteAllDayAndMinutesActivitiesByDay(String key) {
+    public String deleteAllDayAndMinutesActivitiesByDay(String key) {
         key = key.toUpperCase();
         ArrayList<Long> dayActivitiesId = new ArrayList<>();
         for (var d: daysRepository.findAllByKey(key)) {
@@ -86,6 +103,7 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
         for (var id: dayActivitiesId) {
             minutesRepository.deleteAllByDayActivity(id);
         }
+        return "";
     }
 
     @Override

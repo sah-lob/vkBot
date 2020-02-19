@@ -1,9 +1,8 @@
 package ru.sahlob.core.modules.vkpeopleparser.vkstorage.memory;
 
-import lombok.Data;
 import org.springframework.stereotype.Service;
-import ru.sahlob.core.modules.vkpeopleparser.Person;
-import ru.sahlob.core.modules.vkpeopleparser.VKPeopleParser;
+import ru.sahlob.core.modules.vkpeopleparser.models.Person;
+import ru.sahlob.core.modules.vkpeopleparser.services.single.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKPeopleStorage;
 
 import java.util.ArrayList;
@@ -15,9 +14,7 @@ public class VKPeopleMemoryStorage implements VKPeopleStorage {
     private ArrayList<Person> persons = new ArrayList<>();
 
     @Override
-    public void addPerson(String name, String alternativeName) {
-        VKPeopleParser.altName(name);
-        persons.add(new Person(name, alternativeName));
+    public void addPerson(Person person) {
     }
 
     @Override
@@ -53,8 +50,8 @@ public class VKPeopleMemoryStorage implements VKPeopleStorage {
     }
 
     @Override
-    public void deleteAllDayAndMinutesActivitiesByDay(String key) {
-
+    public String deleteAllDayAndMinutesActivitiesByDay(String key) {
+        return null;
     }
 
     @Override

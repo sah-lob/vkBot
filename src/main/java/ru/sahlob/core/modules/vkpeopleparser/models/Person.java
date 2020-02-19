@@ -1,9 +1,7 @@
-package ru.sahlob.core.modules.vkpeopleparser;
+package ru.sahlob.core.modules.vkpeopleparser.models;
 import lombok.*;
-import org.springframework.lang.Nullable;
 import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
-import ru.sahlob.core.observers.Observer;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,6 +16,7 @@ import java.util.*;
 public class Person implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
+    private Integer realId;
     @NonNull private String name;
     @NonNull private String alternativeName;
     private String sex;
