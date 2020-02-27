@@ -1,24 +1,27 @@
 package ru.sahlob.core.commands;
+
 import com.vk.api.sdk.objects.messages.Message;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.commands.commandsmanage.Command;
+import ru.sahlob.core.commands.commandsmanage.storage.commands.VkCommands;
+import ru.sahlob.core.modules.vkpeopleparser.models.Reminder;
 import ru.sahlob.core.modules.vkpeopleparser.services.multi.VKMorning;
-import ru.sahlob.core.modules.vkpeopleparser.services.multi.VKTwoPeopleAnalize;
-import ru.sahlob.core.modules.vkpeopleparser.services.single.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.services.multi.VKPeopleRatings;
+import ru.sahlob.core.modules.vkpeopleparser.services.multi.VKTwoPeopleAnalize;
+import ru.sahlob.core.modules.vkpeopleparser.services.multi.reminder.ReminderService;
+import ru.sahlob.core.modules.vkpeopleparser.services.multi.reminder.remindertypes.ReminderTypeManagement;
+import ru.sahlob.core.modules.vkpeopleparser.services.single.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Component
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Data
 public class VKCommand extends Command {
 
@@ -28,6 +31,8 @@ public class VKCommand extends Command {
     private final VKTwoPeopleAnalize vkTwoPeopleAnalize;
     private final VKTimeStorage vkTimeStorage;
     private final VKMorning vkMorning;
+    private final ReminderService reminderService;
+    private final ReminderTypeManagement reminderTypeManagement;
 
     @Override
     public String getMessage(Message message) {
@@ -37,11 +42,12 @@ public class VKCommand extends Command {
         observersLogic(message);
 
         // это необходимо для слежки за ирой.
-        if (messageBody.equals("и") || messageBody.equals("b")) {
+        if (messageBody.equals(VkCommands.и.name())
+                || messageBody.equals(VkCommands.b.name())) {
             messageBody = "шпионим 12275982";
         }
 
-        if (messageBody.contains("следить")) {
+        if (messageBody.contains(VkCommands.следить.name())) {
             System.out.println(message.getUserId());
             if (messageBody.contains("al_lb")
                     || messageBody.contains("7965708")
@@ -53,25 +59,30 @@ public class VKCommand extends Command {
             }
         }
 
-        if (messageBody.contains("удалить")) {
-            result = deleteDay(messageBody);
+        if (messageBody.contains(VkCommands.удалить.name())) {
+            if (messageBody.contains("день")) {
+                result = deleteDay(messageBody);
+            } else if (messageBody.contains("напоминание")) {
+                result = deleteReminder(messageBody);
+            }
+
         }
 
-        if (messageBody.contains("шпионим")) {
+        if (messageBody.contains(VkCommands.шпионим.name())) {
             result = spy(messageBody);
         }
 
-        if (messageBody.contains("досье")) {
+        if (messageBody.contains(VkCommands.досье.name())) {
             result = dossier(messageBody);
         }
 
-        if (messageBody.contains("лидерыс")) {
+        if (messageBody.contains(VkCommands.лидерыс.name())) {
             result = avgAllTimeDurationsLiders();
-        } else if (messageBody.contains("лидеры")) {
+        } else if (messageBody.contains(VkCommands.лидеры.name())) {
             result = allTimeDurationsLiders();
         }
 
-        if (messageBody.contains("чп")) {
+        if (messageBody.contains(VkCommands.чп.name())) {
             if (message.getUserId() == 7965708) {
                 result = editTimeZoneVKPerson(messageBody);
             } else {
@@ -79,45 +90,59 @@ public class VKCommand extends Command {
             }
         }
 
-        if (messageBody.contains("параноики")) {
+        if (messageBody.contains(VkCommands.параноики.name())) {
             result = personsSessionCount();
         }
 
-        if (messageBody.contains("задротыс")) {
+        if (messageBody.contains(VkCommands.задротыс.name())) {
             result = personsAvgDurationRaiting();
-        } else if (messageBody.contains("задроты")) {
+        } else if (messageBody.contains(VkCommands.задроты.name())) {
             result = personsDurationRating();
         }
 
-        if (messageBody.contains("едины")) {
+        if (messageBody.contains(VkCommands.едины.name())) {
             result = jointOnlineOfTwoUsers(messageBody);
         }
 
-        if (messageBody.contains("утро")) {
+        if (messageBody.contains(VkCommands.утро.name())) {
             result = usersMorning();
         }
 
-        if (messageBody.contains("даты")) {
+        if (messageBody.contains(VkCommands.даты.name())) {
             result = availableDates();
         }
 
-        if (messageBody.contains("команды")) {
+        if (messageBody.contains(VkCommands.команды.name())) {
             result = info(message.getUserId());
         }
 
-        if (messageBody.contains("пол")) {
+        if (messageBody.contains(VkCommands.пол.name())) {
             result = setSex(messageBody);
         }
 
-        if (messageBody.contains("статистика")) {
+        if (messageBody.contains(VkCommands.статистика.name())) {
             result = stats();
         }
 
-        if (messageBody.contains("онлайн")) {
+        if (messageBody.contains(VkCommands.онлайн.name())) {
             result = online(message);
         }
 
-        if (result == null) {
+        if (messageBody.contains(VkCommands.напоминать.name())) {
+            result = addReminder(message);
+        }
+
+        if (messageBody.contains(VkCommands.напоминания.name())) {
+            result = reminders();
+        }
+        if (messageBody.contains(VkCommands.много.name())) {
+            result = manyRemindersTypesFields(messageBody);
+        }
+        if (messageBody.contains(VkCommands.добавить.name())) {
+            result = addOneReminderType(messageBody);
+        }
+
+        if (result == null || result == "") {
             result = "Странно, непонятно как вы умудрились увидеть это сообщение.";
         }
 
@@ -223,8 +248,13 @@ public class VKCommand extends Command {
     }
 
     private String deleteDay(String messageBody) {
-        var key = messageBody.replaceAll("удалить ", "");
+        var key = messageBody.replaceAll("удалить день ", "");
         return vkPeopleMemoryStorage.deleteAllDayAndMinutesActivitiesByDay(key);
+    }
+
+    private String deleteReminder(String messageBody) {
+        var reminderId = messageBody.replaceAll("удалить напоминание ", "");
+        return reminderService.deleteReminder(reminderId);
     }
 
     private String availableDates() {
@@ -276,9 +306,60 @@ public class VKCommand extends Command {
         return vkPeopleMemoryStorage.addNewWaiter(messageBody, String.valueOf(message.getUserId()));
     }
 
+    private String addReminder(Message message) {
+        var mas = message.getBody().split(" ");
+        var name = mas[1];
+        var reminderType = mas[2];
+        var frequency = mas[3];
+        var reminderTimeDuration = mas[4];
+        var reminder = new Reminder();
+        reminder.setReminderType(reminderType);
+        reminder.setFrequency(frequency);
+        reminder.setReminderTimeDuration(reminderTimeDuration);
+        return reminderService.addReminder(reminder, name);
+    }
+
+    private String reminders() {
+        return reminderService.showAllReminders();
+    }
+
+    private String manyRemindersTypesFields(String messageBody) {
+        var result = "";
+        String answer = messageBody.replaceFirst("много строк ", "");
+        String reminderTypeName = answer.substring(0, answer.indexOf("\n"));
+        String[] body = answer.substring(answer.indexOf("\n") + 1).split("!-");
+
+        if (reminderTypeName.length() > 0 && body.length > 0) {
+            reminderTypeManagement.addManyNotesToReminderType(reminderTypeName, List.of(body));
+            result = "Ваш список добавлен.";
+        } else {
+            result = "Список не добавлен, так как там нет элементов или названия списка.";
+        }
+
+        return result;
+    }
+
+    private String addOneReminderType(String messageBody) {
+        String result;
+        if (messageBody.contains("добавить список")) {
+            var answer = messageBody.replaceFirst("добавить список ", "");
+            if (answer.length() > 0) {
+                result = reminderTypeManagement.addReminderType(answer);
+            } else {
+                result = "Название списка не может быть пустым.";
+            }
+        } else {
+            var answer = messageBody.replaceFirst("добавить в список ", "");
+            var body = List.of(answer.split(""));
+            var reminderTypeName = body.get(0);
+            var note = body.get(1);
+            result = reminderTypeManagement.addNoteToReminderType(reminderTypeName, note);
+        }
+
+        return result;
+    }
+
     private void observersLogic(Message message) {
 
     }
-
-
 }

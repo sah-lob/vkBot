@@ -129,6 +129,10 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
         var person = personsRepository.getFirstPersonByName(name);
         return  person;
     }
+
+    public Person getPersonWithoutActivityByRealId(Integer id) {
+        return personsRepository.getFirstPersonByRealId(id);
+    }
     @Override
     public List<Person> getAllPersonsWithTodayDayActivity() {
         return getAllPersonsWithActivityByDate("");

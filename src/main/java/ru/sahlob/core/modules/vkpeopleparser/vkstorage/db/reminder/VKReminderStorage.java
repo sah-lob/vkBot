@@ -15,14 +15,28 @@ public class VKReminderStorage {
 
     private final DBReminderRepository reminderRepository;
 
-    public String addReminder(Reminder reminder) {
+    public String addReminder(Reminder reminder, String personName) {
         reminderRepository.save(reminder);
-        return "Напоминенае для " + reminder.getUser() + " добавлено.";
+        return "Напоминенае для " + personName + " добавлено.";
+    }
+
+    public void editReminder(Reminder reminder) {
+        reminderRepository.save(reminder);
     }
 
     public List<Reminder> getAllReminders() {
         List<Reminder> result = new ArrayList<>();
         reminderRepository.findAll().forEach(result::add);
         return result;
+    }
+
+    public String deleteReminder(String reminderId) {
+
+        if (reminderRepository.findById(Integer.valueOf(reminderId)) != null) {
+            reminderRepository.deleteById(Integer.valueOf(reminderId));
+            return "напоминание удалено";
+        } else {
+            return "такого напоминания нет";
+        }
     }
 }

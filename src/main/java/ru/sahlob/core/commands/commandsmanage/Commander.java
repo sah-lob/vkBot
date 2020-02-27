@@ -3,7 +3,6 @@ package ru.sahlob.core.commands.commandsmanage;
 import com.vk.api.sdk.objects.messages.Message;
 import lombok.Data;
 import org.springframework.stereotype.Component;
-import ru.sahlob.core.commands.Unknown;
 import ru.sahlob.vk.VKManager;
 
 @Component
@@ -33,9 +32,11 @@ public class Commander {
 
         Command cmd = null;
         for (var command : commandManager.getCommands()) {
-            if (body.equals(command.getName())) {
-                cmd = command;
-                break;
+            for (var com: command.getNames()) {
+                if (body.equals(com)) {
+                    cmd = command;
+                    break;
+                }
             }
         }
         String msg;

@@ -9,5 +9,4 @@ import java.util.HashSet;
 public interface Storage {
 
     HashSet<Command> getCommands();
-    void addCommnad(Command command);
 }

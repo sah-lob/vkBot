@@ -77,12 +77,19 @@ public class VKPeopleParser {
         return Integer.parseInt(answer) == 1;
     }
 
+    public boolean personOnline(String name) {
+        var answer = takeGetRequest(name);
+        if (!answer.equals("")) {
+            answer = answer.substring(answer.lastIndexOf("\"online\":") + 9, answer.lastIndexOf("\"online\":") + 10);
+        } else {
+            answer = "0";
+        }
+        return Integer.parseInt(answer) == 1;
+    }
+
     public void updateAllPersons() {
         var persons = (ArrayList<Person>) storage.getAllPersonsWithTodayDayActivity();
         for (var p: persons) {
-            if (p.getRealId() == null) {
-                updateRealID(p);
-            }
             var dateKey = VKTime.getDateKey(p.getTimezone());
             var dayActivity = p.getActivity().get(dateKey);
             if (personOnline(p)) {
@@ -107,7 +114,6 @@ public class VKPeopleParser {
                     }
                     p.setActive(false);
                 } else {
-                    storage.editPerson(p);
                     continue;
                 }
             }
@@ -136,16 +142,6 @@ public class VKPeopleParser {
         }
 
         return result;
-    }
-
-
-    private void updateRealID(Person person) {
-        var request = takeGetRequest(person.getName());
-        var realId = request.substring(request.indexOf("{\"response\":[{\"id\":") + 19);
-        realId = realId.substring(0, realId.indexOf(",\"first_name\":\""));
-        if (person.getRealId() == null) {
-            person.setRealId(Integer.valueOf(realId));
-        }
     }
 
     public static String altName(String name) {

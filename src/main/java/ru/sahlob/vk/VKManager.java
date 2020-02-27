@@ -7,6 +7,8 @@ import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+
 @Component
 @AllArgsConstructor
 public class VKManager {

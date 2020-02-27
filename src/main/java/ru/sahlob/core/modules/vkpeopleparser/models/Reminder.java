@@ -2,22 +2,21 @@ package ru.sahlob.core.modules.vkpeopleparser.models;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
-@EqualsAndHashCode(of = {"id"})
+@Table(name = "reminder")
 @NoArgsConstructor
-@RequiredArgsConstructor
+@EqualsAndHashCode(of = {"id"})
 public class Reminder {
     @Id @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
-    @NonNull private String user;
-    @NonNull private String reminderType;
-    @NonNull private String frequency;
-    @NonNull private String reminderTimeDuration;
+    private Integer userId = -1;
+    private String userName;
+    private String reminderType;
+    private String frequency;
+    private String reminderTimeDuration;
     private String reminderTimePassed = "0";
-    private String lastTimePoint;
+    private String lastTimePoint = "0";
+    private Boolean sendMsg = false;
 }

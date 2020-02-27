@@ -43,8 +43,10 @@ public class ObserversStorage {
     }
 
     public void addRequest(String name, String request) {
-        Observer observer = getObserver(name);
-        observer.addRequest(request);
-        editObserver(observer);
+        if (request.length() <= 255) {
+            Observer observer = getObserver(name);
+            observer.addRequest(request);
+            editObserver(observer);
+        }
     }
 }

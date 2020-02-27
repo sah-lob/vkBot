@@ -9,6 +9,9 @@ import ru.sahlob.core.modules.weather.WeatherManager;
 @Component
 public class Anna extends Command {
 
+    public Anna() {
+    }
+
     @Override
     public String getMessage(Message message) {
 
