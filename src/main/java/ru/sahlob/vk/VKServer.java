@@ -51,6 +51,7 @@ public class VKServer {
             try {
                 var message = vkCore.getMessage();
                 if (message != null) {
+//                    vkCore.getVk().messages().send(vkCore.getActor()).peerId(message.getUserId()).message("hello world").unsafeParam("keyboard", key).execute();
                     observersManagement.checkObserver(String.valueOf(message.getUserId()), message.getBody());
                     var exec = Executors.newCachedThreadPool();
                     messenger.setMessage(message);

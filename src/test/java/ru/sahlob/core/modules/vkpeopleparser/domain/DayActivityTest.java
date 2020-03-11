@@ -1,11 +1,10 @@
 package ru.sahlob.core.modules.vkpeopleparser.domain;
 
-import org.junit.Test;
-import java.util.Arrays;
-import java.util.Date;
-
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+
+import java.util.Arrays;
+import org.junit.Test;
 
 public class DayActivityTest {
 

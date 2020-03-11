@@ -7,6 +7,7 @@ import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.queries.messages.MessagesGetLongPollHistoryQuery;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,15 +20,17 @@ public class VKCore {
     private static int ts;
     private GroupActor actor;
     private static int maxMsgId = -1;
+//    private TokenInfo tokenInfo;
 
-    public VKCore() throws ClientException, ApiException {
-        var accessToken = "45e239cc08f664008a981a57052505d7afa58bd0843e102ce69d5ef432c374fe7bcb6a191e101d255c940";
+    public VKCore(TokenInfo tokenInfo) throws ClientException, ApiException {
+        var accessToken = tokenInfo.getGeoserverUrl();
         var groupId = 160448028;
         var transportClient = HttpTransportClient.getInstance();
 
         vk = new VkApiClient(transportClient);
         actor = new GroupActor(groupId, accessToken);
         ts = vk.messages().getLongPollServer(actor).execute().getTs();
+//        this.tokenInfo = tokenInfo;
     }
 
     public Message getMessage() throws ClientException, ApiException {

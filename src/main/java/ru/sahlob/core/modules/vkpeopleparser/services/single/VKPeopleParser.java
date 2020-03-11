@@ -8,6 +8,7 @@ import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.observers.ObserversManagement;
+import ru.sahlob.vk.TokenInfo;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -23,6 +24,7 @@ public class VKPeopleParser {
     private final MainVKPeopleStorage storage;
     private final VKTimeStorage timeStorage;
     private final ObserversManagement observersManagement;
+    public  final TokenInfo tokenInfo;
 
     public String getInfoAboutPerson(Person person, String date) {
         var stringAnswer = "";
@@ -144,7 +146,7 @@ public class VKPeopleParser {
         return result;
     }
 
-    public static String altName(String name) {
+    public String altName(String name) {
         var answ = takeGetRequest(name);
         var result = answ.substring(answ.indexOf("\"first_name\":\"") + 14).replaceAll("\",\"last_name\":\"", " ");
         result = result.substring(0, result.indexOf("\",\"is_closed\""));
@@ -155,9 +157,11 @@ public class VKPeopleParser {
         return storage.getPersonWithTodayDayActivity(name) != null;
     }
 
-    private static String takeGetRequest(String name) {
-        var url =  "https://api.vk.com/method/users.get?user_ids=" + name
-                + "&fields=online&access_token=45e239cc08f664008a981a57052505d7afa58bd0843e102ce69d5ef432c374fe7bcb6a191e101d255c940&v=5.103";
+    private String takeGetRequest(String name) {
+        var url =  "https://api.vk.com/method/users.get?user_ids="
+                   + name
+                   + "&fields=online&access_token="
+                   + tokenInfo.getGeoserverUrl() + "&v=5.103";
         var answer = "";
         try {
             var obj = new URL(url);
