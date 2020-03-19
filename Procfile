@@ -1,1 +1,1 @@
-web:    java $JAVA_OPTS --enable-preview
+web:    java $JAVA_OPTS="--enable-preview"
