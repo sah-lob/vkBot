@@ -7,16 +7,27 @@
     <groupId>vkBot</groupId>
     <artifactId>vkBot</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <release>13</release>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
+                    <compilerArgs>
+                        --enable-preview
+                    </compilerArgs>
                     <source>13</source>
                     <target>13</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <configuration>
+                    <argLine>--enable-preview</argLine>
                 </configuration>
             </plugin>
             <plugin>
