@@ -54,9 +54,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <jvmArguments>
-                    --enable-preview
-                </jvmArguments>
+                <configuration>
+                    <jvmArguments>
+                        --enable-preview
+                    </jvmArguments>
+                </configuration>
             </plugin>
         </plugins>
     </build>
