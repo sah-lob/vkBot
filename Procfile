@@ -1,1 +1,1 @@
-web:    java $JAVA_OPTS --enable-preview ru/sahlob/Application.class
+web:    java $JAVA_OPTS --enable-preview ru/sahlob/Application
