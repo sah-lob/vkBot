@@ -32,7 +32,7 @@ public class VKReminderStorage {
 
     public String deleteReminder(String reminderId) {
 
-        if (reminderRepository.findById(Integer.valueOf(reminderId)) != null) {
+        if (reminderRepository.findById(Integer.valueOf(reminderId)).isPresent()) {
             reminderRepository.deleteById(Integer.valueOf(reminderId));
             return "напоминание удалено";
         } else {

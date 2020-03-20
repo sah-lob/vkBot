@@ -126,8 +126,7 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     }
 
     public Person getPersonWithoutActivity(String name) {
-        var person = personsRepository.getFirstPersonByName(name);
-        return  person;
+        return personsRepository.getFirstPersonByName(name);
     }
 
     public Person getPersonWithoutActivityByRealId(Integer id) {
@@ -151,12 +150,11 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
         var result =
                 StreamSupport.stream(persons.spliterator(), false)
                         .collect(Collectors.toList());
-        for (int i = 0; i < result.size(); i++) {
-            var p = result.get(i);
+        for (Person p : result) {
             if (date.equals("")) {
-                result.get(i).updateActivityByDate(VKTime.getDateKey(p.getTimezone()), getDayAndMinutesActivitiesByDate(p, VKTime.getDateKey(p.getTimezone())));
+                p.updateActivityByDate(VKTime.getDateKey(p.getTimezone()), getDayAndMinutesActivitiesByDate(p, VKTime.getDateKey(p.getTimezone())));
             } else {
-                result.get(i).updateActivityByDate(date, getDayAndMinutesActivitiesByDate(p, date));
+                p.updateActivityByDate(date, getDayAndMinutesActivitiesByDate(p, date));
             }
         }
         return result;

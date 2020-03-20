@@ -1,7 +1,6 @@
 package ru.sahlob.core.modules.vkpeopleparser.domain;
 
 import lombok.Data;
-import lombok.NonNull;
 
 import java.io.Serializable;
 import java.util.Comparator;

@@ -1,12 +1,7 @@
 package ru.sahlob.vk;
-import com.petersamokhin.bots.sdk.clients.Group;
-import com.petersamokhin.bots.sdk.objects.Message;
+
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.objects.docs.Doc;
-import com.vk.api.sdk.objects.docs.DocPreview;
-//import com.vk.api.sdk.objects.messages.Message;
-import com.vk.api.sdk.objects.messages.MessageAttachment;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.services.multi.VKDaysUpdate;
@@ -15,8 +10,6 @@ import ru.sahlob.core.modules.vkpeopleparser.services.single.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.observers.ObserversManagement;
 
-import java.net.URLEncoder;
-import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.Executors;
 
@@ -51,7 +44,6 @@ public class VKServer {
             try {
                 var message = vkCore.getMessage();
                 if (message != null) {
-//                    vkCore.getVk().messages().send(vkCore.getActor()).peerId(message.getUserId()).message("hello world").unsafeParam("keyboard", key).execute();
                     observersManagement.checkObserver(String.valueOf(message.getUserId()), message.getBody());
                     var exec = Executors.newCachedThreadPool();
                     messenger.setMessage(message);

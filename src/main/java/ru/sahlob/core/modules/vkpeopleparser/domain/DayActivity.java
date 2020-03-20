@@ -1,4 +1,5 @@
 package ru.sahlob.core.modules.vkpeopleparser.domain;
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -6,7 +7,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "days")
@@ -57,13 +57,13 @@ public class DayActivity implements Serializable {
     }
 
     public String getDayActivityInfo() {
-        var dayActivityInfo = "";
+        StringBuilder dayActivityInfo = new StringBuilder();
         if (!dayActivities.isEmpty()) {
             for (var activity: dayActivities) {
-                dayActivityInfo += activity.getStartTime() + " в течение " + activity.getDuration() + "мин.\n";
+                dayActivityInfo.append(activity.getStartTime()).append(" в течение ").append(activity.getDuration()).append("мин.\n");
             }
         }
-        return dayActivityInfo;
+        return dayActivityInfo.toString();
     }
 
     public static final Comparator<DayActivity> COMPARE_BY_DURATION = (lhs, rhs) -> rhs.getTodayDuration() - lhs.getTodayDuration();
