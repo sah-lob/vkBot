@@ -9,6 +9,7 @@ import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleSto
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.observers.ObserversManagement;
 import ru.sahlob.vk.TokenInfo;
+import ru.sahlob.vk.VKCore;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,18 +25,27 @@ public class VKPeopleParser {
     private final MainVKPeopleStorage storage;
     private final VKTimeStorage timeStorage;
     private final ObserversManagement observersManagement;
-    public  final TokenInfo tokenInfo;
+//    private final TokenInfo tokenInfo;
 
     public String getInfoAboutPerson(Person person, String date) {
         var stringAnswer = "";
         if (person == null) {
             stringAnswer += "Данный пользовтель почему-то не найден";
         } else {
-            stringAnswer += "Данные по пользователю " + person.getAlternativeName() + " для мамкиного шпиона: \n\n";
+            stringAnswer += "Данные по пользователю " + person.getAlternativeName() + """
+                     для мамкиного шпиона:\040
+
+                    """;
             if (personOnline(person)) {
-                stringAnswer += "Данный пользовтель сейчас онлайн. \n\n";
+                stringAnswer += """
+                        Данный пользовтель сейчас онлайн.\040
+
+                        """;
             } else {
-                stringAnswer += "Данный пользовтель сейчас офлайн. \n\n";
+                stringAnswer += """
+                        Данный пользовтель сейчас офлайн.\040
+
+                        """;
             }
             if (date.equals("")) {
                 date = VKTime.getDateKey(person.getTimezone());
@@ -61,7 +71,10 @@ public class VKPeopleParser {
         if (person == null) {
             stringAnswer += "Данный пользовтель почему-то не найден";
         } else {
-            stringAnswer += "Досье " + person.getAlternativeName() + ":\n\n";
+            stringAnswer += "Досье " + person.getAlternativeName() + """
+                    :
+
+                    """;
             stringAnswer += "Максимальное время онлайн за день: " + person.getRecordDurationAllTime() + " мин.\n";
             stringAnswer += "Среднее время онлайн за день: " + person.getAvgDurationAllTime() + " мин.\n";
             stringAnswer += "Данные по пользователю собираются в течение " + person.getAllTimeDaysCount()  + " суток.";
@@ -146,7 +159,7 @@ public class VKPeopleParser {
         return result;
     }
 
-    public String altName(String name) {
+    public static String altName(String name) {
         var answ = takeGetRequest(name);
         var result = answ.substring(answ.indexOf("\"first_name\":\"") + 14).replaceAll("\",\"last_name\":\"", " ");
         result = result.substring(0, result.indexOf("\",\"is_closed\""));
@@ -157,11 +170,11 @@ public class VKPeopleParser {
         return storage.getPersonWithTodayDayActivity(name) != null;
     }
 
-    private String takeGetRequest(String name) {
+    private static String takeGetRequest(String name) {
         var url =  "https://api.vk.com/method/users.get?user_ids="
                    + name
                    + "&fields=online&access_token="
-                   + tokenInfo.getGeoserverUrl() + "&v=5.103";
+                   + VKCore.accessToken + "&v=5.103";
         var answer = "";
         try {
             var obj = new URL(url);

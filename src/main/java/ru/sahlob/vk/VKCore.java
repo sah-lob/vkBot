@@ -20,17 +20,16 @@ public class VKCore {
     private static int ts;
     private GroupActor actor;
     private static int maxMsgId = -1;
-//    private TokenInfo tokenInfo;
+    public static String accessToken;
 
     public VKCore(TokenInfo tokenInfo) throws ClientException, ApiException {
-        var accessToken = tokenInfo.getGeoserverUrl();
+        accessToken = tokenInfo.url;
         var groupId = 160448028;
         var transportClient = HttpTransportClient.getInstance();
 
         vk = new VkApiClient(transportClient);
         actor = new GroupActor(groupId, accessToken);
         ts = vk.messages().getLongPollServer(actor).execute().getTs();
-//        this.tokenInfo = tokenInfo;
     }
 
     public Message getMessage() throws ClientException, ApiException {

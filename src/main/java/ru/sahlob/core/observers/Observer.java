@@ -2,12 +2,12 @@ package ru.sahlob.core.observers;
 
 import lombok.*;
 import org.springframework.context.annotation.Lazy;
-import ru.sahlob.core.observers.roles.Role;
+import ru.sahlob.core.observers.roles.Roles;
 
 import javax.persistence.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 @Entity
@@ -22,7 +22,7 @@ public class Observer {
     @NonNull private String name;
     @NonNull private String alternativeName;
     private long countOfRequests = 1;
-    @Transient private List<Role> roles;
+    @NonNull @ElementCollection(fetch = FetchType.EAGER) private Set<Roles> roles;
     @ElementCollection(fetch = FetchType.EAGER) private Map<String, Integer> personsName = new HashMap<>();
     @ElementCollection(fetch = FetchType.EAGER) private Map<String, Integer> requests = new HashMap<>();
 
@@ -43,4 +43,6 @@ public class Observer {
             requests.put(request, 1);
         }
     }
+
+
 }

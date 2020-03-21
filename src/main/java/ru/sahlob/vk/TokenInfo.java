@@ -10,6 +10,14 @@ import org.springframework.context.annotation.PropertySource;
 @Getter
 public class TokenInfo {
 
+
+    public static String geoserverUrl;
+
     @Value("${notToken}")
-    private String geoserverUrl;
+    public String url;
+
+    public TokenInfo() {
+        geoserverUrl = getUrl();
+    }
+
 }

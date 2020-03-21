@@ -34,9 +34,8 @@ public class VKTimeStorage {
             }
         }
         assert minID != null;
-        String key = minID.getTimeKey();
         dbTimesRepository.delete(minID);
-        return key;
+        return minID.getTimeKey();
     }
 
     public List<String> getAllAvlDays() {

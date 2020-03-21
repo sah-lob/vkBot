@@ -4,13 +4,16 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.services.single.VKPeopleParser;
 import ru.sahlob.core.observers.interfaces.DBObserversRepository;
+import ru.sahlob.core.observers.roles.Roles;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 @Data
 public class ObserversStorage {
 
     private final DBObserversRepository observersRepository;
-    private VKPeopleParser vkPeopleParser;
 
     public void addObserver(String name) {
         var dataObserver = getObserver(name);
@@ -18,7 +21,9 @@ public class ObserversStorage {
             dataObserver.incrementCountOfRequests();
             editObserver(dataObserver);
         } else {
-            observersRepository.save(new Observer(name, vkPeopleParser.altName(name)));
+            var roles = new HashSet<Roles>();
+            roles.add(Roles.standart);
+            observersRepository.save(new Observer(name, VKPeopleParser.altName(name), roles));
         }
     }
 
