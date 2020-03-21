@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.vk.VKManager;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 @Data

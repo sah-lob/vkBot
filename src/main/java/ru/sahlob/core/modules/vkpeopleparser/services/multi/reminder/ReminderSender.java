@@ -10,6 +10,9 @@ import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.VKPeopleBDStora
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.reminder.VKReminderStorage;
 import ru.sahlob.vk.VKManager;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Component
 @Data
 public class ReminderSender {
