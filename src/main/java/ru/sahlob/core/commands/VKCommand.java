@@ -16,6 +16,9 @@ import ru.sahlob.core.modules.vkpeopleparser.services.single.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
+import ru.sahlob.core.observers.Observer;
+import ru.sahlob.core.observers.ObserversStorage;
+import ru.sahlob.core.observers.roles.Roles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,125 +28,133 @@ import java.util.List;
 @Data
 public class VKCommand extends Command {
 
+    private final ReminderTypeManagement reminderTypeManagement;
     private final MainVKPeopleStorage vkPeopleMemoryStorage;
-    private final VKPeopleParser vkPeopleParser;
-    private final VKPeopleRatings vkPeopleRatings;
     private final VKTwoPeopleAnalize vkTwoPeopleAnalize;
+    private final ObserversStorage observersStorage;
+    private final ReminderService reminderService;
+    private final VKPeopleRatings vkPeopleRatings;
+    private final VKPeopleParser vkPeopleParser;
     private final VKTimeStorage vkTimeStorage;
     private final VKMorning vkMorning;
-    private final ReminderService reminderService;
-    private final ReminderTypeManagement reminderTypeManagement;
 
     @Override
     public String getMessage(Message message) {
         var result = "";
         var messageBody = message.getBody().toLowerCase();
 
-        observersLogic(message);
+        var observer = observersLogic(message);
 
-        // это необходимо для слежки за ирой.
-        if (messageBody.equals(VkCommands.и.name())
+        if (observer.getRoles().contains(Roles.admin)) {
+            // это необходимо для слежки за ирой.
+            if (messageBody.equals(VkCommands.и.name())
                 || messageBody.equals(VkCommands.b.name())) {
-            messageBody = "шпионим 12275982";
+                messageBody = "шпионим 12275982";
+            }
         }
 
-        if (messageBody.contains(VkCommands.следить.name())) {
-            System.out.println(message.getUserId());
-            if (messageBody.contains("al_lb")
+        if (observer.getRoles().contains(Roles.standart)) {
+            if (messageBody.contains(VkCommands.следить.name())) {
+                System.out.println(message.getUserId());
+                if (messageBody.contains("al_lb")
                     || messageBody.contains("7965708")
                     || messageBody.contains("mynameisann")
                     || messageBody.contains("3501014")) {
-                result = "Не по сеньке шапка";
-            } else {
-                result = addVkPerson(messageBody);
+                    result = "Не по сеньке шапка";
+                } else {
+                    result = addVkPerson(messageBody);
+                }
+            }
+
+            if (messageBody.contains(VkCommands.удалить.name())) {
+                if (messageBody.contains("день")) {
+                    result = deleteDay(messageBody);
+                } else if (messageBody.contains("напоминание")) {
+                    result = deleteReminder(messageBody);
+                }
+
+            }
+
+            if (messageBody.contains(VkCommands.шпионим.name())) {
+                result = spy(messageBody);
+            }
+
+            if (messageBody.contains(VkCommands.досье.name())) {
+                result = dossier(messageBody);
+            }
+
+            if (messageBody.contains(VkCommands.лидерыс.name())) {
+                result = avgAllTimeDurationsLiders();
+            } else if (messageBody.contains(VkCommands.лидеры.name())) {
+                result = allTimeDurationsLiders();
+            }
+
+            if (messageBody.contains(VkCommands.чп.name())) {
+                if (message.getUserId() == 7965708) {
+                    result = editTimeZoneVKPerson(messageBody);
+                } else {
+                    result = "не надо лучше=)";
+                }
+            }
+
+            if (messageBody.contains(VkCommands.параноики.name())) {
+                result = personsSessionCount();
+            }
+
+            if (messageBody.contains(VkCommands.задротыс.name())) {
+                result = personsAvgDurationRaiting();
+            } else if (messageBody.contains(VkCommands.задроты.name())) {
+                result = personsDurationRating();
+            }
+
+            if (messageBody.contains(VkCommands.едины.name())) {
+                result = jointOnlineOfTwoUsers(messageBody);
+            }
+
+            if (messageBody.contains(VkCommands.утро.name())) {
+                result = usersMorning();
+            }
+
+            if (messageBody.contains(VkCommands.даты.name())) {
+                result = availableDates();
+            }
+
+            if (messageBody.contains(VkCommands.команды.name())) {
+                result = info(message.getUserId());
+            }
+
+            if (messageBody.contains(VkCommands.пол.name())) {
+                result = setSex(messageBody);
+            }
+
+            if (messageBody.contains(VkCommands.статистика.name())) {
+                result = stats();
+            }
+
+            if (messageBody.contains(VkCommands.онлайн.name())) {
+                result = online(message);
+            }
+
+            if (messageBody.contains(VkCommands.напоминать.name())) {
+                result = addReminder(message);
+            }
+
+            if (messageBody.contains(VkCommands.напоминания.name())) {
+                result = reminders();
+            }
+
+            if (messageBody.contains(VkCommands.много.name())) {
+                result = manyRemindersTypesFields(messageBody);
+            }
+
+            if (messageBody.contains(VkCommands.добавить.name())) {
+                result = addOneReminderType(messageBody);
             }
         }
 
-        if (messageBody.contains(VkCommands.удалить.name())) {
-            if (messageBody.contains("день")) {
-                result = deleteDay(messageBody);
-            } else if (messageBody.contains("напоминание")) {
-                result = deleteReminder(messageBody);
-            }
 
-        }
-
-        if (messageBody.contains(VkCommands.шпионим.name())) {
-            result = spy(messageBody);
-        }
-
-        if (messageBody.contains(VkCommands.досье.name())) {
-            result = dossier(messageBody);
-        }
-
-        if (messageBody.contains(VkCommands.лидерыс.name())) {
-            result = avgAllTimeDurationsLiders();
-        } else if (messageBody.contains(VkCommands.лидеры.name())) {
-            result = allTimeDurationsLiders();
-        }
-
-        if (messageBody.contains(VkCommands.чп.name())) {
-            if (message.getUserId() == 7965708) {
-                result = editTimeZoneVKPerson(messageBody);
-            } else {
-                result = "не надо лучше=)";
-            }
-        }
-
-        if (messageBody.contains(VkCommands.параноики.name())) {
-            result = personsSessionCount();
-        }
-
-        if (messageBody.contains(VkCommands.задротыс.name())) {
-            result = personsAvgDurationRaiting();
-        } else if (messageBody.contains(VkCommands.задроты.name())) {
-            result = personsDurationRating();
-        }
-
-        if (messageBody.contains(VkCommands.едины.name())) {
-            result = jointOnlineOfTwoUsers(messageBody);
-        }
-
-        if (messageBody.contains(VkCommands.утро.name())) {
-            result = usersMorning();
-        }
-
-        if (messageBody.contains(VkCommands.даты.name())) {
-            result = availableDates();
-        }
-
-        if (messageBody.contains(VkCommands.команды.name())) {
-            result = info(message.getUserId());
-        }
-
-        if (messageBody.contains(VkCommands.пол.name())) {
-            result = setSex(messageBody);
-        }
-
-        if (messageBody.contains(VkCommands.статистика.name())) {
-            result = stats();
-        }
-
-        if (messageBody.contains(VkCommands.онлайн.name())) {
-            result = online(message);
-        }
-
-        if (messageBody.contains(VkCommands.напоминать.name())) {
-            result = addReminder(message);
-        }
-
-        if (messageBody.contains(VkCommands.напоминания.name())) {
-            result = reminders();
-        }
-        if (messageBody.contains(VkCommands.много.name())) {
-            result = manyRemindersTypesFields(messageBody);
-        }
-        if (messageBody.contains(VkCommands.добавить.name())) {
-            result = addOneReminderType(messageBody);
-        }
-
-        if (result == null || result == "") {
-            result = "Странно, непонятно как вы умудрились увидеть это сообщение.";
+        if (result == null || result.equals("")) {
+            result = "Такой команды нет, введите слово 'команды', чтобы посмотреть команды, которые есть.";
         }
 
         return result;
@@ -359,7 +370,7 @@ public class VKCommand extends Command {
         return result;
     }
 
-    private void observersLogic(Message message) {
-
+    private Observer observersLogic(Message message) {
+        return observersStorage.getObserver(String.valueOf(message.getUserId()));
     }
 }
