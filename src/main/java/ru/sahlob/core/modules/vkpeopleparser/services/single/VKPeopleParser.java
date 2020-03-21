@@ -8,7 +8,6 @@ import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.observers.ObserversManagement;
-import ru.sahlob.vk.TokenInfo;
 import ru.sahlob.vk.VKCore;
 
 import java.io.BufferedReader;
@@ -25,7 +24,6 @@ public class VKPeopleParser {
     private final MainVKPeopleStorage storage;
     private final VKTimeStorage timeStorage;
     private final ObserversManagement observersManagement;
-//    private final TokenInfo tokenInfo;
 
     public String getInfoAboutPerson(Person person, String date) {
         var stringAnswer = "";
