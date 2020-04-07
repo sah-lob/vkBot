@@ -7,7 +7,6 @@ import ru.sahlob.core.observers.interfaces.DBObserversRepository;
 import ru.sahlob.core.observers.roles.Roles;
 
 import java.util.HashSet;
-import java.util.Set;
 
 @Component
 @Data
@@ -35,17 +34,21 @@ public class ObserversStorage {
         return observersRepository.findFirstByName(vkid);
     }
 
-    public void addPeronName(String observersName, String personsName) {
-        var observer = getObserver(observersName);
-        observer.addPersonsName(personsName);
-        editObserver(observer);
-    }
-
     public void addRequest(String name, String request) {
         if (request.length() <= 255) {
             Observer observer = getObserver(name);
             observer.addRequest(request);
             editObserver(observer);
+        }
+    }
+
+    public String addPersonsId (Observer observer, String personsId) {
+        if (observer.getPersonsId().contains(personsId)) {
+            return "Человек уже был добавлен раньше";
+        } else {
+            observer.getPersonsId().add(personsId);
+            observersRepository.save(observer);
+            return "Человек добавлен";
         }
     }
 }

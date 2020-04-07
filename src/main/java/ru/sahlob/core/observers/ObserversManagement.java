@@ -20,8 +20,8 @@ public class ObserversManagement {
         addRequest(observersName, message);
     }
 
-    public void addPersonsName(String observersName, String personsName) {
-        observersStorage.addPeronName(observersName, personsName);
+    public String addPersonsName(Observer observer, String personsName) {
+       return observersStorage.addPersonsId(observer, personsName);
     }
 
     public void addRequest(String observersName, String message) {

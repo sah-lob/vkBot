@@ -22,6 +22,7 @@ public class ReminderTypeManagement {
     public ReminderType getReminderTypeByName(String name) {
         return reminderTypeStorage.getGetReminderTypeByName(name);
     }
+    
 
     public String getRandomReminderTypeNote(String reminderTypeName) {
         return reminderTypeStorage.getGetReminderTypeByName(reminderTypeName).getRandomNote();

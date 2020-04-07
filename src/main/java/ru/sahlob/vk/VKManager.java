@@ -106,10 +106,7 @@ public class VKManager {
                     VkCommands.задроты.toString(),
                     VkCommands.задротыс.toString(),
                     VkCommands.лидеры.toString(),
-                    VkCommands.лидерыс.toString(),
-                    VkCommands.статистика.toString(),
-                    VkCommands.параноики.toString(),
-                    VkCommands.команды.toString());
+                    VkCommands.лидерыс.toString());
             var set = new HashSet<>(resultList);
             for (var v: variants) {
                 if (resultList.size() < 4 && !set.contains(v)) {

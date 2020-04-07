@@ -1,4 +1,4 @@
-package ru.sahlob.core.commands;
+package ru.sahlob.core.commands.vkcommands;
 
 import com.vk.api.sdk.objects.messages.Message;
 import lombok.Data;
@@ -17,19 +17,23 @@ import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
 import ru.sahlob.core.observers.Observer;
+import ru.sahlob.core.observers.ObserversManagement;
 import ru.sahlob.core.observers.ObserversStorage;
 import ru.sahlob.core.observers.roles.Roles;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.sahlob.core.commands.vkcommands.answers.VKTextAnswers.*;
+
 @EqualsAndHashCode(callSuper = true)
 @Component
 @Data
-public class VKCommand extends Command {
+public class VKCommandController extends Command {
 
     private final ReminderTypeManagement reminderTypeManagement;
     private final MainVKPeopleStorage vkPeopleMemoryStorage;
+    private final ObserversManagement observersManagement;
     private final VKTwoPeopleAnalize vkTwoPeopleAnalize;
     private final ObserversStorage observersStorage;
     private final ReminderService reminderService;
@@ -51,68 +55,76 @@ public class VKCommand extends Command {
                 || messageBody.equals(VkCommands.b.name())) {
                 messageBody = "шпионим 12275982";
             }
+
+            if (messageBody.equals(VkCommands.роль.name())) {
+                result = observersRoles(observer, message);
+            }
+
         }
 
         if (observer.getRoles().contains(Roles.standart)) {
             if (messageBody.contains(VkCommands.следить.name())) {
-                System.out.println(message.getUserId());
-                if (messageBody.contains("al_lb")
-                    || messageBody.contains("7965708")
-                    || messageBody.contains("mynameisann")
-                    || messageBody.contains("3501014")) {
-                    result = "Не по сеньке шапка";
+                if (!observer.getRoles().contains(Roles.admin)) {
+                    result = addVkPerson(observer, messageBody);
                 } else {
-                    result = addVkPerson(messageBody);
+                    if (messageBody.contains("al_lb")
+                        || messageBody.contains("7965708")
+                        || messageBody.contains("mynameisann")
+                        || messageBody.contains("3501014")) {
+                        result = "Не по сеньке шапка";
+                    } else {
+                        result = addVkPerson(observer, messageBody);
+                    }
                 }
             }
 
             if (messageBody.contains(VkCommands.удалить.name())) {
-                if (messageBody.contains("день")) {
-                    result = deleteDay(messageBody);
-                } else if (messageBody.contains("напоминание")) {
-                    result = deleteReminder(messageBody);
+                if (messageBody.contains(DAY)) {
+                    result = deleteDay(observer, messageBody);
+                } else if (messageBody.contains(REMINDER)) {
+                    result = deleteReminder(observer, messageBody);
                 }
 
             }
 
             if (messageBody.contains(VkCommands.шпионим.name())) {
-                result = spy(messageBody);
+                result = spy(observer, messageBody);
             }
 
             if (messageBody.contains(VkCommands.досье.name())) {
-                result = dossier(messageBody);
+                result = dossier(observer, messageBody);
             }
 
             if (messageBody.contains(VkCommands.лидерыс.name())) {
-                result = avgAllTimeDurationsLiders();
+                result = avgAllTimeDurationsLiders(observer);
             } else if (messageBody.contains(VkCommands.лидеры.name())) {
-                result = allTimeDurationsLiders();
+                result = allTimeDurationsLiders(observer);
             }
 
             if (messageBody.contains(VkCommands.чп.name())) {
                 if (message.getUserId() == 7965708) {
-                    result = editTimeZoneVKPerson(messageBody);
+                    result = editTimeZoneVKPerson(observer, messageBody);
                 } else {
                     result = "не надо лучше=)";
                 }
             }
 
             if (messageBody.contains(VkCommands.параноики.name())) {
-                result = personsSessionCount();
+                result = personsSessionCount(observer);
             }
 
             if (messageBody.contains(VkCommands.задротыс.name())) {
-                result = personsAvgDurationRaiting();
+                result = personsAvgDurationRaiting(observer);
             } else if (messageBody.contains(VkCommands.задроты.name())) {
-                result = personsDurationRating();
+                result = personsDurationRating(observer);
             }
 
             if (messageBody.contains(VkCommands.едины.name())) {
-                result = jointOnlineOfTwoUsers(messageBody);
+                result = jointOnlineOfTwoUsers(observer, messageBody);
             }
 
             if (messageBody.contains(VkCommands.утро.name())) {
-                result = usersMorning();
+                result = usersMorning(observer);
             }
 
             if (messageBody.contains(VkCommands.даты.name())) {
@@ -124,34 +136,33 @@ public class VKCommand extends Command {
             }
 
             if (messageBody.contains(VkCommands.пол.name())) {
-                result = setSex(messageBody);
+                result = setSex(observer, messageBody);
             }
 
             if (messageBody.contains(VkCommands.статистика.name())) {
-                result = stats();
+                result = stats(observer);
             }
 
             if (messageBody.contains(VkCommands.онлайн.name())) {
-                result = online(message);
+                result = online(observer, message);
             }
 
             if (messageBody.contains(VkCommands.напоминать.name())) {
-                result = addReminder(message);
+                result = addReminder(observer, message);
             }
 
             if (messageBody.contains(VkCommands.напоминания.name())) {
-                result = reminders();
+                result = reminders(observer);
             }
 
             if (messageBody.contains(VkCommands.много.name())) {
-                result = manyRemindersTypesFields(messageBody);
+                result = manyRemindersTypesFields(observer, messageBody);
             }
 
             if (messageBody.contains(VkCommands.добавить.name())) {
-                result = addOneReminderType(messageBody);
+                result = addOneReminderType(observer, messageBody);
             }
         }
-
 
         if (result == null || result.equals("")) {
             result = "Такой команды нет, введите слово 'команды', чтобы посмотреть команды, которые есть.";
@@ -160,132 +171,151 @@ public class VKCommand extends Command {
         return result;
     }
 
-    private String editTimeZoneVKPerson(String messageBody) {
+    private String editTimeZoneVKPerson(Observer observer, String messageBody) {
         messageBody = messageBody.substring(3);
-        String userName = messageBody.substring(0, messageBody.indexOf(" "));
-        messageBody = messageBody.substring(messageBody.indexOf(" ") + 1);
-        messageBody = messageBody.replaceAll(" ", "");
-        int timezone = Integer.parseInt(messageBody);
-        vkPeopleMemoryStorage.editTimeZoneToPerson(userName, timezone);
-        return "Часовой пояс изменен.";
+        var userName = messageBody.substring(0, messageBody.indexOf(WSP));
+        messageBody = messageBody.substring(messageBody.indexOf(WSP) + 1);
+        messageBody = messageBody.replaceAll(WSP, "");
+        var timezone = Integer.parseInt(messageBody);
+        vkPeopleMemoryStorage.editTimeZoneToPerson(observer, userName, timezone);
+        return TIME_ZONE_HAS_BEEN_CHANGED;
     }
 
-    private String addVkPerson(String messageBody) {
+    private String addVkPerson(Observer observer, String messageBody) {
         var result = "";
         var name = getNameOrAlternativeNameFromMessageBody(messageBody);
-        boolean checkPerson = checkPerson(messageBody, name);
+        boolean checkPerson = checkPerson(observer, messageBody, name);
         if (checkPerson) {
-            if (vkPeopleParser.addNewPerson(name)) {
-                result = "Человечек добавлен";
+            var person = vkPeopleParser.addNewPerson(name);
+            if (person != null) {
+                result = observersManagement.addPersonsName(observer,
+                        String.valueOf(person.getRealId()));
             } else {
-                result = "Введены некорректные данные человечка";
+                result = INCORRECT_HUMAN_DATA_WAS_ENTERED;
             }
         } else {
-            result = "А человечек то уже наблюдается";
+            var person = vkPeopleMemoryStorage.getPersonWithoutDayActivity(null, name);
+            result = observersManagement.addPersonsName(
+                    observer,
+                    String.valueOf(person.getRealId()));
         }
         return result;
     }
 
-    private String spy(String messageBody) {
-        if (messageBody.split(" ").length > 2) {
-            var m = messageBody.split(" ");
+    private String spy(Observer observer, String messageBody) {
+        if (messageBody.split(WSP).length > 2) {
+            var m = messageBody.split(WSP);
             var name = m[1];
-            var date = m[2] + " " + m[3].toUpperCase() + " " + m[4];
-            return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPersonWithDayActivityByDate(name, date), date);
+            name = name.replaceAll(ID, "");
+            var date = m[2] + WSP + m[3].toUpperCase() + WSP + m[4];
+            return observer.getPersonsId().contains(name) ?
+                    vkPeopleParser
+                            .getInfoAboutPerson(vkPeopleMemoryStorage
+                                    .getPersonWithDayActivityByDate(observer, name, date),
+                                    date) : PERSON_NOT_ADDED;
         } else {
             var name = getNameOrAlternativeNameFromMessageBody(messageBody);
-            name = name.replaceAll("id", "");
-            return vkPeopleParser.getInfoAboutPerson(vkPeopleMemoryStorage.getPersonWithTodayDayActivity(name), "");
+            name = name.replaceAll(ID, "");
+            return observer.getPersonsId().contains(name) ?
+                    vkPeopleParser
+                            .getInfoAboutPerson(vkPeopleMemoryStorage
+                                    .getPersonWithTodayDayActivity(observer, name),
+                                    "") : PERSON_NOT_ADDED;
         }
     }
 
-    private String dossier(String messageBody) {
-        var name = messageBody.replaceAll("досье ", "");
-        return vkPeopleParser.getInfoAboutPersonsRecords(vkPeopleMemoryStorage.getPersonWithTodayDayActivity(name));
+    private String dossier(Observer observer, String messageBody) {
+        var name = messageBody.replaceAll(DOSSIER + WSP, "");
+        return personsExist(observer, name) ? vkPeopleParser.
+                getInfoAboutPersonsRecords(vkPeopleMemoryStorage.
+                        getPersonWithTodayDayActivity(observer, name)) : PERSON_NOT_ADDED;
     }
 
-    private String personsDurationRating() {
-        return vkPeopleRatings.getPersonsDurationRaiting();
+    private String personsDurationRating(Observer observer) {
+        return vkPeopleRatings.getPersonsDurationRaiting(observer);
     }
 
-    private String personsAvgDurationRaiting() {
-        return vkPeopleRatings.getPersonsAvgDurationRaiting();
+    private String personsAvgDurationRaiting(Observer observer) {
+        return vkPeopleRatings.getPersonsAvgDurationRaiting(observer);
     }
 
-    private String allTimeDurationsLiders() {
-        return vkPeopleRatings.getPseronsAllTimeDurationRaiting();
+    private String allTimeDurationsLiders(Observer observer) {
+        return vkPeopleRatings.getPseronsAllTimeDurationRaiting(observer);
     }
 
-    private String avgAllTimeDurationsLiders() {
-        return vkPeopleRatings.getPseronsAvgAllTimeDurationRaiting();
+    private String avgAllTimeDurationsLiders(Observer observer) {
+        return vkPeopleRatings.getPseronsAvgAllTimeDurationRaiting(observer);
     }
 
-    private String personsSessionCount() {
-        return vkPeopleRatings.getCountOfPersonsSessions();
+    private String personsSessionCount(Observer observer) {
+        return vkPeopleRatings.getCountOfPersonsSessions(observer);
     }
 
-    private boolean checkPerson(String messageBody, String name) {
-        if (messageBody.contains("следить")) {
-            return !checkPersonForExistence(name);
-        } else if (messageBody.contains("шпионим")) {
-            return checkPersonForExistence(name);
+    private boolean checkPerson(Observer observer, String messageBody, String name) {
+        if (messageBody.contains(VkCommands.следить.toString())) {
+            return !checkPersonForExistence(null, name);
+        } else if (messageBody.contains(VkCommands.шпионим.toString())) {
+            return checkPersonForExistence(observer, name);
         }
         return true;
     }
 
-    private boolean checkPersonForExistence(String name) {
-        return vkPeopleParser.userExistenceCheck(name);
+    private boolean checkPersonForExistence(Observer observer, String name) {
+        return vkPeopleParser.userExistenceCheck(observer, name);
     }
 
     private String getNameOrAlternativeNameFromMessageBody(String messageBody) {
         return messageBody.substring(8);
     }
 
-    private String jointOnlineOfTwoUsers(String messageBody) {
-        var ew = messageBody.split(" ");
-        var name1 = ew[1].replace(" ", "");
-        var name2 = ew[2].replace(" ", "");
-        if (!checkPersonForExistence(name1)) {
+    private String jointOnlineOfTwoUsers(Observer observer, String messageBody) {
+        var ew = messageBody.split(WSP);
+        var name1 = ew[1].replace(WSP, "");
+        var name2 = ew[2].replace(WSP, "");
+        if (!checkPersonForExistence(observer, name1)) {
             return "1 пользователь " + name1 + " не добавлен";
-        } else if (!checkPersonForExistence(name2)) {
+        } else if (!checkPersonForExistence(observer, name2)) {
             return "2 пользователь " + name2 + " не добавлен";
         } else {
-            return vkTwoPeopleAnalize.jointOnlineOfTwoUsers(name1, name2);
+            return vkTwoPeopleAnalize.jointOnlineOfTwoUsers(observer, name1, name2);
         }
     }
 
-    private String usersMorning() {
-        return vkMorning.usersMorning();
+    private String usersMorning(Observer observer) {
+        return vkMorning.usersMorning(observer);
     }
 
-    private String deleteDay(String messageBody) {
-        var key = messageBody.replaceAll("удалить день ", "");
-        return vkPeopleMemoryStorage.deleteAllDayAndMinutesActivitiesByDay(key);
+    private String deleteDay(Observer observer, String messageBody) {
+        var key = messageBody.replaceAll(DELETE_DAY + WSP, "");
+        return vkPeopleMemoryStorage.deleteAllDayAndMinutesActivitiesByDay(observer, key);
     }
 
-    private String deleteReminder(String messageBody) {
-        var reminderId = messageBody.replaceAll("удалить напоминание ", "");
-        return reminderService.deleteReminder(reminderId);
+    private String deleteReminder(Observer observer, String messageBody) {
+        var reminderId = messageBody.replaceAll(DELETE_REMINDER + WSP, "");
+        if(observer.getPersonsId().contains(reminderId) || observer.getRoles().contains(Roles.admin)){
+            return reminderService.deleteReminder(reminderId);
+        }
+        return PERSON_NOT_ADDED;
     }
 
     private String availableDates() {
         var list = vkTimeStorage.getAllAvlDays();
-        StringBuilder result = new StringBuilder("Доступные даты: \n");
+        StringBuilder result = new StringBuilder(AVAILABLE_DATES + ": \n");
         for (var l : list) {
             result.append(l).append("\n");
         }
         return result.toString();
     }
 
-    private String setSex(String messageBody) {
-        var mas = messageBody.split(" ");
+    private String setSex(Observer observer, String messageBody) {
+        var mas = messageBody.split(WSP);
         var name = mas[1];
         var sex = mas[2];
-        return vkPeopleMemoryStorage.editSexToPerson(name, sex);
+        return vkPeopleMemoryStorage.editSexToPerson(observer, name, sex);
     }
 
-    private String stats() {
-        return vkPeopleRatings.getMainStats();
+    private String stats(Observer observer) {
+        return vkPeopleRatings.getMainStats(observer);
     }
 
     private String info(Integer id) {
@@ -310,15 +340,15 @@ public class VKCommand extends Command {
         return result.toString();
     }
 
-    private String online(Message message) {
+    private String online(Observer observer, Message message) {
         String messageBody = message.getBody();
         messageBody = messageBody.substring(7);
-        messageBody = messageBody.replaceAll("id", "");
-        return vkPeopleMemoryStorage.addNewWaiter(messageBody, String.valueOf(message.getUserId()));
+        messageBody = messageBody.replaceAll(ID, "");
+        return vkPeopleMemoryStorage.addNewWaiter(observer, messageBody, String.valueOf(message.getUserId()));
     }
 
-    private String addReminder(Message message) {
-        var mas = message.getBody().split(" ");
+    private String addReminder(Observer observer, Message message) {
+        var mas = message.getBody().split(WSP);
         var name = mas[1];
         var reminderType = mas[2];
         var frequency = mas[3];
@@ -327,50 +357,59 @@ public class VKCommand extends Command {
         reminder.setReminderType(reminderType);
         reminder.setFrequency(frequency);
         reminder.setReminderTimeDuration(reminderTimeDuration);
-        return reminderService.addReminder(reminder, name);
+        return reminderService.addReminder(observer, reminder, name);
     }
 
-    private String reminders() {
+    private String reminders(Observer observer) {
         return reminderService.showAllReminders();
     }
 
-    private String manyRemindersTypesFields(String messageBody) {
+    private String manyRemindersTypesFields(Observer observer, String messageBody) {
         var result = "";
-        String answer = messageBody.replaceFirst("много строк ", "");
-        String reminderTypeName = answer.substring(0, answer.indexOf("\n"));
-        String[] body = answer.substring(answer.indexOf("\n") + 1).split("!-");
+        var answer = messageBody.replaceFirst(MANY_LINES + WSP, "");
+        var reminderTypeName = answer.substring(0, answer.indexOf("\n"));
+        var body = answer.substring(answer.indexOf("\n") + 1)
+                .split(LINE_SEPARATOR_IN_THE_REMINDER_LIST);
 
         if (reminderTypeName.length() > 0 && body.length > 0) {
             reminderTypeManagement.addManyNotesToReminderType(reminderTypeName, List.of(body));
-            result = "Ваш список добавлен.";
+            result = YOUR_LIST_HAS_BEEN_ADDED;
         } else {
-            result = "Список не добавлен, так как там нет элементов или названия списка.";
+            result = LIST_WAS_NOT_ADDED_BECAUSE_THERE_ARE_NO_ITEMS_OR_NAMES_OF_THE_LIST;
         }
 
         return result;
     }
 
-    private String addOneReminderType(String messageBody) {
+    private String addOneReminderType(Observer observer, String messageBody) {
         String result;
-        if (messageBody.contains("добавить список")) {
-            var answer = messageBody.replaceFirst("добавить список ", "");
+        if (messageBody.contains(ADD_LIST)) {
+            var answer = messageBody.replaceFirst(ADD_LIST + WSP, "");
             if (answer.length() > 0) {
                 result = reminderTypeManagement.addReminderType(answer);
             } else {
-                result = "Название списка не может быть пустым.";
+                result = NAME_OF_LIST_CANNOT_BE_EMPTY;
             }
         } else {
-            var answer = messageBody.replaceFirst("добавить в список ", "");
+            var answer = messageBody.replaceFirst(ADD_TO_LIST + WSP, "");
             var body = List.of(answer.split(""));
             var reminderTypeName = body.get(0);
             var note = body.get(1);
             result = reminderTypeManagement.addNoteToReminderType(reminderTypeName, note);
         }
-
         return result;
     }
 
     private Observer observersLogic(Message message) {
         return observersStorage.getObserver(String.valueOf(message.getUserId()));
     }
+
+    private String observersRoles(Observer observer, Message message) {
+        return null;
+    }
+
+    private boolean personsExist(Observer observer, String personsId) {
+        return observer.getPersonsId().contains(personsId);
+    }
+
 }

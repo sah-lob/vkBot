@@ -7,6 +7,7 @@ import ru.sahlob.core.modules.vkpeopleparser.models.Person;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
+import ru.sahlob.core.observers.Observer;
 import ru.sahlob.core.observers.ObserversManagement;
 import ru.sahlob.vk.VKCore;
 
@@ -17,6 +18,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static ru.sahlob.core.commands.vkcommands.answers.VKTextAnswers.*;
+
 @Component
 @Data
 public class VKPeopleParser {
@@ -26,39 +29,33 @@ public class VKPeopleParser {
     private final ObserversManagement observersManagement;
 
     public String getInfoAboutPerson(Person person, String date) {
+
         var stringAnswer = "";
+
         if (person == null) {
-            stringAnswer += "Данный пользовтель почему-то не найден";
+            stringAnswer += PERSON_NOT_ADDED;
         } else {
-            stringAnswer += "Данные по пользователю " + person.getAlternativeName() + """
-                     для мамкиного шпиона:\040
+            stringAnswer += DATA_FOR_THE_USER + WSP + person.getAlternativeName() + TWO_NL;
 
-                    """;
-            if (personOnline(person)) {
-                stringAnswer += """
-                        Данный пользовтель сейчас онлайн.\040
+            var firstName = person.getAlternativeName()
+                    .substring(0, person.getAlternativeName().indexOf(WSP));
 
-                        """;
-            } else {
-                stringAnswer += """
-                        Данный пользовтель сейчас офлайн.\040
+            stringAnswer += firstName + WSP + (personOnline(person) ? NOW_ONLINE : NOW_OFFLINE) + TWO_NL;
 
-                        """;
-            }
             if (date.equals("")) {
                 date = VKTime.getDateKey(person.getTimezone());
             }
             var activity = person.getActivityByDate(date);
             if (activity != null) {
-                var duration = activity.getTodayDuration() + " мин.";
+                var duration = activity.getTodayDuration() + WSP + MIN;
                 var info = activity.getDayActivityInfo();
                 if (info.equals("")) {
-                    info = "Данный пользователь сегодня не сидел вк";
+                    info = firstName + WSP + TODAY_NOT_IN_VK + NL;
                 }
-                stringAnswer += "Онлайн в течение дня:  " + duration + "\n";
-                stringAnswer += "Информация о посещении: \n" + info;
+                stringAnswer += ONLINE_PER_DAY + ":" + WSP + duration + WSP + MIN + NL;
+                stringAnswer += INFORMATION_ABOUT_VISITS + ":" + NL + info;
             } else {
-                stringAnswer += "\nДанный пока не собраны=(";
+                stringAnswer += NL + DATA_HAS_NOT_YET_BEEN_COLLECTED;
             }
         }
         return stringAnswer;
@@ -67,15 +64,12 @@ public class VKPeopleParser {
     public String getInfoAboutPersonsRecords(Person person) {
         var stringAnswer = "";
         if (person == null) {
-            stringAnswer += "Данный пользовтель почему-то не найден";
+            stringAnswer += PERSON_NOT_ADDED;
         } else {
-            stringAnswer += "Досье " + person.getAlternativeName() + """
-                    :
-
-                    """;
-            stringAnswer += "Максимальное время онлайн за день: " + person.getRecordDurationAllTime() + " мин.\n";
-            stringAnswer += "Среднее время онлайн за день: " + person.getAvgDurationAllTime() + " мин.\n";
-            stringAnswer += "Данные по пользователю собираются в течение " + person.getAllTimeDaysCount()  + " суток.";
+            stringAnswer += DOSSIER + WSP + person.getAlternativeName() + ":" + TWO_NL;
+            stringAnswer += MAX_TIME_PER_DAY + ":" + WSP + person.getRecordDurationAllTime() + WSP + MIN + NL;
+            stringAnswer += AVG_TIME_PER_DAY + ":" + WSP + person.getAvgDurationAllTime() + WSP + MIN + NL;
+            stringAnswer += USER_DATA_COLLECTED_OVER + ":" + WSP + person.getAllTimeDaysCount() + " суток.";
         }
         return stringAnswer;
     }
@@ -101,7 +95,7 @@ public class VKPeopleParser {
     }
 
     public void updateAllPersons() {
-        var persons = (ArrayList<Person>) storage.getAllPersonsWithTodayDayActivity();
+        var persons = (ArrayList<Person>) storage.getAllPersonsWithTodayDayActivity(null);
         for (var p: persons) {
             var dateKey = VKTime.getDateKey(p.getTimezone());
             var dayActivity = p.getActivity().get(dateKey);
@@ -130,12 +124,12 @@ public class VKPeopleParser {
                     continue;
                 }
             }
-            storage.editPerson(p);
+            storage.editPerson(null, p);
         }
     }
 
-    public boolean addNewPerson(String name) {
-        var result = false;
+    public Person addNewPerson(String name) {
+
         var request = takeGetRequest(name);
 
         if (request.contains("{\"response\":[{")) {
@@ -144,17 +138,15 @@ public class VKPeopleParser {
                     .replaceAll("\",\"last_name\":\"", " ");
             altName = altName.substring(0, altName.indexOf("\",\"is_closed\""));
 
-
             var realId = request.substring(request.indexOf("{\"response\":[{\"id\":") + 19);
             realId = realId.substring(0, realId.indexOf(",\"first_name\":\""));
-            result = true;
-
             var person = new Person(name, altName);
             person.setRealId(Integer.valueOf(realId));
             storage.addPerson(person);
+            return person;
         }
 
-        return result;
+        return null;
     }
 
     public static String altName(String name) {
@@ -164,8 +156,8 @@ public class VKPeopleParser {
         return result;
     }
 
-    public boolean userExistenceCheck(String name) {
-        return storage.getPersonWithTodayDayActivity(name) != null;
+    public boolean userExistenceCheck(Observer observer, String name) {
+        return storage.getPersonWithTodayDayActivity(observer, name) != null;
     }
 
     private static String takeGetRequest(String name) {

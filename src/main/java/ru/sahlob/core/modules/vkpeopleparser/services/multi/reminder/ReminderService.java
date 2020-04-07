@@ -3,11 +3,11 @@ package ru.sahlob.core.modules.vkpeopleparser.services.multi.reminder;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.models.Reminder;
-import ru.sahlob.core.modules.vkpeopleparser.models.ReminderType;
 import ru.sahlob.core.modules.vkpeopleparser.services.multi.reminder.frequencytypes.FrequencyType;
 import ru.sahlob.core.modules.vkpeopleparser.services.multi.reminder.remindertypes.ReminderTypeManagement;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.VKPeopleBDStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.reminder.VKReminderStorage;
+import ru.sahlob.core.observers.Observer;
 import ru.sahlob.vk.VKManager;
 
 import java.util.List;
@@ -22,8 +22,8 @@ public class ReminderService {
     private final VKReminderStorage vkReminderStorage;
     private final ReminderTypeManagement reminderTypeManagement;
 
-    public String addReminder(Reminder reminder, String personName) {
-        var person = vkPeopleStorage.getPersonWithoutActivity(personName);
+    public String addReminder(Observer observer, Reminder reminder, String personName) {
+        var person = vkPeopleStorage.getPersonWithoutActivity(observer, personName);
         if (person == null) {
             return "Пользователь не добавлен в систему";
         }
@@ -42,28 +42,40 @@ public class ReminderService {
         if (list.isEmpty()) {
             return "Напоминаний еще нет";
         }
-        String result = "Созданные напоминания: \n";
+        StringBuilder result = new StringBuilder("Созданные напоминания: \n");
 
         for (int i = 0; i < list.size(); i++) {
-            result += (i + 1) + ") "
-                    + list.get(i).getUserName()
-                    + "  " + list.get(i).getId()
-                    + "  " + list.get(i).getFrequency()
-                    + "  " + list.get(i).getReminderType()
-                    + "  " + list.get(i).getReminderTimePassed() + "\n\n";
+            result.append(i + 1)
+                    .append(") ")
+                    .append(list.get(i)
+                            .getUserName())
+                    .append("  ")
+                    .append(list.get(i).getId())
+                    .append("  ")
+                    .append(list.get(i).getFrequency())
+                    .append("  ")
+                    .append(list.get(i)
+                            .getReminderType())
+                    .append("  ")
+                    .append(list.get(i)
+                            .getReminderTimePassed())
+                    .append("""
+
+
+                            """);
         }
 
-        return result;
+        return result.toString();
     }
 
-    public void remindUsers() {
+    public void remindUsers(Observer observer) {
         String frequency = "онлайн";
         var reminders = vkReminderStorage.getAllReminders();
         for (Reminder reminder: reminders) {
             if (reminder.getFrequency().equals(frequency)) {
                 var userId = reminder.getUserId();
                 if (frequency.equals(FrequencyType.онлайн.name())) {
-                    reminderSender.online(userId, reminder);
+                    reminderSender.online(observer, userId, reminder);
                 } else if (frequency.contains(FrequencyType.каждыйДень.name())) {
                     reminderSender.everyDay(userId, reminder, frequency);
                 } else if (frequency.contains(FrequencyType.каждыйМесяц.name())) {

@@ -6,6 +6,7 @@ import ru.sahlob.core.observers.roles.Roles;
 
 import javax.persistence.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,15 +24,11 @@ public class Observer {
     @NonNull private String alternativeName;
     private long countOfRequests = 1;
     @NonNull @ElementCollection(fetch = FetchType.EAGER) private Set<Roles> roles;
-    @ElementCollection(fetch = FetchType.EAGER) private Map<String, Integer> personsName = new HashMap<>();
     @ElementCollection(fetch = FetchType.EAGER) private Map<String, Integer> requests = new HashMap<>();
+    @ElementCollection(fetch = FetchType.EAGER) private Set<String> personsId = new HashSet<>();
 
     public void incrementCountOfRequests() {
         countOfRequests++;
-    }
-
-    public void addPersonsName(String personsName) {
-        this.personsName.put(personsName, 0);
     }
 
     public void addRequest(String request) {

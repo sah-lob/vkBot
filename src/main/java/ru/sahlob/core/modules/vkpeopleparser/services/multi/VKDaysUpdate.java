@@ -5,6 +5,7 @@ import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKTimeStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.time.VKTimeKey;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
+import ru.sahlob.core.observers.Observer;
 
 @Component
 @Data
@@ -14,16 +15,16 @@ public class VKDaysUpdate {
     private final VKTimeStorage timeStorage;
 
     public void dayUpdate(String day) {
-        updatePeoplesRecordes(day);
-        updateDayTimer();
+        updatePeoplesRecordes(null, day);
+        updateDayTimer(null);
     }
 
-    private void updatePeoplesRecordes(String day) {
-        var persons = storage.getAllPersonsWithDayActivityByDate(day);
+    private void updatePeoplesRecordes(Observer observer, String day) {
+        var persons = storage.getAllPersonsWithDayActivityByDate(null, day);
         for (var p: persons) {
-            var recordDurationAlltime = storage.getPersonWithDayActivityByDate(p.getName(), day).getRecordDurationAllTime();
-            var addDaysCount = storage.getPersonWithDayActivityByDate(p.getName(), day).getAllTimeDaysCount();
-            var avgDuration = storage.getPersonWithDayActivityByDate(p.getName(), day).getAvgDurationAllTime();
+            var recordDurationAlltime = p.getRecordDurationAllTime();
+            var addDaysCount = p.getAllTimeDaysCount();
+            var avgDuration = p.getAvgDurationAllTime();
             var dayActivity = p.getActivityByDate(day);
             if (dayActivity != null) {
                 var dayDuration = dayActivity.getTodayDuration();
@@ -54,17 +55,17 @@ public class VKDaysUpdate {
                     p.setAvgDurationAllTime(0);
                 }
             }
-            storage.editPerson(p);
+            storage.editPerson(observer, p);
         }
     }
 
-    private void updateDayTimer() {
+    private void updateDayTimer(Observer observer) {
         var vkTimeKey = new VKTimeKey();
         vkTimeKey.setTimeKey(VKTime.getDateKey(3));
         timeStorage.addNewTime(vkTimeKey);
         if (timeStorage.getTimeCount() >= 7) {
             var key = timeStorage.deleteFirst();
-            storage.deleteAllDayAndMinutesActivitiesByDay(key);
+            storage.deleteAllDayAndMinutesActivitiesByDay(observer, key);
         }
     }
 }

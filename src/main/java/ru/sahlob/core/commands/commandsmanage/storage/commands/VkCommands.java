@@ -18,6 +18,7 @@ public enum VkCommands {
     много,
     едины,
     досье,
+    роль,
     утро,
     даты,
     look,

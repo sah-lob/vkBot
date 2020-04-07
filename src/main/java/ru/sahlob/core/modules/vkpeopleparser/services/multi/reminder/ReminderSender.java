@@ -8,6 +8,7 @@ import ru.sahlob.core.modules.vkpeopleparser.services.multi.reminder.frequencyty
 import ru.sahlob.core.modules.vkpeopleparser.services.single.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.VKPeopleBDStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.reminder.VKReminderStorage;
+import ru.sahlob.core.observers.Observer;
 import ru.sahlob.vk.VKManager;
 
 import java.util.Arrays;
@@ -22,9 +23,9 @@ public class ReminderSender {
     private final VKPeopleBDStorage vkPeopleStorage;
     private final VKReminderStorage vkReminderStorage;
 
-    public void online(Integer userId, Reminder reminder) {
+    public void online(Observer observer, Integer userId, Reminder reminder) {
         if (vkPeopleParser.personOnline(String.valueOf(userId))) {
-            Person person = vkPeopleStorage.getPersonWithoutActivityByRealId(userId);
+            Person person = vkPeopleStorage.getPersonWithoutActivityByRealId(observer, userId);
             if (!person.isActive() && !reminder.getSendMsg()) {
                 reminder.setSendMsg(true);
                 vkManager.sendMessage("Вы сейчас онлайн.",

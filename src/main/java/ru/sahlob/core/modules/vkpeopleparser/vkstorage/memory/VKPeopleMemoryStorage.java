@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.sahlob.core.modules.vkpeopleparser.models.Person;
 import ru.sahlob.core.modules.vkpeopleparser.services.single.VKPeopleParser;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.VKPeopleStorage;
+import ru.sahlob.core.observers.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,56 +12,47 @@ import java.util.List;
 @Service
 public class VKPeopleMemoryStorage implements VKPeopleStorage {
 
-    private ArrayList<Person> persons = new ArrayList<>();
-
     @Override
     public void addPerson(Person person) {
     }
 
     @Override
-    public Person getPersonWithTodayDayActivity(String name) {
-        Person person = null;
-        for (Person value : persons) {
-            if (value.getName().equals(name)) {
-                person = value;
-                break;
-            }
-        }
-        return person;
-    }
-
-    @Override
-    public void editPerson(Person person) {
-
-    }
-
-    @Override
-    public List<Person> getAllPersonsWithTodayDayActivity() {
-        return persons;
-    }
-
-    @Override
-    public List<Person> getAllPersonsWithoutDayActivities() {
+    public Person getPersonWithTodayDayActivity(Observer observer, String name) {
         return null;
     }
 
     @Override
-    public void editTimeZoneToPerson(String name, int timezone) {
-        getPersonWithTodayDayActivity(name).setTimezone(timezone);
+    public void editPerson(Observer observer, Person person) {
+
     }
 
     @Override
-    public String deleteAllDayAndMinutesActivitiesByDay(String key) {
+    public List<Person> getAllPersonsWithTodayDayActivity(Observer observer) {
         return null;
     }
 
     @Override
-    public Person getPersonWithActivityByDate(String name, String date) {
+    public List<Person> getAllPersonsWithoutDayActivities(Observer observer) {
         return null;
     }
 
     @Override
-    public List<Person> getAllPersonsWithActivityByDate(String date) {
+    public void editTimeZoneToPerson(Observer observer, String name, int timezone) {
+
+    }
+
+    @Override
+    public String deleteAllDayAndMinutesActivitiesByDay(Observer observer, String key) {
+        return null;
+    }
+
+    @Override
+    public Person getPersonWithActivityByDate(Observer observer, String name, String date) {
+        return null;
+    }
+
+    @Override
+    public List<Person> getAllPersonsWithActivityByDate(Observer observer, String date) {
         return null;
     }
 }

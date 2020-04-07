@@ -1,7 +1,7 @@
 package ru.sahlob.core.commands.commandsmanage.storage;
 
 import org.springframework.context.annotation.Configuration;
-import ru.sahlob.core.commands.VKCommand;
+import ru.sahlob.core.commands.vkcommands.VKCommandController;
 import ru.sahlob.core.commands.commandsmanage.Command;
 import ru.sahlob.core.commands.commandsmanage.storage.commands.VkCommands;
 
@@ -13,12 +13,12 @@ public class MemoryStorage implements Storage {
 
     private static HashSet<Command> commands = new HashSet<>();
 
-    public MemoryStorage(VKCommand vkCommand) {
-        vkCommand.addAllNames(
+    public MemoryStorage(VKCommandController vkCommandController) {
+        vkCommandController.addAllNames(
                 Arrays.stream(VkCommands.values())
                         .map(Enum::toString)
                         .collect(Collectors.toList()));
-        commands.addAll(List.of(vkCommand));
+        commands.addAll(List.of(vkCommandController));
     }
 
     @Override

@@ -31,7 +31,7 @@ public class VKServer {
         do {
             Thread.sleep(300);
             if (new Date().getSeconds() % 3 == 0) {
-                reminderService.remindUsers();
+                reminderService.remindUsers(null);
             }
             if (minutes != new Date().getMinutes()) {
                 vkPeopleParser.updateAllPersons();

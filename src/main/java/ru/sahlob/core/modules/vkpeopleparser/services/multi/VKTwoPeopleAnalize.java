@@ -8,6 +8,7 @@ import ru.sahlob.core.modules.vkpeopleparser.models.Person;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKDay;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKHour;
+import ru.sahlob.core.observers.Observer;
 
 import java.util.*;
 
@@ -17,10 +18,10 @@ public class VKTwoPeopleAnalize {
 
     private MainVKPeopleStorage storage;
 
-    public String jointOnlineOfTwoUsers(String name1, String name2) {
+    public String jointOnlineOfTwoUsers(Observer observer, String name1, String name2) {
 
-        var person1 = storage.getPersonWithTodayDayActivity(name1);
-        var person2 = storage.getPersonWithTodayDayActivity(name2);
+        var person1 = storage.getPersonWithTodayDayActivity(observer, name1);
+        var person2 = storage.getPersonWithTodayDayActivity(observer, name2);
         var stringAnswer = "";
         var dayActivity1 = person1.getTodayActivity();
         var dayActivity2 = person2.getTodayActivity();
@@ -30,17 +31,13 @@ public class VKTwoPeopleAnalize {
             stringAnswer += person1.getAlternativeName() + " был онлайн: " + dayActivity1.getTodayDuration() + "мин \n";
             stringAnswer += person2.getAlternativeName() + " был онлайн: " + dayActivity2.getTodayDuration() + "мин \n";
 
-            if (activity != null) {
-                var duration = activity.getTodayDuration() + " мин.";
-                var info = activity.getDayActivityInfo();
-                if (info.equals("")) {
-                    info = "Данные пользователи вместе вк сегодня не сидели =)";
-                }
-                stringAnswer += "Совместный онлайн в течение дня:  " + duration + "\n";
-                stringAnswer += "Информация о посещении: \n" + info;
-            } else {
-                stringAnswer += "\nПользователи не сидели в одно и тоже время.";
+            var duration = activity.getTodayDuration() + " мин.";
+            var info = activity.getDayActivityInfo();
+            if (info.equals("")) {
+                info = "Данные пользователи вместе вк сегодня не сидели =)";
             }
+            stringAnswer += "Совместный онлайн в течение дня:  " + duration + "\n";
+            stringAnswer += "Информация о посещении: \n" + info;
         } else {
             stringAnswer += "Данные по какому-то из пользователей еще не собраны!";
         }

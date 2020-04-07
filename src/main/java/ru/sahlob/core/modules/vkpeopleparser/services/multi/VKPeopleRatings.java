@@ -4,9 +4,12 @@ import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.domain.DayActivity;
 import ru.sahlob.core.modules.vkpeopleparser.models.Person;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
+import ru.sahlob.core.observers.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static ru.sahlob.core.commands.vkcommands.answers.VKTextAnswers.TWO_NL;
 
 @Component
 @Data
@@ -14,11 +17,12 @@ public class VKPeopleRatings {
 
     private final MainVKPeopleStorage storage;
 
-    public String getPersonsDurationRaiting() {
-        var dayActivities = getSortedDayActivityListOfPersons();
+    public String getPersonsDurationRaiting(Observer observer) {
+
+        var dayActivities = getSortedDayActivityListOfPersons(observer);
         dayActivities.sort(DayActivity.COMPARE_BY_DURATION);
 
-        StringBuilder result = new StringBuilder("Список задротов за сегодня: \n\n");
+        StringBuilder result = new StringBuilder("Список задротов за сегодня: " + TWO_NL);
         for (int i = 0; i < dayActivities.size(); i++) {
             result.append(i + 1).append("  ").append(dayActivities.get(i)
                     .getDurationINFO()).append(" - ")
@@ -30,8 +34,8 @@ public class VKPeopleRatings {
         return result.toString();
     }
 
-    public String getPersonsAvgDurationRaiting() {
-        var dayActivities = getSortedDayActivityListOfPersons();
+    public String getPersonsAvgDurationRaiting(Observer observer) {
+        var dayActivities = getSortedDayActivityListOfPersons(observer);
         var newDayActivities = new ArrayList<DayActivity>();
         for (var d: dayActivities) {
             if (d.getDayActivities().size() != 0) {
@@ -39,7 +43,7 @@ public class VKPeopleRatings {
             }
         }
         newDayActivities.sort(DayActivity.COMPARE_BY_AVG_DURATION);
-        var result = new StringBuilder("Список лидеров по средней длине сессии за сегодня: \n\n");
+        var result = new StringBuilder("Список лидеров по средней длине сессии за сегодня: " + TWO_NL);
         for (int i = 0; i < newDayActivities.size(); i++) {
             double data = newDayActivities.get(i).getTodayDuration() /  newDayActivities.get(i).getDayActivities().size();
 
@@ -51,10 +55,13 @@ public class VKPeopleRatings {
         return result.toString();
     }
 
-    public String getPseronsAllTimeDurationRaiting() {
-        var persons = storage.getAllPersonsWithoutDayActivity();
+    public String getPseronsAllTimeDurationRaiting(Observer observer) {
+        var persons = storage.getAllPersonsWithoutDayActivity(observer);
         persons.sort(Person.COMPARE_BY_DURATION);
-        StringBuilder result = new StringBuilder("Главные задроты за все время: \n\n");
+        StringBuilder result = new StringBuilder("""
+                Главные задроты за все время:\040
+
+                """);
 
 
         for (int i = 0; i < persons.size(); i++) {
@@ -63,10 +70,13 @@ public class VKPeopleRatings {
         return result.toString();
     }
 
-    public String getPseronsAvgAllTimeDurationRaiting() {
-        var persons = storage.getAllPersonsWithoutDayActivity();
+    public String getPseronsAvgAllTimeDurationRaiting(Observer observer) {
+        var persons = storage.getAllPersonsWithoutDayActivity(observer);
         persons.sort(Person.COMPARE_BY_AVG_DURATION);
-        StringBuilder result = new StringBuilder("Рейтинг по средним сессиям: \n\n");
+        StringBuilder result = new StringBuilder("""
+                Рейтинг по средним сессиям:\040
+
+                """);
 
         for (int i = 0; i < persons.size(); i++) {
             result.append(i + 1).append(". ").append(persons.get(i).getAlternativeName()).append(" в среднем ").append(persons.get(i).getAvgDurationAllTime()).append(" мин.\n");
@@ -74,12 +84,15 @@ public class VKPeopleRatings {
         return result.toString();
     }
 
-    public String getCountOfPersonsSessions() {
+    public String getCountOfPersonsSessions(Observer observer) {
 
-        var dayActivities = getSortedDayActivityListOfPersons();
+        var dayActivities = getSortedDayActivityListOfPersons(observer);
         dayActivities.sort(DayActivity.COMPARE_BY_SESSION_COUNT);
 
-        StringBuilder result = new StringBuilder("Список главных параноиков за сегодня: \n\n");
+        StringBuilder result = new StringBuilder("""
+                Список главных параноиков за сегодня:\040
+
+                """);
 
         for (int i = 0; i < dayActivities.size(); i++) {
             result.append(i + 1).append("  ").append(dayActivities.get(i)
@@ -92,8 +105,8 @@ public class VKPeopleRatings {
         return result.toString();
     }
 
-    public String getMainStats() {
-        var persons = storage.getAllPersonsWithoutDayActivity();
+    public String getMainStats(Observer observer) {
+        var persons = storage.getAllPersonsWithoutDayActivity(observer);
         var maleDuration = 0;
         var maxMaleDuration = 0;
         var maleAvgDuration = 0;
@@ -121,8 +134,11 @@ public class VKPeopleRatings {
                 }
             }
         }
-        int maxSession = maxFemaleDuration > maxMaleDuration ? maxFemaleDuration : maxMaleDuration;
-        var result = "Статистика по палате.\n\n";
+        int maxSession = Math.max(maxFemaleDuration, maxMaleDuration);
+        var result = """
+                Статистика по палате.
+
+                """;
         result += "Самая продолжительная сессия у мужчин: " + maxMaleDuration + " мин.\n";
         result += "Самая продолжительная сессия у женщин: " + maxFemaleDuration + " мин.\n";
         result += "Самая продолжительная сессия: " + maxSession + " мин.\n";
@@ -140,8 +156,9 @@ public class VKPeopleRatings {
         return result;
     }
 
-    private List<DayActivity> getSortedDayActivityListOfPersons() {
-        var persons = storage.getAllPersonsWithTodayDayActivity();
+    private List<DayActivity> getSortedDayActivityListOfPersons(Observer observer) {
+
+        var persons = storage.getAllPersonsWithTodayDayActivity(observer);
         var dayActivities = new ArrayList<DayActivity>();
         for (var p: persons) {
             if (p.getTodayActivity() != null) {

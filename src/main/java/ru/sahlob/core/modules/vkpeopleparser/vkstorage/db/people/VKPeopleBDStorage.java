@@ -11,11 +11,16 @@ import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.interfaces.DBDa
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.interfaces.DBMinutesRepository;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.interfaces.DBPersonsRepository;
 import ru.sahlob.core.modules.vkpeopleparser.vktime.VKTime;
+import ru.sahlob.core.observers.Observer;
+import ru.sahlob.core.observers.roles.Roles;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static ru.sahlob.core.commands.vkcommands.answers.VKTextAnswers.PERSON_NOT_ADDED;
 
 @Service
 @Transactional
@@ -33,11 +38,12 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     }
 
     @Override
-    public void editPerson(Person person) {
+    public void editPerson(Observer observer, Person person) {
+        if (hasNoAccessToUser(observer, String.valueOf(person.getRealId()))) return;
         personsRepository.save(person);
         var todayActivity = person.getTodayActivity();
         if (todayActivity != null) {
-            if (getDayAndMinutesActivitiesByDate(person, VKTime.getDateKey(person.getTimezone())) == null) {
+            if (getDayAndMinutesActivitiesByDate(observer, person, VKTime.getDateKey(person.getTimezone())) == null) {
                 todayActivity = new DayActivity(person.getTimezone());
                 todayActivity.setPerson(person.getId());
                 todayActivity.setKey(VKTime.getDateKey(person.getTimezone()));
@@ -53,7 +59,8 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     }
 
     @Override
-    public void editTimeZoneToPerson(String name, int timezone) {
+    public void editTimeZoneToPerson(Observer observer, String name, int timezone) {
+        if (hasNoAccessToUser(observer, name)) return;
         var person = personsRepository.getFirstPersonByName(name);
         if (person != null) {
             person.setTimezone(timezone);
@@ -61,7 +68,8 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
         }
     }
 
-    public String editSexToPerson(String name, String sex) {
+    public String editSexToPerson(Observer observer, String name, String sex) {
+        if (hasNoAccessToUser(observer, name)) return PERSON_NOT_ADDED;
         String result;
         var person = personsRepository.getFirstPersonByName(name);
         if (person != null) {
@@ -73,27 +81,29 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
                 result = "Пол передается двумя буквами: \"m\" или \"f\"";
             }
         } else {
-            result = "Такого человека нет";
+            result = PERSON_NOT_ADDED;
         }
         return result;
     }
 
-    public String addNewWaiter(String name, String waiter) {
+    public String addNewWaiter(Observer observer, String name, String waiter) {
+        if (hasNoAccessToUser(observer, name)) return PERSON_NOT_ADDED;
         String result;
-        var person = getPersonWithoutActivity(name);
+        var person = getPersonWithoutActivity(observer, name);
         if (person == null) {
             result = "Для того, чтобы получить уведомление о том, что человек вошел в вк его нужно добавить."
                     + " Для этого введите команду: следить " + name;
         } else {
             person.addExpectingPeople(waiter);
-            editPerson(person);
+            editPerson(observer, person);
             result = "Когда человек будет онлайн, придет сообщение.";
         }
         return result;
     }
 
     @Override
-    public String deleteAllDayAndMinutesActivitiesByDay(String key) {
+    public String deleteAllDayAndMinutesActivitiesByDay(Observer observer, String key) {
+        if (!observer.getRoles().contains(Roles.admin)) return "У вас нет прав";
         key = key.toUpperCase();
         ArrayList<Long> dayActivitiesId = new ArrayList<>();
         for (var d: daysRepository.findAllByKey(key)) {
@@ -107,60 +117,59 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
     }
 
     @Override
-    public Person getPersonWithTodayDayActivity(String name) {
-        return getPersonWithActivityByDate(name, "");
+    public Person getPersonWithTodayDayActivity(Observer observer, String name) {
+        return getPersonWithActivityByDate(observer, name, "");
     }
 
     @Override
-    public Person getPersonWithActivityByDate(String name, String date) {
+    public Person getPersonWithActivityByDate(Observer observer, String name, String date) {
+        if (hasNoAccessToUser(observer, name)) return null;
         var person = personsRepository.getFirstPersonByName(name);
-
 
         if (person != null) {
             if (date.equals("")) {
                 date = VKTime.getDateKey(person.getTimezone());
             }
-            person.updateActivityByDate(date, getDayAndMinutesActivitiesByDate(person, date));
+            person.updateActivityByDate(date, getDayAndMinutesActivitiesByDate(observer, person, date));
         }
         return person;
     }
 
-    public Person getPersonWithoutActivity(String name) {
+    public Person getPersonWithoutActivity(Observer observer, String name) {
+        if (hasNoAccessToUser(observer, name)) return null;
         return personsRepository.getFirstPersonByName(name);
     }
 
-    public Person getPersonWithoutActivityByRealId(Integer id) {
+    public Person getPersonWithoutActivityByRealId(Observer observer, Integer id) {
+        if (hasNoAccessToUser(observer, id)) return null;
         return personsRepository.getFirstPersonByRealId(id);
     }
+
     @Override
-    public List<Person> getAllPersonsWithTodayDayActivity() {
-        return getAllPersonsWithActivityByDate("");
+    public List<Person> getAllPersonsWithTodayDayActivity(Observer observer) {
+        return getAllPersonsWithActivityByDate(observer, "");
     }
 
     @Override
-    public List<Person> getAllPersonsWithoutDayActivities() {
-        var persons = personsRepository.findAll();
-        return StreamSupport.stream(persons.spliterator(), false)
-                .collect(Collectors.toList());
+    public List<Person> getAllPersonsWithoutDayActivities(Observer observer) {
+        return getPersonsList(observer);
     }
 
     @Override
-    public List<Person> getAllPersonsWithActivityByDate(String date) {
-        var persons = personsRepository.findAll();
-        var result =
-                StreamSupport.stream(persons.spliterator(), false)
-                        .collect(Collectors.toList());
-        for (Person p : result) {
+    public List<Person> getAllPersonsWithActivityByDate(Observer observer, String date) {
+        var persons = getPersonsList(observer);
+        for (Person p : persons) {
             if (date.equals("")) {
-                p.updateActivityByDate(VKTime.getDateKey(p.getTimezone()), getDayAndMinutesActivitiesByDate(p, VKTime.getDateKey(p.getTimezone())));
+                p.updateActivityByDate(VKTime.getDateKey(p.getTimezone()), getDayAndMinutesActivitiesByDate(observer, p, VKTime.getDateKey(p.getTimezone())));
             } else {
-                p.updateActivityByDate(date, getDayAndMinutesActivitiesByDate(p, date));
+                p.updateActivityByDate(date, getDayAndMinutesActivitiesByDate(observer, p, date));
             }
         }
-        return result;
+        return persons;
     }
 
-    private DayActivity getDayAndMinutesActivitiesByDate(Person person, String date) {
+    private DayActivity getDayAndMinutesActivitiesByDate(Observer observer, Person person, String date) {
+        if (hasNoAccessToUser(observer, person.getRealId())) return null;
         DayActivity dayActivity = null;
         try {
             dayActivity = daysRepository.getDayActivityByPersonAndKey(person.getId(), date);
@@ -177,4 +186,36 @@ public class VKPeopleBDStorage implements VKPeopleStorage {
         }
         return dayActivity;
     }
+
+    private List<Person> getPersonsList(Observer observer) {
+        var persons = new ArrayList<Person>();
+        if (observer == null || observer.getRoles().contains(Roles.admin)) {
+            personsRepository.findAll().forEach(persons::add);
+        } else {
+            Set<Integer> personsId = observer
+                    .getPersonsId()
+                    .stream()
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toSet());
+            persons.addAll(personsRepository.getAllByRealIdIn(personsId));
+        }
+        return persons;
+    }
+
+    private boolean hasNoAccessToUser(Observer observer, String name) {
+        if (observer == null || observer.getRoles().contains(Roles.admin)) return false;
+        var person = personsRepository.getFirstPersonByName(name);
+        if (person != null) {
+            return !observer.getPersonsId().contains(String.valueOf(person.getRealId()));
+        } else {
+            return !observer.getPersonsId().contains(name);
+        }
+    }
+
+    private boolean hasNoAccessToUser(Observer observer, Integer name) {
+        if (observer == null || observer.getRoles().contains(Roles.admin)) return false;
+        return !observer.getPersonsId().contains(String.valueOf(name));
+    }
 }
+
+

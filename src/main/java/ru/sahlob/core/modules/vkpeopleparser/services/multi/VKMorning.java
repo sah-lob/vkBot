@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.sahlob.core.modules.vkpeopleparser.domain.Morning;
 import ru.sahlob.core.modules.vkpeopleparser.vkstorage.db.people.MainVKPeopleStorage;
+import ru.sahlob.core.observers.Observer;
+
 import java.util.ArrayList;
 
 @Component
@@ -13,9 +15,9 @@ public class VKMorning {
     private MainVKPeopleStorage storage;
     private VKTwoPeopleAnalize analize;
 
-    public String usersMorning() {
+    public String usersMorning(Observer observer) {
         var result = new StringBuilder("Кто во сколько первый раз зашел в вк:\n \n");
-        var persons = storage.getAllPersonsWithTodayDayActivity();
+        var persons = storage.getAllPersonsWithTodayDayActivity(observer);
         var morningTimes = new ArrayList<Morning>();
         for (var p: persons) {
             var vkDay = analize.getVKDayOfPerson(p);

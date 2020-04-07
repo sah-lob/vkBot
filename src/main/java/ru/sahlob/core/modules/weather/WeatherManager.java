@@ -53,7 +53,10 @@ public class WeatherManager {
             wheatherString.append(finalTemperature).append("°  ").append(todayWeather[i + 5]).append("\n");
         }
         if (maxWind > 6) {
-            weatherForm += "\n Сегодня будет сильный ветер! \n";
+            weatherForm += """
+
+                     Сегодня будет сильный ветер!\040
+                    """;
         }
         weatherForm += wheatherString;
         return weatherForm;
