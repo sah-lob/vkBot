@@ -409,6 +409,7 @@ public class VKCommandController extends Command {
     }
 
     private boolean personsExist(Observer observer, String personsId) {
+        if (observer.getRoles().contains(Roles.admin)) return true;
         return observer.getPersonsId().contains(personsId);
     }
 
